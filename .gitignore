@@ -1,32 +1,10 @@
-# Prerequisites
-*.d
+# clion file
+.idea
+cmake-build-debug
+cmake-build-release
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+# mac file
+.DS_Store
 
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+# external depebdencies
+external
