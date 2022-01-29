@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     std::string mitsuba_path = std::string(PBD_TEXTURE_DIR) + "mitsuba.png";
 
     Discregrid::TriangleMesh mesh(bunny_path);
-    
+
     igl::opengl::glfw::Viewer viewer;
     viewer.load_mesh_from_file(bunny_path);
     viewer.launch();

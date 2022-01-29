@@ -1,6 +1,6 @@
-file(GLOB my_src src/*.cpp)
+file(GLOB COURSE01_SRC src/*.cpp)
 
-add_executable(minimal-pbd ${my_src})
+add_executable(minimal-pbd ${COURSE01_SRC} ${PBD_UTILS_FILES} ${PBD_UTILS_VISUALIZATION_FILES})
 target_link_libraries(minimal-pbd
         PUBLIC
         igl::core
