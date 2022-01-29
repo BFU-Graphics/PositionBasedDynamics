@@ -5,7 +5,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 set(MY_EXTERNAL_DIR ${CMAKE_SOURCE_DIR}/external)
 
 find_package(MY_EIGEN REQUIRED)
-find_package(MY_DISCREGRID)
+find_package(MY_DISCREGRID REQUIRED)
 
 #if (APPLE)
     # Libigl
