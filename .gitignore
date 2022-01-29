@@ -7,4 +7,5 @@ cmake-build-release
 .DS_Store
 
 # external depebdencies
+bin
 external

@@ -1,23 +1,34 @@
 #include <igl/opengl/glfw/Viewer.h>
-#include <igl/readOBJ.h>
 #include <string>
 
 #include "Discregrid/All"
 
+#include "opencv2/opencv.hpp"
+
+#define STB_IMAGE_IMPLEMENTATION
+
+#include "stb/stb_image.h"
+
 int main(int argc, char *argv[])
 {
-    Discregrid::TriangleMesh mesh();
-
-
     Eigen::MatrixXd V;
     Eigen::MatrixXi F;
 
-    std::string path = std::string(PBD_MODEL_DIR) + "starry_fish.obj";
+    std::string bunny_path   = std::string(PBD_MODEL_DIR) + "bun_zipper.ply";
+    std::string mitsuba_path = std::string(PBD_TEXTURE_DIR) + "mitsuba.png";
 
-    Discregrid::TriangleMesh my_mesh(path);
+    Discregrid::TriangleMesh mesh(bunny_path);
 
-    igl::readOBJ(path, V, F);
+    using namespace cv;
+    Mat img = imread(mitsuba_path, IMREAD_COLOR);
+    imshow("Mitsuba", img);
+    int k = waitKey(0);
+
+    int           width, height, nrChannels;
+    unsigned char *data      = stbi_load(mitsuba_path.c_str(), &width, &height, &nrChannels, 0);
+
+
     igl::opengl::glfw::Viewer viewer;
-    viewer.data().set_mesh(V, F);
+    viewer.load_mesh_from_file(bunny_path);
     viewer.launch();
 }
