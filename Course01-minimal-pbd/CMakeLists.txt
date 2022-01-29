@@ -7,3 +7,7 @@ target_link_libraries(minimal-pbd
         igl::opengl_glfw
         ${MY_DISCREGRID_LIBS}
         )
+if (MSVC)
+    set_property(TARGET minimal-pbd PROPERTY
+            MSVC_RUNTIME_LIBRARY "MultiThreadedDLL")
+endif ()
