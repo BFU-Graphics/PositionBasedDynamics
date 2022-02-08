@@ -11,9 +11,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
 # Set My Variables
 set(MY_EXTERNAL_DIR ${CMAKE_SOURCE_DIR}/external) # default method
-if (APPLE)
+#if (APPLE)
     set(MY_EXTERNAL_DIR ${CMAKE_SOURCE_DIR}/../Graphics-Dependencies/install) # method 2: READ CAREFULLY THIS LINE ~
-endif ()
+#endif ()
 
 
 # Find Packages
@@ -46,6 +46,7 @@ file(GLOB PBD_UTILS_VISUALIZATION_FILES Utils/visualization/*.h Utils/visualizat
 add_definitions(
         -DPBD_MODEL_DIR="${CMAKE_SOURCE_DIR}/Resources/models/"
         -DPBD_TEXTURE_DIR="${CMAKE_SOURCE_DIR}/Resources/textures/"
+        -DPBD_LOG_DIR="${CMAKE_SOURCE_DIR}/bin/log/"
 )
 
 
