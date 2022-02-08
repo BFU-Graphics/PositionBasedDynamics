@@ -7,6 +7,6 @@ target_link_libraries(minimal-pbd
         igl::opengl
         igl::opengl_glfw
         igl::opengl_glfw_imgui
-        ${MY_DISCREGRID_LIBS}
-        ${MY_OPENCV_LIBS}
+#        ${MY_DISCREGRID_LIBS}
+#        ${MY_OPENCV_LIBS}
         )

@@ -40,9 +40,9 @@ void simulate()
     while (!pause)
     {
         auto start = std::chrono::steady_clock::now();
-        qdot = g;
-        q = (q + (dt * qdot)).eval();
-        t += dt;
+//        qdot = g;
+//        q = (q + (dt * qdot)).eval();
+//        t += dt;
         std::cout << "Physics Rate(ms)=" << pbd_util::since(start).count() << std::endl;
     }
 }
@@ -55,15 +55,17 @@ bool draw(igl::opengl::glfw::Viewer &viewer)
 
 int main(int argc, char *argv[])
 {
-
-    std::string cube_path = std::string(PBD_MODEL_DIR) + "cube.obj";
+    // Phase I: Load Resources ================================================================================
+    std::string cube_path = std::string(PBD_MODEL_DIR) + "cube.ply";
     std::string bunny_path = std::string(PBD_MODEL_DIR) + "bun_zipper_res3.ply";
     std::string mitsuba_path = std::string(PBD_TEXTURE_DIR) + "mitsuba.png";
 
-//    igl::readPLY(bunny_path, V, F);
-    igl::readOBJ(cube_path, V, F);
+    igl::readPLY(cube_path, V, F);
     igl::edges(F, E);
 
+    pbd_viewer::add_object_to_scene(V, F, Eigen::RowVector3d(244, 165, 130) / 255.);
+
+    // Phase II: Init Physics State ================================================================================
     q.resize(V.rows() * V.cols());
     qdot.resize(V.rows() * V.cols());
 
@@ -71,14 +73,14 @@ int main(int argc, char *argv[])
     q = Eigen::Map<Eigen::VectorXd>(Vt.data(), Vt.rows() * Vt.cols());
     qdot.setZero();
 
+    pbd_viewer::setup(q, qdot, false);
+
+    // Phase III: Init Physics State ================================================================================
     std::thread simulation_thread(simulate);
     simulation_thread.detach();
 
-    pbd_viewer::setup(q, qdot, true);
-    pbd_viewer::add_object_to_scene(V, F, Eigen::RowVector3d(244, 165, 130) / 255.);
     pbd_viewer::viewer().callback_post_draw = &draw;
-
-    pbd_viewer::viewer().launch_init(true, false, "Mass-Spring Systems", 0, 0);
+    pbd_viewer::viewer().launch_init(true, false, "Hello Minimal PBD", 0, 0);
     pbd_viewer::viewer().launch_rendering(true);
     pause = true;
     pbd_viewer::viewer().launch_shut();

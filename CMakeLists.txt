@@ -13,7 +13,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 # Set My Variables
 set(MY_EXTERNAL_DIR ${CMAKE_SOURCE_DIR}/external) # default method
 #if (APPLE)
-    set(MY_EXTERNAL_DIR ${CMAKE_SOURCE_DIR}/../Graphics-Dependencies/install) # method 2: READ CAREFULLY THIS LINE ~
+set(MY_EXTERNAL_DIR ${CMAKE_SOURCE_DIR}/../Graphics-Dependencies/install) # method 2: READ CAREFULLY THIS LINE ~
 #endif ()
 
 
