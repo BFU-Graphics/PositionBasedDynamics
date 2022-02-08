@@ -21,13 +21,17 @@
 
 namespace pbd_viewer
 {
-    igl::opengl::glfw::Viewer &viewer();
-
     /// set up igl viewer system
     void setup(const Eigen::VectorXd &q, const Eigen::VectorXd &qdot, bool ps_plot = false);
 
     /// int object
     void add_object_to_scene(const Eigen::MatrixXd &V, const Eigen::MatrixXi &F, Eigen::RowVector3d color);
+
+    /// update rendering vertices
+    void update_vertex_positions(unsigned int id, Eigen::Ref<const Eigen::VectorXd> pos);
+
+    /// get igl viewer
+    igl::opengl::glfw::Viewer &viewer();
 
     /// mouse callback
     bool mouse_down(igl::opengl::glfw::Viewer &viewer, int x, int y);
@@ -36,13 +40,13 @@ namespace pbd_viewer
 
     bool mouse_move(igl::opengl::glfw::Viewer &viewer, int x, int y);
 
-    const Eigen::Vector3d & mouse_world();
+    const Eigen::Vector3d &mouse_world();
 
-    const Eigen::Vector3d & mouse_drag_world();
+    const Eigen::Vector3d &mouse_drag_world();
+
+    const std::vector<unsigned int> &picked_vertices();
 
     bool is_mouse_dragging();
-
-    const std::vector<unsigned int> & picked_vertices();
 }
 
 

@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 project(PositionBasedDynamics)
 
+set(CMAKE_CXX_STANDARD 17)
 
 # Set Cmake Variables
 set(CMAKE_MSVC_RUNTIME_LIBRARY MultiThreaded$<$<CONFIG:Debug>:Debug>DLL)
@@ -18,8 +19,8 @@ set(MY_EXTERNAL_DIR ${CMAKE_SOURCE_DIR}/external) # default method
 
 # Find Packages
 find_package(MY_EIGEN REQUIRED)
-find_package(MY_DISCREGRID REQUIRED)
-find_package(MY_OPENCV REQUIRED)
+#find_package(MY_DISCREGRID REQUIRED)
+#find_package(MY_OPENCV REQUIRED)
 
 
 #if (APPLE)

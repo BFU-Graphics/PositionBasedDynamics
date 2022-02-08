@@ -32,9 +32,6 @@ namespace pbd_viewer
 
 }
 
-igl::opengl::glfw::Viewer &pbd_viewer::viewer()
-{ return g_viewer; }
-
 void pbd_viewer::setup(const Eigen::VectorXd &q, const Eigen::VectorXd &qdot, bool ps_plot)
 {
     g_q = &q;
@@ -89,11 +86,46 @@ void pbd_viewer::setup(const Eigen::VectorXd &q, const Eigen::VectorXd &qdot, bo
         style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.00f, 0.00f, 1.00f, 0.35f);
         style.Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.20f, 0.20f, 0.20f, 0.35f);
 
-        g_viewer.core().background_color.setConstant(1.0);
-        g_viewer.core().is_animating = true;
         // Draw parent menu content
         menu.draw_viewer_menu();
     };
+
+
+    if (ps_plot)
+    {
+        // Add content to the default menu window
+        menu.callback_draw_custom_window = [&]()
+        {
+            // Define next window position + size
+            ImGui::SetNextWindowPos(ImVec2(180.f * menu.menu_scaling(), 10), ImGuiCond_FirstUseEver);
+            ImGui::SetNextWindowSize(ImVec2(800, 500), ImGuiCond_FirstUseEver);
+            ImGui::Begin(
+                    "Energy Plot", nullptr,
+                    ImGuiWindowFlags_NoSavedSettings
+
+            );
+
+            ImVec2 min = ImGui::GetWindowContentRegionMin();
+            ImVec2 max = ImGui::GetWindowContentRegionMax();
+
+            max.x = (max.x - min.x) / 2;
+            max.y -= min.y + ImGui::GetTextLineHeightWithSpacing() * 3;
+            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+//                Visualize::plot_energy("T", 1, ImVec2(-15, 10), ImVec2(0, 2e6), ImGui::GetColorU32(ImGuiCol_PlotLines));
+//                Visualize::plot_energy("V", 2, ImVec2(-15, 10), ImVec2(0, 2e6), ImGui::GetColorU32(ImGuiCol_HeaderActive));
+//                Visualize::plot_energy("T+V", 3, ImVec2(-15, 10), ImVec2(0, 4e6), ImGui::GetColorU32(ImGuiCol_ColumnActive));
+
+            ImGui::End();
+        };
+    }
+
+
+    g_viewer.callback_mouse_down = mouse_down;
+    g_viewer.callback_mouse_up = mouse_up;
+    g_viewer.callback_mouse_move = mouse_move;
+
+    g_viewer.core().background_color.setConstant(1.0);
+    g_viewer.core().is_animating = true;
 }
 
 void pbd_viewer::add_object_to_scene(const Eigen::MatrixXd &V, const Eigen::MatrixXi &F, Eigen::RowVector3d color)
@@ -110,7 +142,21 @@ void pbd_viewer::add_object_to_scene(const Eigen::MatrixXd &V, const Eigen::Matr
     g_viewer.data().set_colors(color);
 
     //add mesh to geometry vector
-    g_geometry.push_back(std::make_pair(V, F));
+    g_geometry.emplace_back(V, F);
+}
+
+void pbd_viewer::update_vertex_positions(unsigned int id, Eigen::Ref<const Eigen::VectorXd> pos)
+{
+    //update vertex positions
+    for (unsigned int ii = 0; ii < g_geometry[id].first.rows(); ++ii)
+    {
+        g_viewer.data_list[g_id[id]].V.row(ii) = pos.segment<3>(3 * ii).transpose();
+    }
+
+    //tell viewer to update
+    g_viewer.data_list[g_id[id]].dirty |= igl::opengl::MeshGL::DIRTY_POSITION;
+
+//    pbd_viewer::viewer().core().align_camera_center(g_viewer.data_list[g_id[id]].V);
 }
 
 bool pbd_viewer::mouse_down(igl::opengl::glfw::Viewer &viewer, int x, int y)
@@ -133,6 +179,9 @@ bool pbd_viewer::mouse_down(igl::opengl::glfw::Viewer &viewer, int x, int y)
     }
     return false;
 }
+
+igl::opengl::glfw::Viewer &pbd_viewer::viewer()
+{ return g_viewer; }
 
 bool pbd_viewer::mouse_up(igl::opengl::glfw::Viewer &viewer, int x, int y)
 {
@@ -167,7 +216,7 @@ bool pbd_viewer::mouse_move(igl::opengl::glfw::Viewer &viewer, int x, int y)
             g_mouse_world);
 
 
-    if (g_mouse_dragging && g_picked_vertices.size() > 0)
+    if (g_mouse_dragging && !g_picked_vertices.empty())
     {
         return true;
     }
@@ -185,11 +234,12 @@ const Eigen::Vector3d &pbd_viewer::mouse_drag_world()
     return g_mouse_drag_world;
 }
 
+const std::vector<unsigned int> &pbd_viewer::picked_vertices()
+{
+    return g_picked_vertices;
+}
+
 bool pbd_viewer::is_mouse_dragging()
 {
     return g_mouse_dragging;
-}
-
-const std::vector<unsigned int> & pbd_viewer::picked_vertices() {
-    return g_picked_vertices;
 }
