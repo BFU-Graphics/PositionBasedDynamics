@@ -4,6 +4,8 @@
  */
 
 #include "constraints.h"
+#include "Utils/pbd_log.h"
+#include <iostream>
 
 pbd_src::DistanceConstraint::DistanceConstraint(Eigen::VectorXd &init_q, const Eigen::MatrixXi &edges)
 {
@@ -46,7 +48,12 @@ bool pbd_src::DistanceConstraint::solve(const Eigen::VectorXd &q, const Eigen::S
         double C = (B * p).norm() - rest_length(i);
         Eigen::Vector6d dC = (B.transpose() * B * p) / (B * p).norm();
         Eigen::Vector6d dp = -stiffness * (C * dC) / (dC.transpose() * M_inv66 * dC);
+        pbd_util::log(C, "Distance Constraint", "C", true);
+        pbd_util::log(dC, "Distance Constraint", "dC", true);
+        pbd_util::log(dp, "Distance Constraint", "dp", true);
+        pbd_util::log(dq, "Distance Constraint", "dq", true);
         dq = dq + Es[i].transpose() * dp;
+
     }
     return true;
 }

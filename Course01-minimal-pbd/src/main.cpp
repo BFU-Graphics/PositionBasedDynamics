@@ -38,16 +38,18 @@ void simulate()
     g.setZero();
     for (int i = 0; i < qdot.rows(); i += 3)
     {
-        g[i + 1] = -0.98 * dt * 0.01;
+        g[i + 1] = -9.8 * dt;
     }
 
-    Eigen::VectorXd dq;
-    dq.resize(q.rows());
+    Eigen::VectorXd p;
+    Eigen::VectorXd dp;
+    p.resize(q.rows());
+    dp.resize(q.rows());
     while (!pause)
     {
         auto start = std::chrono::steady_clock::now();
 
-        dq.setZero();
+        dp.setZero();
 
         // (5) forall vertices i do v_i <- v_i + \Delta t * w_i * f_external
         qdot = qdot + dt * M_inv * g;
@@ -56,7 +58,7 @@ void simulate()
         qdot *= 0.999;
 
         // (7) forall vertices i do p_i <- x_i + \Delta t * v_i
-        q = q + dt * qdot;
+        p = q + dt * qdot;
 
 
         // (8) forall vertices i do generateCollisionConstraints(x_i → p_i)
@@ -66,17 +68,18 @@ void simulate()
         // loop solverIterations times
         // projectConstraints(C_1,...,C_M+Mcoll ,p_1,...,p_N)
         // end loop
-        for (int i = 0; i < 1; ++i)
+        for (int i = 0; i < 5; ++i)
         {
-            distance_constraint->solve(q, M_inv, dq);
+            distance_constraint->solve(q, M_inv, dp, k);
         }
 
 
         // (12) ~ (15) forall vertices i
         // v_i <- (p_i - x_i) / \Delta t
         // x_i <- p_i
-        q = q + dq;
-        std::cout << dq << std::endl;
+//        qdot = dp / dt;
+        q = p + dp;
+//        std::cout << dq << std::endl;
 
 
         // (16) velocityUpdate(v_1,...,v_N)
