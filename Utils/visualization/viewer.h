@@ -19,6 +19,10 @@
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 
+#include <vector>
+#include <array>
+#include <deque>
+
 namespace pbd_viewer
 {
     /// set up igl viewer system
@@ -47,7 +51,66 @@ namespace pbd_viewer
     const std::vector<unsigned int> &picked_vertices();
 
     bool is_mouse_dragging();
-}
 
+    // Custom Plot Canvas
+
+    template<int size, typename T = double>
+    class Trackable
+    {
+    public:
+        virtual std::deque<std::array<T, size>>& track(int index) = 0;
+    };
+
+    template<int size, typename T = double>
+    class ScalarTimeValueInspector
+    {
+    public:
+        ScalarTimeValueInspector<size, T> *track(std::deque<std::array<T, size>> &state, int index);
+
+        void plot(const char *label);
+
+    public:
+        std::deque<std::array<T, size>> *state_ptr_;
+        int index_;
+    };
+
+    template<int size, typename T>
+    ScalarTimeValueInspector<size, T> *ScalarTimeValueInspector<size, T>::track(std::deque<std::array<T, size>> &state, int index)
+    {
+        state_ptr_ = &state;
+        index_ = index;
+        return this;
+    }
+
+    template<int size, typename T>
+    void ScalarTimeValueInspector<size, T>::plot(const char *label)
+    {
+        using namespace ImGui;
+
+        ImGuiContext &g = *GImGui;
+        const ImGuiStyle &style = g.Style;
+
+        const ImGuiStyle &Style = GetStyle();
+        const ImGuiIO &IO = GetIO();
+        ImDrawList *DrawList = GetWindowDrawList();
+        ImGuiWindow *Window = GetCurrentWindow();
+
+        if (Window->SkipItems)
+            return;
+
+        Dummy(ImVec2(0, 3));
+
+        ImVec2 avail = GetContentRegionAvail();
+        ImVec2 Canvas(ImMin(avail.x, avail.y), ImMin(avail.x, avail.y));
+        Canvas = CalcItemSize(Canvas, style.FramePadding.x * 2.0f, style.FramePadding.y * 2.0f);
+        ImRect bb(Window->DC.CursorPos, Window->DC.CursorPos + Canvas);
+
+        const ImGuiID id = Window->GetID(label);
+        RenderFrame(bb.Min, bb.Max, GetColorU32(ImGuiCol_FrameBg, 1), true, Style.FrameRounding);
+    }
+
+    template<int size, typename T = double>
+    void track_scalar(std::deque<std::array<T, size>> &state);
+}
 
 #endif //POSITIONBASEDDYNAMICS_VIEWER_H

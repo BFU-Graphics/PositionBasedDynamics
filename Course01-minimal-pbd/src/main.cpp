@@ -87,7 +87,7 @@ void simulate()
 
 
 
-        std::cout << "Physics Rate(ms)=" << pbd_util::since(start).count() << std::endl;
+        std::cout << "Physics Rate(ms)=" << pbd_util::since(start).count() << "ms" << std::endl;
     }
 }
 
@@ -138,7 +138,7 @@ int main(int argc, char *argv[])
     pbd_util::log(M_inv, "M_inv", "Inverse Mass");
     distance_constraint = new pbd_src::DistanceConstraint(q, E);
 
-    pbd_viewer::setup(q, qdot, false);
+    pbd_viewer::setup(q, qdot, true);
 
     // Phase III: Init Physics State ================================================================================
     std::thread simulation_thread(simulate);
@@ -149,26 +149,4 @@ int main(int argc, char *argv[])
     pbd_viewer::viewer().launch_rendering(true);
     pause = true;
     pbd_viewer::viewer().launch_shut();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    pbd_util::log(V, "vertices");
-//    pbd_util::log(F, "faces");
-//    pbd_util::log(E, "edges");
 }

@@ -47,7 +47,7 @@ file(GLOB PBD_UTILS_VISUALIZATION_FILES Utils/visualization/*.h Utils/visualizat
 add_definitions(
         -DPBD_MODEL_DIR="${CMAKE_SOURCE_DIR}/Resources/models/"
         -DPBD_TEXTURE_DIR="${CMAKE_SOURCE_DIR}/Resources/textures/"
-        -DPBD_LOG_DIR="${CMAKE_SOURCE_DIR}/bin/log/"
+        -DPBD_LOG_DIR="${CMAKE_SOURCE_DIR}/log/"
 )
 
 
