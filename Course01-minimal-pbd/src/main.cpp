@@ -17,7 +17,6 @@
 bool pause = false;
 Eigen::VectorXd q;
 Eigen::VectorXd qdot;
-Eigen::SparseMatrix<double> M;
 Eigen::SparseMatrix<double> M_inv;
 double t = 0; //simulation time
 double dt = 0.005; //time step
@@ -38,7 +37,7 @@ void simulate()
     g.setZero();
     for (int i = 0; i < qdot.rows(); i += 3)
     {
-        g[i + 1] = -9.8 * dt;
+        g[i + 1] = -9.8 * dt * 10;
     }
 
     Eigen::VectorXd p;
@@ -55,7 +54,7 @@ void simulate()
         qdot = qdot + dt * M_inv * g;
 
         // (6) damping velocities v_i
-        qdot *= 0.999;
+//        qdot *= 0.999;
 
         // (7) forall vertices i do p_i <- x_i + \Delta t * v_i
         p = q + dt * qdot;
@@ -98,14 +97,32 @@ bool draw(igl::opengl::glfw::Viewer &viewer)
     return false; // stay false if success
 }
 
+void set_inv_mass(int index)
+{
+    M_inv.resize(q.rows(), q.rows());
+    typedef Eigen::Triplet<double> T;
+    std::vector<T> tl_M;
+    tl_M.emplace_back(3 * index + 0, 3 * index + 0, 0);
+    tl_M.emplace_back(3 * index + 1, 3 * index + 1, 0);
+    tl_M.emplace_back(3 * index + 2, 3 * index + 2, 0);
+    for (int i = 0; i < q.rows(); ++i)
+    {
+        if ((i / 3) == 0)
+            continue;
+        tl_M.emplace_back(i, i, 1);
+    }
+    M_inv.setFromTriplets(tl_M.begin(), tl_M.end());
+}
+
 int main(int argc, char *argv[])
 {
     // Phase I: Load Resources ================================================================================
+    std::string plane_path = std::string(PBD_MODEL_DIR) + "plane.obj";
     std::string cube_path = std::string(PBD_MODEL_DIR) + "cube.obj";
     std::string bunny_path = std::string(PBD_MODEL_DIR) + "bun_zipper_res3.ply";
     std::string mitsuba_path = std::string(PBD_TEXTURE_DIR) + "mitsuba.png";
 
-    igl::readOBJ(cube_path, V, F);
+    igl::readOBJ(plane_path, V, F);
     igl::edges(F, E);
 
     pbd_viewer::add_object_to_scene(V, F, Eigen::RowVector3d(244, 165, 130) / 255.);
@@ -117,19 +134,8 @@ int main(int argc, char *argv[])
     Eigen::MatrixXd Vt = V.transpose();
     q = Eigen::Map<Eigen::VectorXd>(Vt.data(), Vt.rows() * Vt.cols());
     qdot.setZero();
-    M.resize(V.rows() * V.cols(), V.rows() * V.cols());
-    typedef Eigen::Triplet<double> T;
-    std::vector<T> tl_M;
-//    M.setZero();
-//    for (int i = 0; i < q.rows(); ++i)
-//    {
-//        if ((i % 3) == 0)
-//            continue;
-//        tl_M.emplace_back(i, i, 1);
-//    }
-//    M.setFromTriplets(tl_M.begin(), tl_M.end());
-    M.setIdentity();
-    M_inv = M;
+    set_inv_mass(0);
+    pbd_util::log(M_inv, "M_inv", "Inverse Mass");
     distance_constraint = new pbd_src::DistanceConstraint(q, E);
 
     pbd_viewer::setup(q, qdot, false);

@@ -27,7 +27,7 @@ namespace pbd_util
 
         o << "NAME: " << tag << std::endl;
 
-        o << t;
+        o << t << std::endl;
         o.flush();
 
         o.close();
