@@ -4,6 +4,8 @@
 #include <igl/readPLY.h>
 #include <igl/edges.h>
 
+
+#include "Utils/visualization/inspector.h"
 #include "Utils/visualization/eigen_types.h"
 #include "Utils/visualization/viewer.h"
 #include "Utils/pbd_log.h"
@@ -67,7 +69,7 @@ void simulate()
         // loop solverIterations times
         // projectConstraints(C_1,...,C_M+Mcoll ,p_1,...,p_N)
         // end loop
-        for (int i = 0; i < 5; ++i)
+        for (int i = 0; i < 1; ++i)
         {
             distance_constraint->solve(q, M_inv, dp, k);
         }
@@ -88,6 +90,7 @@ void simulate()
 
 
         std::cout << "Physics Rate(ms)=" << pbd_util::since(start).count() << "ms" << std::endl;
+        pbd_inspector::Timeable::simulation_time_ += dt;
     }
 }
 
@@ -137,6 +140,7 @@ int main(int argc, char *argv[])
     set_inv_mass(0);
     pbd_util::log(M_inv, "M_inv", "Inverse Mass");
     distance_constraint = new pbd_src::DistanceConstraint(q, E);
+    pbd_viewer::track(distance_constraint);
 
     pbd_viewer::setup(q, qdot, true);
 

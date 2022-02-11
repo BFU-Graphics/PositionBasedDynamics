@@ -10,6 +10,7 @@
 //#include "stb/stb_image.h"
 namespace pbd_viewer
 {
+    std::vector<pbd_inspector::Inspector *> inspector_list;
 
     igl::opengl::glfw::Viewer g_viewer;
     igl::opengl::glfw::imgui::ImGuiMenu menu;
@@ -96,26 +97,25 @@ void pbd_viewer::setup(const Eigen::VectorXd &q, const Eigen::VectorXd &qdot, bo
         menu.callback_draw_custom_window = [&]()
         {
             // Define next window position + size
-            ImGui::SetNextWindowPos(ImVec2(180.f * menu.menu_scaling(), 10), ImGuiCond_FirstUseEver);
-            ImGui::SetNextWindowSize(ImVec2(400, 400), ImGuiCond_FirstUseEver);
+//            ImGui::SetNextWindowPos(ImVec2(180.f * menu.menu_scaling(), 0), ImGuiCond_FirstUseEver);
+            ImGui::SetNextWindowPos(ImVec2(779, 0), ImGuiCond_FirstUseEver);
+            ImGui::SetNextWindowSize(ImVec2(500, 200), ImGuiCond_FirstUseEver);
             ImGui::Begin(
-                    "Energy Plot", nullptr,
+                    "C Plot", nullptr,
                     ImGuiWindowFlags_NoSavedSettings
-
             );
 
-//            ImVec2 min = ImGui::GetWindowContentRegionMin();
-//            ImVec2 max = ImGui::GetWindowContentRegionMax();
-//
-//            max.x = (max.x - min.x) / 2;
-//            max.y -= min.y + ImGui::GetTextLineHeightWithSpacing() * 3;
-//            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-//                Visualize::plot_energy("T", 1, ImVec2(-15, 10), ImVec2(0, 2e6), ImGui::GetColorU32(ImGuiCol_PlotLines));
-//                Visualize::plot_energy("V", 2, ImVec2(-15, 10), ImVec2(0, 2e6), ImGui::GetColorU32(ImGuiCol_HeaderActive));
-//                Visualize::plot_energy("T+V", 3, ImVec2(-15, 10), ImVec2(0, 4e6), ImGui::GetColorU32(ImGuiCol_ColumnActive));
-            std::deque<std::array<double, 4> > energy;
-            (new ScalarTimeValueInspector<4>())->track(energy, 1)->plot("energy");
+            ImVec2 min = ImGui::GetWindowContentRegionMin();
+            ImVec2 max = ImGui::GetWindowContentRegionMax();
 
+            max.x = (max.x - min.x) / 2;
+            max.y -= min.y + ImGui::GetTextLineHeightWithSpacing() * 3;
+            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+            for (auto &inspector: inspector_list)
+            {
+                inspector->plot("C");
+            }
 
             ImGui::End();
         };
@@ -244,4 +244,9 @@ const std::vector<unsigned int> &pbd_viewer::picked_vertices()
 bool pbd_viewer::is_mouse_dragging()
 {
     return g_mouse_dragging;
+}
+
+void pbd_viewer::track(pbd_inspector::Trackable *trackable, int index)
+{
+    inspector_list.emplace_back((new pbd_inspector::ScalarTimeValueInspector())->track(trackable, index));
 }

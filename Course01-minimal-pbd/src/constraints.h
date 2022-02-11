@@ -7,13 +7,13 @@
 #define POSITIONBASEDDYNAMICS_CONSTRAINTS_H
 
 #include "Utils/visualization/eigen_types.h"
-#include "Utils/visualization/viewer.h"
+#include "Utils/visualization/inspector.h"
 
 #include <vector>
 
 namespace pbd_src
 {
-    class DistanceConstraint : public pbd_viewer::Trackable<2>
+    class DistanceConstraint : public pbd_inspector::Trackable
     {
     public:
         explicit DistanceConstraint(Eigen::VectorXd &init_q, const Eigen::MatrixXi &edges);
@@ -24,9 +24,6 @@ namespace pbd_src
         std::vector<Eigen::SparseMatrixd> Es; // election matrix group
         Eigen::Matrix36d B; // composition matrix group
         Eigen::VectorXd rest_length; // rest length group
-
-    public:
-        std::deque<std::array<double, 2>> &track(int index) override;
     };
 }
 

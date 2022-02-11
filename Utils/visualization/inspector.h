@@ -11,17 +11,33 @@
 
 namespace pbd_inspector
 {
-    class Trackable
+    class Timeable
     {
     public:
-        virtual std::pair<int, std::deque<std::vector<double> > > &track(int index) = 0;
+        static double simulation_time_;
+    };
+
+    class Trackable : public Timeable
+    {
+    public:
+        std::deque<std::vector<double> > tracked_state_; // [index, {time, ...}]
+
+    public:
+        void record(double state);
+        double max = std::numeric_limits<double>::min();
+        double min = std::numeric_limits<double>::max();
+        size_t max_cache_ = 10000;
     };
 
     class Inspector
     {
     public:
-        void track(Trackable &trackable, int index);
-        virtual void plot(const char *label) = 0;
+        Inspector *track(Trackable *trackable, int index);
+
+        virtual void plot(const char *label);
+
+        Trackable *trackable_;
+        int index_;
     };
 
     class ScalarTimeValueInspector : public Inspector
@@ -30,7 +46,7 @@ namespace pbd_inspector
         void plot(const char *label) override;
 
     public:
-        
+
     };
 }
 

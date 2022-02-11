@@ -5,7 +5,6 @@
 
 #include "constraints.h"
 #include "Utils/pbd_log.h"
-#include <iostream>
 
 pbd_src::DistanceConstraint::DistanceConstraint(Eigen::VectorXd &init_q, const Eigen::MatrixXi &edges)
 {
@@ -40,6 +39,7 @@ pbd_src::DistanceConstraint::DistanceConstraint(Eigen::VectorXd &init_q, const E
 
 bool pbd_src::DistanceConstraint::solve(const Eigen::VectorXd &q, const Eigen::SparseMatrix<double> &M_inv, Eigen::VectorXd &dq, double stiffness)
 {
+    double tracked_C = 0;
     for (int i = 0; i < Es.size(); ++i)
     {
         Eigen::Vector6d p = Es[i] * q;
@@ -61,6 +61,9 @@ bool pbd_src::DistanceConstraint::solve(const Eigen::VectorXd &q, const Eigen::S
 //        }
         dq = dq + Es[i].transpose() * dp;
 
+        tracked_C = C;
     }
+    tracked_C = std::sin(simulation_time_);
+    record(tracked_C);
     return true;
 }
