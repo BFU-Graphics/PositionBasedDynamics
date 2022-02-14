@@ -45,7 +45,7 @@ link_directories(${MY_EXTERNAL_DIR}/bin ${MY_EXTERNAL_DIR}/lib)
 
 # Global Source Files
 file(GLOB PBD_UTILS_FILES Utils/*.h Utils/*.cpp)
-file(GLOB PBD_UTILS_VISUALIZATION_FILES Utils/visualization/*.h Utils/visualization/*.cpp)
+file(GLOB PBD_UTILS_VISUALIZATION_FILES Utils/visualization_src/*.h Utils/visualization_src/*.cpp)
 
 
 # Global Definitions

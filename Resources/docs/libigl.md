@@ -80,7 +80,7 @@ void* callback_key_up_data;
 // Empty all fields
 void clear();
 
-// Change the visualization mode, invalidating the cache if necessary
+// Change the visualization_src mode, invalidating the cache if necessary
 void set_face_based(bool newvalue);
 
 // Helpers that can draw the most common meshes

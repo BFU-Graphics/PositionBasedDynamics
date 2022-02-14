@@ -117,7 +117,7 @@ void pbd_viewer::setup(const Eigen::VectorXd &q, const Eigen::VectorXd &qdot, bo
 
 void pbd_viewer::add_object_to_scene(const Eigen::MatrixXd &V, const Eigen::MatrixXi &F, Eigen::RowVector3d color)
 {
-    if (g_geometry.size() == 0)
+    if (g_geometry.empty())
     {
         g_id.push_back(0);
     } else
@@ -146,6 +146,34 @@ void pbd_viewer::update_vertex_positions(unsigned int id, Eigen::Ref<const Eigen
 //    pbd_viewer::viewer().core().align_camera_center(g_viewer.data_list[g_id[id]].V);
 }
 
+void pbd_viewer::track(pbd_inspector::Trackable *trackable, int index)
+{
+    inspector_list.emplace_back((new pbd_inspector::ScalarTimeValueInspector())->track(trackable, index));
+}
+
+igl::opengl::glfw::Viewer &pbd_viewer::viewer()
+{ return g_viewer; }
+
+const Eigen::Vector3d &pbd_viewer::mouse_world()
+{
+    return g_mouse_world;
+}
+
+const Eigen::Vector3d &pbd_viewer::mouse_drag_world()
+{
+    return g_mouse_drag_world;
+}
+
+const std::vector<unsigned int> &pbd_viewer::picked_vertices()
+{
+    return g_picked_vertices;
+}
+
+bool pbd_viewer::is_mouse_dragging()
+{
+    return g_mouse_dragging;
+}
+
 bool pbd_viewer::mouse_down(igl::opengl::glfw::Viewer &viewer, int x, int y)
 {
     g_mouse_win = Eigen::Vector3d(g_viewer.current_mouse_x, viewer.core().viewport(3) - g_viewer.current_mouse_y, 0.);
@@ -166,9 +194,6 @@ bool pbd_viewer::mouse_down(igl::opengl::glfw::Viewer &viewer, int x, int y)
     }
     return false;
 }
-
-igl::opengl::glfw::Viewer &pbd_viewer::viewer()
-{ return g_viewer; }
 
 bool pbd_viewer::mouse_up(igl::opengl::glfw::Viewer &viewer, int x, int y)
 {
@@ -209,29 +234,4 @@ bool pbd_viewer::mouse_move(igl::opengl::glfw::Viewer &viewer, int x, int y)
     }
 
     return false;
-}
-
-const Eigen::Vector3d &pbd_viewer::mouse_world()
-{
-    return g_mouse_world;
-}
-
-const Eigen::Vector3d &pbd_viewer::mouse_drag_world()
-{
-    return g_mouse_drag_world;
-}
-
-const std::vector<unsigned int> &pbd_viewer::picked_vertices()
-{
-    return g_picked_vertices;
-}
-
-bool pbd_viewer::is_mouse_dragging()
-{
-    return g_mouse_dragging;
-}
-
-void pbd_viewer::track(pbd_inspector::Trackable *trackable, int index)
-{
-    inspector_list.emplace_back((new pbd_inspector::ScalarTimeValueInspector())->track(trackable, index));
 }

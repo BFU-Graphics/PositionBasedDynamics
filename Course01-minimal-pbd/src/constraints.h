@@ -6,8 +6,8 @@
 #ifndef POSITIONBASEDDYNAMICS_CONSTRAINTS_H
 #define POSITIONBASEDDYNAMICS_CONSTRAINTS_H
 
-#include "Utils/visualization/eigen_types.h"
-#include "Utils/visualization/inspector.h"
+#include "Utils/visualization_src/eigen_types.h"
+#include "Utils/visualization_src/inspector.h"
 
 #include <vector>
 

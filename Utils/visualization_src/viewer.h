@@ -27,6 +27,8 @@
 
 namespace pbd_viewer
 {
+    // ======================================== Viewer API ========================================
+
     /// set up igl viewer system
     void setup(const Eigen::VectorXd &q, const Eigen::VectorXd &qdot, bool ps_plot = false);
 
@@ -36,15 +38,13 @@ namespace pbd_viewer
     /// update rendering vertices
     void update_vertex_positions(unsigned int id, Eigen::Ref<const Eigen::VectorXd> pos);
 
-    /// get igl viewer
+    // Custom Plot Canvas
+    void track(pbd_inspector::Trackable *trackable, int index = 1);
+
+
+    // ======================================== Global Variables Access ========================================
+
     igl::opengl::glfw::Viewer &viewer();
-
-    /// mouse callback
-    bool mouse_down(igl::opengl::glfw::Viewer &viewer, int x, int y);
-
-    bool mouse_up(igl::opengl::glfw::Viewer &viewer, int x, int y);
-
-    bool mouse_move(igl::opengl::glfw::Viewer &viewer, int x, int y);
 
     const Eigen::Vector3d &mouse_world();
 
@@ -54,8 +54,11 @@ namespace pbd_viewer
 
     bool is_mouse_dragging();
 
-    // Custom Plot Canvas
-    void track(pbd_inspector::Trackable *trackable, int index = 1);
+    bool mouse_down(igl::opengl::glfw::Viewer &viewer, int x, int y);
+
+    bool mouse_up(igl::opengl::glfw::Viewer &viewer, int x, int y);
+
+    bool mouse_move(igl::opengl::glfw::Viewer &viewer, int x, int y);
 }
 
 #endif //POSITIONBASEDDYNAMICS_VIEWER_H

@@ -51,7 +51,7 @@ void pbd_inspector::Inspector::plot(const char *label, float start_pos_x, float 
             ImGuiWindowFlags_NoSavedSettings
     );
 
-    Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    Text("Rendering average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
     ImGuiContext &g = *GImGui;
     const ImGuiStyle &style = g.Style;
@@ -137,7 +137,7 @@ void pbd_inspector::Inspector::plot(const char *label, float start_pos_x, float 
         }
         std::string text = std::to_string(res);
         text.resize(5);
-        text.append("e");
+        text.append("e-");
         text.append(std::to_string(scale));
         DrawList->AddText(normalized_to_pix(ImVec2(0, static_cast<float>(10 - i) / static_cast<float>(11))), GetColorU32(ImGuiCol_Text), text.c_str());
     }

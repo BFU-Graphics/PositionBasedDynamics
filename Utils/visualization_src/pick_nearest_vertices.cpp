@@ -61,6 +61,6 @@ namespace pbd_viewer
             }
         }
 
-        return (verts.size() == 0 ? false : true);
+        return verts.size() != 0;
     }
 }
