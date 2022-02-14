@@ -44,21 +44,10 @@ bool pbd_src::DistanceConstraint::solve(const Eigen::VectorXd &q, const Eigen::S
     {
         Eigen::Vector6d p = Es[i] * q;
         Eigen::Matrix66d M_inv66 = Es[i] * M_inv * Es[i].transpose();
-//        Eigen::Matrix3d M1_inv = M_inv66.block<3, 3>(0, 0);
-//        Eigen::Matrix3d M2_inv = M_inv66.block<3, 3>(3, 3);
 
         double C = (B * p).norm() - rest_length(i);
         Eigen::Vector6d dC = (B.transpose() * B * p) / (B * p).norm();
         Eigen::Vector6d dp = -0.6 * stiffness * M_inv66.transpose() * (C * dC) / (dC.transpose() * M_inv66 * dC);
-//        if (C > 2)
-//        {
-//            pbd_util::log(p, "Distance Constraint", "p", true);
-//            pbd_util::log(C, "Distance Constraint", "C", true);
-//            pbd_util::log(dC, "Distance Constraint", "dC", true);
-//            pbd_util::log(dp, "Distance Constraint", "dp", true);
-//            pbd_util::log(Es[i], "Distance Constraint", "Es", true);
-//            pbd_util::log(M_inv66, "Distance Constraint", "M_inv66", true);
-//        }
         dq = dq + Es[i].transpose() * dp;
 
         tracked_C = C;
