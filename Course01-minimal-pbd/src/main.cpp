@@ -4,7 +4,6 @@
 #include <igl/readPLY.h>
 #include <igl/edges.h>
 
-
 #include "Utils/visualization/inspector.h"
 #include "Utils/visualization/eigen_types.h"
 #include "Utils/visualization/viewer.h"
