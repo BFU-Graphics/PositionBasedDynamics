@@ -49,7 +49,7 @@ bool pbd_src::DistanceConstraint::solve(const Eigen::VectorXd &q, const Eigen::S
 
         double C = (B * p).norm() - rest_length(i);
         Eigen::Vector6d dC = (B.transpose() * B * p) / (B * p).norm();
-        Eigen::Vector6d dp = -0.2 * stiffness * M_inv66.transpose() * (C * dC) / (dC.transpose() * M_inv66 * dC);
+        Eigen::Vector6d dp = -0.6 * stiffness * M_inv66.transpose() * (C * dC) / (dC.transpose() * M_inv66 * dC);
 //        if (C > 2)
 //        {
 //            pbd_util::log(p, "Distance Constraint", "p", true);
@@ -63,7 +63,7 @@ bool pbd_src::DistanceConstraint::solve(const Eigen::VectorXd &q, const Eigen::S
 
         tracked_C = C;
     }
-    tracked_C = std::sin(simulation_time_);
+//    tracked_C = std::sin(simulation_time_);
     record(tracked_C);
     return true;
 }

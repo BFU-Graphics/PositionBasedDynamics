@@ -39,7 +39,7 @@ void simulate()
     g.setZero();
     for (int i = 0; i < qdot.rows(); i += 3)
     {
-        g[i + 1] = -9.8 * dt * 10;
+        g[i + 1] = -9.8 * dt;
     }
 
     Eigen::VectorXd p;
@@ -69,17 +69,19 @@ void simulate()
         // loop solverIterations times
         // projectConstraints(C_1,...,C_M+Mcoll ,p_1,...,p_N)
         // end loop
-        for (int i = 0; i < 1; ++i)
+        for (int i = 0; i < 5; ++i)
         {
-            distance_constraint->solve(q, M_inv, dp, k);
+            dp.setZero();
+            distance_constraint->solve(p, M_inv, dp, k);
+            p += dp;
         }
 
 
         // (12) ~ (15) forall vertices i
         // v_i <- (p_i - x_i) / \Delta t
         // x_i <- p_i
-//        qdot = dp / dt;
-        q = p + dp;
+        qdot = (p - q) / dt;
+        q = p;
 //        std::cout << dq << std::endl;
 
 
@@ -125,7 +127,7 @@ int main(int argc, char *argv[])
     std::string bunny_path = std::string(PBD_MODEL_DIR) + "bun_zipper_res3.ply";
     std::string mitsuba_path = std::string(PBD_TEXTURE_DIR) + "mitsuba.png";
 
-    igl::readOBJ(plane_path, V, F);
+    igl::readOBJ(cube_path, V, F);
     igl::edges(F, E);
 
     pbd_viewer::add_object_to_scene(V, F, Eigen::RowVector3d(244, 165, 130) / 255.);
@@ -148,6 +150,7 @@ int main(int argc, char *argv[])
     std::thread simulation_thread(simulate);
     simulation_thread.detach();
 
+    pbd_viewer::viewer().core().animation_max_fps = 60;
     pbd_viewer::viewer().callback_post_draw = &draw;
     pbd_viewer::viewer().launch_init(true, false, "Hello Minimal PBD", 0, 0);
     pbd_viewer::viewer().launch_rendering(true);

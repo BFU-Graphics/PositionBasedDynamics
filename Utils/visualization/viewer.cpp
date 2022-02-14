@@ -96,28 +96,16 @@ void pbd_viewer::setup(const Eigen::VectorXd &q, const Eigen::VectorXd &qdot, bo
         // Add content to the default menu window
         menu.callback_draw_custom_window = [&]()
         {
-            // Define next window position + size
-//            ImGui::SetNextWindowPos(ImVec2(180.f * menu.menu_scaling(), 0), ImGuiCond_FirstUseEver);
-            ImGui::SetNextWindowPos(ImVec2(779, 0), ImGuiCond_FirstUseEver);
-            ImGui::SetNextWindowSize(ImVec2(500, 200), ImGuiCond_FirstUseEver);
-            ImGui::Begin(
-                    "C Plot", nullptr,
-                    ImGuiWindowFlags_NoSavedSettings
-            );
-
             ImVec2 min = ImGui::GetWindowContentRegionMin();
             ImVec2 max = ImGui::GetWindowContentRegionMax();
 
             max.x = (max.x - min.x) / 2;
             max.y -= min.y + ImGui::GetTextLineHeightWithSpacing() * 3;
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
-            for (auto &inspector: inspector_list)
+            for (int i = 0; i < inspector_list.size(); ++i)
             {
-                inspector->plot("C");
+                inspector_list[i]->plot("C", 1280 - 600 - 1, i * 150, 600, 150);
             }
-
-            ImGui::End();
         };
     }
 
@@ -158,7 +146,7 @@ void pbd_viewer::update_vertex_positions(unsigned int id, Eigen::Ref<const Eigen
     //tell viewer to update
     g_viewer.data_list[g_id[id]].dirty |= igl::opengl::MeshGL::DIRTY_POSITION;
 
-    pbd_viewer::viewer().core().align_camera_center(g_viewer.data_list[g_id[id]].V);
+//    pbd_viewer::viewer().core().align_camera_center(g_viewer.data_list[g_id[id]].V);
 }
 
 bool pbd_viewer::mouse_down(igl::opengl::glfw::Viewer &viewer, int x, int y)

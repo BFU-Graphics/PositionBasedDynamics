@@ -34,7 +34,7 @@ namespace pbd_inspector
     public:
         Inspector *track(Trackable *trackable, int index);
 
-        virtual void plot(const char *label);
+        virtual void plot(const char *label, float start_pos_x, float start_pos_y, float width, float height);
 
         Trackable *trackable_;
         int index_;
@@ -43,7 +43,7 @@ namespace pbd_inspector
     class ScalarTimeValueInspector : public Inspector
     {
     public:
-        void plot(const char *label) override;
+        void plot(const char *label, float start_pos_x, float start_pos_y, float width, float height) override;
 
     public:
 
