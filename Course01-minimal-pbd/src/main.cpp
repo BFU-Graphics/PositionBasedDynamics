@@ -18,7 +18,8 @@ Eigen::VectorXd q;
 Eigen::VectorXd qdot;
 Eigen::SparseMatrix<double> M_inv;
 double t = 0; //simulation time
-double dt = 0.01; //time step
+double dt = 0.02; //time step
+double iterations = 5;
 double k = 1;
 double k_selected = 1e5; //stiff spring for pulling on object
 double m = 1.;
@@ -45,6 +46,7 @@ void set_inv_mass(int index)
 
 void init()
 {
+    Eigen::initParallel();
     std::string plane_path = std::string(PBD_MODEL_DIR) + "plane.obj";
     std::string cube_path = std::string(PBD_MODEL_DIR) + "cube.obj";
     std::string bunny_path = std::string(PBD_MODEL_DIR) + "bun_zipper_res3.ply";
@@ -54,10 +56,9 @@ void init()
     Eigen::MatrixXi F;
     Eigen::MatrixXi E;
 
-    igl::readOBJ(cube_path, V, F);
+    igl::readPLY(bunny_path, V, F);
+//    igl::readOBJ(cube_path, V, F);
     igl::edges(F, E);
-
-    pbd_viewer::add_object_to_scene(V, F, Eigen::RowVector3d(244, 165, 130) / 255.);
 
 
     q.resize(V.rows() * V.cols());
@@ -68,7 +69,12 @@ void init()
     qdot.setZero();
     set_inv_mass(0);
     distance_constraint = new pbd_src::DistanceConstraint(q, E);
+
+    pbd_viewer::add_object_to_scene(V, F, Eigen::RowVector3d(244, 165, 130) / 255.);
+
     pbd_viewer::track(distance_constraint);
+
+    pbd_viewer::setup(q, qdot, true);
 }
 
 void simulate()
@@ -78,18 +84,14 @@ void simulate()
     g.setZero();
     for (int i = 0; i < qdot.rows(); i += 3)
     {
-        g[i + 1] = -9.8 * dt;
+        g[i + 1] = -9.8;
     }
 
     Eigen::VectorXd p;
-    Eigen::VectorXd dp;
     p.resize(q.rows());
-    dp.resize(q.rows());
     while (!pause)
     {
         auto start = std::chrono::steady_clock::now();
-
-        dp.setZero();
 
         // (5) forall vertices i do v_i <- v_i + \Delta t * w_i * f_external
         qdot = qdot + dt * M_inv * g;
@@ -108,11 +110,9 @@ void simulate()
         // loop solverIterations times
         // projectConstraints(C_1,...,C_M+Mcoll ,p_1,...,p_N)
         // end loop
-        for (int i = 0; i < 5; ++i)
+        for (int i = 0; i < iterations; ++i)
         {
-            dp.setZero();
-            distance_constraint->solve(p, M_inv, dp, k);
-            p += dp;
+            distance_constraint->solve(p, M_inv, k);
         }
 
 
@@ -144,7 +144,6 @@ bool draw(igl::opengl::glfw::Viewer &viewer)
 int main(int argc, char *argv[])
 {
     init();
-    pbd_viewer::setup(q, qdot, true);
     std::thread simulation_thread(simulate);
     simulation_thread.detach();
 

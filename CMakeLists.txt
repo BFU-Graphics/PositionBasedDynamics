@@ -3,6 +3,15 @@ project(PositionBasedDynamics)
 
 set(CMAKE_CXX_STANDARD 17)
 
+OPTION (USE_OpenMP "Use OpenMP" ON)
+IF(USE_OpenMP)
+    FIND_PACKAGE(OpenMP)
+    IF(OPENMP_FOUND)
+        SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    ENDIF()
+ENDIF()
+
 if ( MSVC )
     set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} /W4")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4005 /wd4100 /wd4244 /wd4267 /wd4819 /wd4305 /wd4996 /wd4018 /wd4389 /wd4018 /wd4127 /wd4458 /wd4459 /wd4189 /wd4456 /wd4101 /wd4125 /wd4505")

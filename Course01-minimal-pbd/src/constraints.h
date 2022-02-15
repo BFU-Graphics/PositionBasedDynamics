@@ -18,7 +18,7 @@ namespace pbd_src
     public:
         explicit DistanceConstraint(Eigen::VectorXd &init_q, const Eigen::MatrixXi &edges);
 
-        bool solve(const Eigen::VectorXd &q, const Eigen::SparseMatrix<double>& M_inv, Eigen::VectorXd &dq, double stiffness = 10000.0);
+        bool solve(Eigen::VectorXd &q, const Eigen::SparseMatrix<double>& M_inv, double stiffness = 1.0);
 
     public: // const fields (won't change during the simulation)
         std::vector<Eigen::SparseMatrixd> Es; // election matrix group

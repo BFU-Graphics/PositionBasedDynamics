@@ -6,6 +6,8 @@
 #include "constraints.h"
 #include "Utils/pbd_log.h"
 
+#include "omp.h"
+
 pbd_src::DistanceConstraint::DistanceConstraint(Eigen::VectorXd &init_q, const Eigen::MatrixXi &edges)
 {
     typedef Eigen::Triplet<double> T;
@@ -37,9 +39,26 @@ pbd_src::DistanceConstraint::DistanceConstraint(Eigen::VectorXd &init_q, const E
             , 0, 0, 1, 0, 0, -1;
 }
 
-bool pbd_src::DistanceConstraint::solve(const Eigen::VectorXd &q, const Eigen::SparseMatrix<double> &M_inv, Eigen::VectorXd &dq, double stiffness)
+bool pbd_src::DistanceConstraint::solve(Eigen::VectorXd &q, const Eigen::SparseMatrix<double> &M_inv, double stiffness)
 {
-    double tracked_C = 0;
+//    double tracked_dp = 0;
+//    for (int i = 0; i < Es.size(); ++i)
+//    {
+//        Eigen::Vector6d p = Es[i] * q;
+//        Eigen::Matrix66d M_inv66 = Es[i] * M_inv * Es[i].transpose();
+//
+//        double C = (B * p).norm() - rest_length(i);
+//        Eigen::Vector6d dC = (B.transpose() * B * p) / (B * p).norm();
+//        Eigen::Vector6d dp = -1 * stiffness * M_inv66.transpose() * (C * dC) / (dC.transpose() * M_inv66 * dC);
+//        dq = dq + Es[i].transpose() * dp;
+//
+//        tracked_dp = C;
+//    }
+////    tracked_C = std::sin(simulation_time_);
+//    record(tracked_dp);
+
+    omp_set_num_threads(8);
+#pragma omp parallel for
     for (int i = 0; i < Es.size(); ++i)
     {
         Eigen::Vector6d p = Es[i] * q;
@@ -47,12 +66,8 @@ bool pbd_src::DistanceConstraint::solve(const Eigen::VectorXd &q, const Eigen::S
 
         double C = (B * p).norm() - rest_length(i);
         Eigen::Vector6d dC = (B.transpose() * B * p) / (B * p).norm();
-        Eigen::Vector6d dp = -0.6 * stiffness * M_inv66.transpose() * (C * dC) / (dC.transpose() * M_inv66 * dC);
-        dq = dq + Es[i].transpose() * dp;
-
-        tracked_C = C;
+        Eigen::Vector6d dp = -stiffness * M_inv66.transpose() * (C * dC) / (dC.transpose() * M_inv66 * dC);
+        q += Es[i].transpose() * dp;
     }
-//    tracked_C = std::sin(simulation_time_);
-    record(tracked_C);
     return true;
 }
