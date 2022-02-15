@@ -46,7 +46,6 @@ bool HINASIM::DistanceConstraint::solve(Eigen::VectorXd &q, const Eigen::SparseM
     {
         Eigen::Vector6d p = Es[i] * q;
         Eigen::Matrix66d M_inv66 = Es[i] * M_inv * Es[i].transpose();
-
         double C = (B * p).norm() - rest_length(i);
         Eigen::Vector6d dC = (B.transpose() * B * p) / (B * p).norm();
         Eigen::Vector6d dp = -stiffness * M_inv66.transpose() * (C * dC) / (dC.transpose() * M_inv66 * dC);

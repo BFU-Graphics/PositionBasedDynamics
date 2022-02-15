@@ -51,6 +51,7 @@ bool pbd_src::DistanceConstraint::solve(Eigen::VectorXd &q, const Eigen::SparseM
         double C = (B * p).norm() - rest_length(i);
         Eigen::Vector6d dC = (B.transpose() * B * p) / (B * p).norm();
         Eigen::Vector6d dp = -stiffness * M_inv66.transpose() * (C * dC) / (dC.transpose() * M_inv66 * dC);
+        auto res = Es[i].transpose() * dp;
         q += Es[i].transpose() * dp;
     }
     return true;

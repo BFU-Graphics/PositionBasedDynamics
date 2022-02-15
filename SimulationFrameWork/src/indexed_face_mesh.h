@@ -1,0 +1,16 @@
+/**
+ * @author YC XIANG.
+ * @date 02/15, 2022
+ */
+
+#ifndef POSITIONBASEDDYNAMICS_INDEXED_FACE_MESH_H
+#define POSITIONBASEDDYNAMICS_INDEXED_FACE_MESH_H
+
+
+class indexed_face_mesh
+{
+
+};
+
+
+#endif //POSITIONBASEDDYNAMICS_INDEXED_FACE_MESH_H

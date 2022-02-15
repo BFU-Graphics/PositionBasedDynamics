@@ -13,12 +13,18 @@
 
 namespace pbd_src
 {
-    class DistanceConstraint : public pbd_inspector::Trackable
+    class Constraint
+    {
+    public:
+        virtual bool solve(Eigen::VectorXd &q, const Eigen::SparseMatrix<double> &M_inv, double stiffness) = 0;
+    };
+
+    class DistanceConstraint : public Constraint, public pbd_inspector::Trackable
     {
     public:
         explicit DistanceConstraint(Eigen::VectorXd &init_q, const Eigen::MatrixXi &edges);
 
-        bool solve(Eigen::VectorXd &q, const Eigen::SparseMatrix<double>& M_inv, double stiffness = 1.0);
+        bool solve(Eigen::VectorXd &q, const Eigen::SparseMatrix<double> &M_inv, double stiffness) override;
 
     public: // const fields (won't change during the simulation)
         std::vector<Eigen::SparseMatrixd> Es; // election matrix group
