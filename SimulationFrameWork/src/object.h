@@ -13,4 +13,5 @@ namespace HINASIM
 
     };
 }
+
 #endif //POSITIONBASEDDYNAMICS_OBJECT_H
