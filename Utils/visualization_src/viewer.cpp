@@ -188,7 +188,6 @@ bool pbd_viewer::mouse_down(igl::opengl::glfw::Viewer &viewer, int x, int y)
                               g_viewer.core().view, g_viewer.core().proj, g_viewer.core().viewport,
                               g_viewer.data().V, g_geometry[0].second, 0.1))
     {
-
         g_selected_obj = 0;
         g_mouse_dragging = true;
     }

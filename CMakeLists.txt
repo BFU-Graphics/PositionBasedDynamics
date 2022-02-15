@@ -53,9 +53,17 @@ link_directories(${MY_EXTERNAL_DIR}/bin ${MY_EXTERNAL_DIR}/lib)
 
 
 # Global Source Files
+file(GLOB PBD_UTILS_FILES Utils/api/*.h Utils/api/*.cpp)
 file(GLOB PBD_UTILS_FILES Utils/*.h Utils/*.cpp)
 file(GLOB PBD_UTILS_VISUALIZATION_FILES Utils/visualization_src/*.h Utils/visualization_src/*.cpp)
 
+
+file(GLOB VISUALIZATION_FILES
+        RenderingFrameWork/*.h
+        RenderingFrameWork/*.cpp
+        RenderingFrameWork/src/*.h
+        RenderingFrameWork/src/*.cpp
+        )
 
 # Global Definitions
 add_definitions(
@@ -66,4 +74,6 @@ add_definitions(
 
 
 # Sub Targets
+add_subdirectory(RenderingFrameWork)
+add_subdirectory(SimulationFrameWork)
 add_subdirectory(Course01-minimal-pbd)
