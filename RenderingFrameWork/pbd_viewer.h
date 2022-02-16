@@ -26,10 +26,11 @@ namespace HINAVIEWER
 
         void launch_rendering(const std::string &window_name = "Hello HinaPE");
 
+        void update_vertex_positions(unsigned int id, Eigen::Ref<const Eigen::MatrixXd> V);
+
         igl::opengl::glfw::Viewer &viewer();
 
     public:
-
         int record(HINAVIEWER::RENDERABLE::Renderable *renderable);
 
         void track(HINAVIEWER::INSPECTOR::Trackable *trackable, int index = 1);

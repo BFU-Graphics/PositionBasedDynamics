@@ -29,6 +29,12 @@ void HINAVIEWER::PBDViewer::launch_rendering(const std::string &window_name)
     viewer_.launch_rendering(true);
 }
 
+void HINAVIEWER::PBDViewer::update_vertex_positions(unsigned int id, Eigen::Ref<const Eigen::MatrixXd> V)
+{
+    viewer_.data_list[id].V = V;
+    viewer_.data_list[id].dirty |= igl::opengl::MeshGL::DIRTY_POSITION;
+}
+
 igl::opengl::glfw::Viewer &HINAVIEWER::PBDViewer::viewer()
 {
     return viewer_;

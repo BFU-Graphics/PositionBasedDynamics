@@ -24,6 +24,7 @@ namespace HINAVIEWER::RENDERABLE
     public:
         Eigen::MatrixXd V_;
         Eigen::MatrixXi F_;
+        Eigen::MatrixXi E_;
     };
 }
 
