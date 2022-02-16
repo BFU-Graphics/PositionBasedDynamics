@@ -32,11 +32,11 @@ void HINAVIEWER::INSPECTOR::Trackable::record(double state)
     { return lhs[1] < rhs[1]; }))[1];
 }
 
-HINAVIEWER::INSPECTOR::Inspector &HINAVIEWER::INSPECTOR::Inspector::track(HINAVIEWER::INSPECTOR::Trackable *trackable, int index)
+HINAVIEWER::INSPECTOR::Inspector *HINAVIEWER::INSPECTOR::Inspector::track(HINAVIEWER::INSPECTOR::Trackable *trackable, int index)
 {
     trackable_ = trackable;
     index_ = index;
-    return *this;
+    return this;
 }
 
 void HINAVIEWER::INSPECTOR::Inspector::plot(const char *label, float start_pos_x, float start_pos_y, float width, float height)

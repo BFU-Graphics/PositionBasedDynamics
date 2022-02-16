@@ -18,7 +18,7 @@ Eigen::VectorXd q;
 Eigen::VectorXd qdot;
 Eigen::SparseMatrix<double> M_inv;
 double t = 0; //simulation time
-double dt = 0.02; //time step
+double dt = 0.005; //time step
 double iterations = 5;
 double k = 1;
 double k_selected = 1e5; //stiff spring for pulling on object
@@ -56,8 +56,8 @@ void init()
     Eigen::MatrixXi F;
     Eigen::MatrixXi E;
 
-    igl::readPLY(bunny_path, V, F);
-//    igl::readOBJ(cube_path, V, F);
+//    igl::readPLY(bunny_path, V, F);
+    igl::readOBJ(cube_path, V, F);
     igl::edges(F, E);
 
 
@@ -97,7 +97,7 @@ void simulate()
         qdot = qdot + dt * M_inv * g;
 
         // (6) damping velocities v_i
-//        qdot *= 0.999;
+        qdot *= 0.999;
 
         // (7) forall vertices i do p_i <- x_i + \Delta t * v_i
         p = q + dt * qdot;
@@ -147,9 +147,9 @@ int main(int argc, char *argv[])
     std::thread simulation_thread(simulate);
     simulation_thread.detach();
 
-    pbd_viewer::viewer().core().animation_max_fps = 60;
     pbd_viewer::viewer().callback_post_draw = &draw;
     pbd_viewer::viewer().launch_init(true, false, "Hello Minimal PBD", 0, 0);
+    pbd_viewer::viewer().core().animation_max_fps = 60;
     pbd_viewer::viewer().launch_rendering(true);
     pbd_viewer::viewer().launch_shut();
 }

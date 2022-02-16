@@ -32,7 +32,7 @@ namespace HINAVIEWER::INSPECTOR
     class Inspector
     {
     public:
-        Inspector &track(Trackable *trackable, int index);
+        Inspector *track(Trackable *trackable, int index);
 
         virtual void plot(const char *label, float start_pos_x, float start_pos_y, float width, float height);
 

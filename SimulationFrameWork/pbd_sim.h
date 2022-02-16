@@ -6,8 +6,8 @@
 #ifndef POSITIONBASEDDYNAMICS_PBD_SIM_H
 #define POSITIONBASEDDYNAMICS_PBD_SIM_H
 
+#include "src/object.h"
 #include "src/constraints.h"
-
 
 #include <vector>
 
@@ -29,7 +29,9 @@ namespace HINASIM
         virtual void project_positions();
 
     protected:
-        std::vector<Constraint> constraints;
+        typedef Constraint Joint;
+        std::vector<Object *> objects_;
+        std::vector<Joint *> joints_;
 
     protected: // Env
 

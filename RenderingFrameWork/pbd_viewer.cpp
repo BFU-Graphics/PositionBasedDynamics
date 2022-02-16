@@ -18,6 +18,7 @@ HINAVIEWER::PBDViewer::PBDViewer(int width, int height, Eigen::Vector4f color) :
 {
     setup_menu();
 //    setup_callback();
+//    setup_inspector()
     viewer_.core().background_color = color_;
     viewer_.core().is_animating = true;
 }
@@ -31,6 +32,12 @@ void HINAVIEWER::PBDViewer::launch_rendering(const std::string &window_name)
 igl::opengl::glfw::Viewer &HINAVIEWER::PBDViewer::viewer()
 {
     return viewer_;
+}
+
+HINAVIEWER::PBDViewer &HINAVIEWER::PBDViewer::track(HINAVIEWER::INSPECTOR::Trackable *trackable, int index)
+{
+    inspector_list_.emplace_back((new HINAVIEWER::INSPECTOR::ScalarTimeValueInspector())->track(trackable, index));
+    return *this;
 }
 
 HINAVIEWER::PBDViewer &HINAVIEWER::PBDViewer::set_background_color(const Eigen::Vector4f &color)
@@ -107,6 +114,24 @@ void HINAVIEWER::PBDViewer::setup_callback()
     viewer_.callback_mouse_up = MOUSE_CALLBACK::mouse_up;
     viewer_.callback_mouse_move = MOUSE_CALLBACK::mouse_move;
 }
+
+void HINAVIEWER::PBDViewer::setup_inspector()
+{
+    menu_.callback_draw_custom_window = [&]()
+    {
+        ImVec2 min = ImGui::GetWindowContentRegionMin();
+        ImVec2 max = ImGui::GetWindowContentRegionMax();
+
+        max.x = (max.x - min.x) / 2;
+        max.y -= min.y + ImGui::GetTextLineHeightWithSpacing() * 3;
+
+        for (int i = 0; i < inspector_list_.size(); ++i)
+        {
+            inspector_list_[i]->plot("C", 1280 - 600 - 1, i * 150, 600, 150);
+        }
+    };
+}
+
 
 HINAVIEWER::PBDViewer &HINAVIEWER::PBDViewer::set_full_screen()
 {

@@ -8,6 +8,8 @@
 
 #define IMGUI_DEFINE_MATH_OPERATORS
 
+#include "src/inspector.h"
+
 #include <igl/opengl/glfw/Viewer.h>
 #include <igl/opengl/glfw/imgui/ImGuiMenu.h>
 #include <igl/opengl/glfw/imgui/ImGuiHelpers.h>
@@ -26,6 +28,10 @@ namespace HINAVIEWER
         igl::opengl::glfw::Viewer &viewer();
 
     public:
+
+        PBDViewer &track(HINAVIEWER::INSPECTOR::Trackable *trackable, int index = 1);
+
+    public:
         PBDViewer &set_background_color(const Eigen::Vector4f &color);
 
         PBDViewer &set_max_fps(double fps);
@@ -37,9 +43,12 @@ namespace HINAVIEWER
 
         void setup_callback();
 
+        void setup_inspector();
+
     protected:
         igl::opengl::glfw::Viewer viewer_;
         igl::opengl::glfw::imgui::ImGuiMenu menu_;
+        std::vector<HINAVIEWER::INSPECTOR::Inspector *> inspector_list_;
 
     protected:
         int width_, height_;

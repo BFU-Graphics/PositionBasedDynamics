@@ -5,11 +5,19 @@
 
 #include "RenderingFrameWork/pbd_viewer.h"
 
+#include "../src/constraints.h"
+
 int main()
 {
     HINAVIEWER::PBDViewer viewer;
+
+
+
+
+
+
+
+
     viewer.launch_rendering();
-
-
     return 0;
 }

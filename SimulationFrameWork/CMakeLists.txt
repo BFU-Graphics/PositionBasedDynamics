@@ -3,6 +3,8 @@ file(GLOB SIMULATION_FRAMEWORK_FILES
         *.cpp
         src/*.h
         src/*.cpp
+        utils/*.h
+        utils/*.cpp
         )
 
 add_executable(test_sim test/main.cpp ${SIMULATION_FRAMEWORK_FILES} ${VISUALIZATION_FILES})

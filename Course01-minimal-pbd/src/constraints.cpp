@@ -41,6 +41,7 @@ pbd_src::DistanceConstraint::DistanceConstraint(Eigen::VectorXd &init_q, const E
 
 bool pbd_src::DistanceConstraint::solve(Eigen::VectorXd &q, const Eigen::SparseMatrix<double> &M_inv, double stiffness)
 {
+    double rec;
     omp_set_num_threads(8);
 #pragma omp parallel for
     for (int i = 0; i < Es.size(); ++i)
@@ -53,6 +54,9 @@ bool pbd_src::DistanceConstraint::solve(Eigen::VectorXd &q, const Eigen::SparseM
         Eigen::Vector6d dp = -stiffness * M_inv66.transpose() * (C * dC) / (dC.transpose() * M_inv66 * dC);
         auto res = Es[i].transpose() * dp;
         q += Es[i].transpose() * dp;
+
+        rec = C;
     }
+    record(rec);
     return true;
 }
