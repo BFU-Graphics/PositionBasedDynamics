@@ -160,3 +160,9 @@ HINAVIEWER::PBDViewer &HINAVIEWER::PBDViewer::set_full_screen()
     is_full_screen = true;
     return *this;
 }
+
+HINAVIEWER::PBDViewer &HINAVIEWER::PBDViewer::focus_object(int ID)
+{
+    viewer_.core().align_camera_center(viewer_.data_list[ID].V);
+    return *this;
+}

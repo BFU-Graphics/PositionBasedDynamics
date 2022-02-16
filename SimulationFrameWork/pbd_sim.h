@@ -16,7 +16,23 @@ namespace HINASIM
     class PBDSim
     {
     public:
+        void simulate(double dt);
+
+    public:
         void add_object(SimObject *object);
+
+    protected:
+        void integrate_velocity_by_gravity(Eigen::Ref<Eigen::VectorXd> qdot, double dt);
+
+        void damping_velocity(Eigen::Ref<Eigen::VectorXd> qdot);
+
+        void predict_position(Eigen::Ref<Eigen::VectorXd> p, Eigen::Ref<Eigen::VectorXd> q, Eigen::Ref<Eigen::VectorXd> qdot, double dt);
+
+        void generate_collision_constraints();
+
+        void constraints_projection(SimObject *o);
+
+        void update_q_and_qdot(Eigen::Ref<Eigen::VectorXd> q, Eigen::Ref<Eigen::VectorXd> qdot, Eigen::Ref<Eigen::VectorXd> p, double dt);
 
     protected:
         typedef Constraint Joint;
@@ -24,7 +40,7 @@ namespace HINASIM
         std::vector<Joint *> joints_;
 
     protected: // Env
-
+        Eigen::Vector3d gravity{0, -9.8, 0};
     };
 }
 

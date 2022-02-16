@@ -24,9 +24,9 @@ namespace HINASIM
     public:
         SimObject& add_constraint(Constraint *constraint);
 
-        SimObject& set_inv_mass(double unified_mass);
+        SimObject& set_inv_mass(double unified_inv_mass);
 
-        SimObject& set_inv_mass(int index, double mass);
+        SimObject& set_inv_mass(int index, double inv_mass);
 
     public:
         /// once [custom_init_geometry] is not nullptr, this would replace default [init_geometry]
@@ -35,7 +35,10 @@ namespace HINASIM
     public:
         Eigen::VectorXd q_;
         Eigen::VectorXd qdot_;
-        Eigen::VectorXd mass_;
+        Eigen::VectorXd p_;
+        Eigen::VectorXd inv_mass_;
+        Eigen::SparseMatrix<double> M_inv; // very big sparse inv mass Matrix, would be removed in the future!
+
 
         std::vector<Constraint *> inner_constraints_;
     };

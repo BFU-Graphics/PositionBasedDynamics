@@ -59,9 +59,9 @@ link_directories(${MY_EXTERNAL_DIR}/bin ${MY_EXTERNAL_DIR}/lib)
 
 
 # Global Source Files
-file(GLOB PBD_UTILS_FILES Utils/api/*.h Utils/api/*.cpp)
-file(GLOB PBD_UTILS_FILES Utils/*.h Utils/*.cpp)
-file(GLOB PBD_UTILS_VISUALIZATION_FILES Utils/visualization_src/*.h Utils/visualization_src/*.cpp)
+#file(GLOB PBD_UTILS_FILES Utils/api/*.h Utils/api/*.cpp)
+#file(GLOB PBD_UTILS_FILES Utils/*.h Utils/*.cpp)
+#file(GLOB PBD_UTILS_VISUALIZATION_FILES Utils/visualization_src/*.h Utils/visualization_src/*.cpp)
 
 
 file(GLOB VISUALIZATION_FILES
@@ -75,11 +75,10 @@ file(GLOB VISUALIZATION_FILES
 add_definitions(
         -DPBD_MODEL_DIR="${CMAKE_SOURCE_DIR}/Resources/models/"
         -DPBD_TEXTURE_DIR="${CMAKE_SOURCE_DIR}/Resources/textures/"
-        -DPBD_LOG_DIR="${CMAKE_SOURCE_DIR}/log/"
 )
 
 
 # Sub Targets
 add_subdirectory(RenderingFrameWork)
 add_subdirectory(SimulationFrameWork)
-add_subdirectory(Course01-minimal-pbd)
+#add_subdirectory(Course01-minimal-pbd)

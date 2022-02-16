@@ -32,8 +32,10 @@ void HINASIM::DeformableObject::init_physical_state()
     q_ = Eigen::Map<Eigen::VectorXd>(Vt.data(), Vt.rows() * Vt.cols());
     qdot_.setZero();
 
-    mass_.resize(V_.rows());
-    mass_.setOnes();
+    p_.resize(q_.size());
+
+    inv_mass_.resize(V_.rows());
+    inv_mass_.setOnes();
 }
 
 void HINASIM::DeformableObject::update_geometry_info()
@@ -50,15 +52,34 @@ HINASIM::SimObject &HINASIM::SimObject::add_constraint(HINASIM::Constraint *cons
     return *this;
 }
 
-HINASIM::SimObject &HINASIM::SimObject::set_inv_mass(double unified_mass)
+HINASIM::SimObject &HINASIM::SimObject::set_inv_mass(double unified_inv_mass)
 {
-    mass_.setConstant(unified_mass);
+    inv_mass_.setConstant(unified_inv_mass);
+
+    M_inv.setIdentity();
+    M_inv *= unified_inv_mass;
+
     return *this;
 }
 
-HINASIM::SimObject &HINASIM::SimObject::set_inv_mass(int index, double mass)
+HINASIM::SimObject &HINASIM::SimObject::set_inv_mass(int index, double inv_mass)
 {
-    mass_(index) = mass;
+    inv_mass_(index) = inv_mass;
+
+    M_inv.resize(q_.rows(), q_.rows());
+    typedef Eigen::Triplet<double> T;
+    std::vector<T> tl_M;
+    tl_M.emplace_back(3 * index + 0, 3 * index + 0, 0);
+    tl_M.emplace_back(3 * index + 1, 3 * index + 1, 0);
+    tl_M.emplace_back(3 * index + 2, 3 * index + 2, 0);
+    for (int i = 0; i < q_.rows(); ++i)
+    {
+        if ((i / 3) == index)
+            continue;
+        tl_M.emplace_back(i, i, 1);
+    }
+    M_inv.setFromTriplets(tl_M.begin(), tl_M.end());
+
     return *this;
 }
 

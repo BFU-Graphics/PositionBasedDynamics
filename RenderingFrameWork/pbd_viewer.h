@@ -42,6 +42,8 @@ namespace HINAVIEWER
 
         PBDViewer &set_full_screen();
 
+        PBDViewer &focus_object(int ID);
+
     protected:
         void setup_menu();
 
