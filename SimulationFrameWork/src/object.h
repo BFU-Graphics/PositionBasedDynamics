@@ -13,7 +13,10 @@ namespace HINASIM
     class Object : public HINAVIEWER::RENDERABLE::Renderable
     {
     public:
-        void init_geometry() override;
+        void init_geometry(const std::string &path) override;
+
+    public:
+        void (*custom_init_geometry)() = nullptr;
     };
 }
 

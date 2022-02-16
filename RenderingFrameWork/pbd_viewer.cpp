@@ -34,7 +34,6 @@ igl::opengl::glfw::Viewer &HINAVIEWER::PBDViewer::viewer()
     return viewer_;
 }
 
-
 int HINAVIEWER::PBDViewer::record(HINAVIEWER::RENDERABLE::Renderable *renderable)
 {
     int ID;
@@ -43,7 +42,8 @@ int HINAVIEWER::PBDViewer::record(HINAVIEWER::RENDERABLE::Renderable *renderable
     else
         ID = viewer_.append_mesh();
 
-    viewer_.data(ID).set_mesh(renderable->V, renderable->F);
+    viewer_.data(ID).set_mesh(renderable->V_, renderable->F_);
+    viewer_.data(ID).set_colors(Eigen::RowVector3d(244, 165, 130) / 255.);
 
     renderable->is_recorded_ = true;
     renderable->ID_ = ID;

@@ -8,20 +8,22 @@
 
 #include "../eigen_types.h"
 
+#include <string>
+
 namespace HINAVIEWER::RENDERABLE
 {
     class Renderable
     {
     public:
-        virtual void init_geometry() = 0;
+        virtual void init_geometry(const std::string &path) = 0;
 
     public:
         bool is_recorded_ = false;
         int ID_ = -1; // invalid unless recorded
 
     public:
-        Eigen::MatrixXd V;
-        Eigen::MatrixXi F;
+        Eigen::MatrixXd V_;
+        Eigen::MatrixXi F_;
     };
 }
 
