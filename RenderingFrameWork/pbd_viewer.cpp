@@ -34,10 +34,26 @@ igl::opengl::glfw::Viewer &HINAVIEWER::PBDViewer::viewer()
     return viewer_;
 }
 
-HINAVIEWER::PBDViewer &HINAVIEWER::PBDViewer::track(HINAVIEWER::INSPECTOR::Trackable *trackable, int index)
+
+int HINAVIEWER::PBDViewer::record(HINAVIEWER::RENDERABLE::Renderable *renderable)
+{
+    int ID;
+    if (object_list_.empty())
+        ID = 0;
+    else
+        ID = viewer_.append_mesh();
+
+    viewer_.data(ID).set_mesh(renderable->V, renderable->F);
+
+    renderable->is_recorded_ = true;
+    renderable->ID_ = ID;
+
+    return ID;
+}
+
+void HINAVIEWER::PBDViewer::track(HINAVIEWER::INSPECTOR::Trackable *trackable, int index)
 {
     inspector_list_.emplace_back((new HINAVIEWER::INSPECTOR::ScalarTimeValueInspector())->track(trackable, index));
-    return *this;
 }
 
 HINAVIEWER::PBDViewer &HINAVIEWER::PBDViewer::set_background_color(const Eigen::Vector4f &color)

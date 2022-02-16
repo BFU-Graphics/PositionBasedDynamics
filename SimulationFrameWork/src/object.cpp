@@ -4,3 +4,8 @@
  */
 
 #include "object.h"
+
+void HINASIM::Object::init_geometry()
+{
+
+}
