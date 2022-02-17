@@ -12,7 +12,7 @@ int main()
     HINASIM::PBDSim pbd_sim;
 
     HINASIM::DeformableObject obj;
-    obj.init_geometry(PBD_MODEL_DIR + std::string("bun_zipper_res3.ply"));
+    obj.init_geometry(PBD_MODEL_DIR + std::string("cube.obj"));
     HINASIM::DistanceConstraint dc(obj.q_, obj.E_);
     obj.set_inv_mass(0, 0).add_constraint(&dc);
 
@@ -42,7 +42,7 @@ int main()
 
 //    pbd_viewer.set_max_fps(60).launch_rendering("Simulation Framework Test 01");
     pbd_viewer.set_max_fps(60).show_inspector().launch_rendering("Simulation Framework Test 01");
-//    pbd_viewer.set_max_fps(60).focus_object(0).show_inspector().launch_rendering();
+//    pbd_viewer.set_max_fps(60).focus_object(0).show_inspector().launch_rendering("Simulation Framework Test 01");
 
     return 0;
 }
