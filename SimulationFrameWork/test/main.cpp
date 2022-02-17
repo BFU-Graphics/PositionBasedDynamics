@@ -31,13 +31,13 @@ int main()
     {
         while (!pause)
         {
-            pbd_sim.simulate(0.0002);
+            pbd_sim.simulate_real_dt();
         }
     };
 
     std::thread simulation_thread(simulate);
     simulation_thread.detach();
 
-    pbd_viewer.set_max_fps(60).launch_rendering();
+    pbd_viewer.set_max_fps(60).show_inspector().launch_rendering();
     return 0;
 }

@@ -44,6 +44,8 @@ namespace HINAVIEWER
 
         PBDViewer &focus_object(int ID);
 
+        PBDViewer &show_inspector();
+
     protected:
         void setup_menu();
 
@@ -61,6 +63,9 @@ namespace HINAVIEWER
         int width_, height_;
         Eigen::Vector4f color_;
         bool is_full_screen = false;
+        bool enable_menu = true;
+        bool enable_inspector = false;
+        bool enable_custom_mouse_callback = false;
     };
 }
 

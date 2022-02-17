@@ -16,9 +16,9 @@ namespace HINAVIEWER
 
 HINAVIEWER::PBDViewer::PBDViewer(int width, int height, Eigen::Vector4f color) : width_(width), height_(height), color_(std::move(color))
 {
-    setup_menu();
-//    setup_callback();
-//    setup_inspector()
+    if (enable_menu) setup_menu();
+    if (enable_custom_mouse_callback) setup_callback();
+    if (enable_inspector) setup_inspector();
     viewer_.core().background_color = color_;
     viewer_.core().is_animating = true;
 }
@@ -32,6 +32,7 @@ void HINAVIEWER::PBDViewer::launch_rendering(const std::string &window_name)
 void HINAVIEWER::PBDViewer::update_vertex_positions(unsigned int id, Eigen::Ref<const Eigen::MatrixXd> V)
 {
     viewer_.data_list[id].V = V;
+    viewer_.data_list[id].compute_normals();
     viewer_.data_list[id].dirty |= igl::opengl::MeshGL::DIRTY_POSITION;
 }
 
@@ -73,6 +74,25 @@ HINAVIEWER::PBDViewer &HINAVIEWER::PBDViewer::set_max_fps(double fps)
     viewer_.core().animation_max_fps = fps;
     return *this;
 }
+
+HINAVIEWER::PBDViewer &HINAVIEWER::PBDViewer::set_full_screen()
+{
+    is_full_screen = true;
+    return *this;
+}
+
+HINAVIEWER::PBDViewer &HINAVIEWER::PBDViewer::focus_object(int ID)
+{
+    viewer_.core().align_camera_center(viewer_.data_list[ID].V);
+    return *this;
+}
+
+HINAVIEWER::PBDViewer &HINAVIEWER::PBDViewer::show_inspector()
+{
+    enable_inspector = true;
+    return *this;
+}
+
 
 void HINAVIEWER::PBDViewer::setup_menu()
 {
@@ -152,17 +172,4 @@ void HINAVIEWER::PBDViewer::setup_inspector()
             inspector_list_[i]->plot("C", 1280 - 600 - 1, i * 150, 600, 150);
         }
     };
-}
-
-
-HINAVIEWER::PBDViewer &HINAVIEWER::PBDViewer::set_full_screen()
-{
-    is_full_screen = true;
-    return *this;
-}
-
-HINAVIEWER::PBDViewer &HINAVIEWER::PBDViewer::focus_object(int ID)
-{
-    viewer_.core().align_camera_center(viewer_.data_list[ID].V);
-    return *this;
 }

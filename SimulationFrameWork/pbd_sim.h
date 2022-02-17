@@ -18,12 +18,19 @@ namespace HINASIM
     public:
         void simulate(double dt);
 
+        void simulate_real_dt();
+
     public:
         void add_object(SimObject *object);
 
         void update_all_rendering_state();
 
-    protected:
+    public:
+        PBDSim& fix_dt(double dt);
+
+    protected: // PBD Kernel Region
+        void pbd_kernel_loop(double dt);
+
         void integrate_velocity_by_gravity(Eigen::Ref<Eigen::VectorXd> qdot, Eigen::Ref<Eigen::VectorXd> inv_mass, double dt);
 
         static void damping_velocity(Eigen::Ref<Eigen::VectorXd> qdot);
@@ -43,6 +50,7 @@ namespace HINASIM
 
     protected: // Env
         Eigen::Vector3d gravity{0, -9.8, 0};
+        double fixed_dt = 0.02;
     };
 }
 

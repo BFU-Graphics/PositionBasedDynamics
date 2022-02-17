@@ -130,11 +130,12 @@ void HINAVIEWER::INSPECTOR::Inspector::plot(const char *label, float start_pos_x
                 GetColorU32(ImGuiCol_TextDisabled), 1.2);
         double res = min + static_cast<double>(i) / static_cast<double>(11) * data_range;
         int scale = 0;
-//        while (res < 1.0 && res > -1.0)
-//        {
-//            res *= 10;
-//            ++scale;
-//        }
+        if (res != 0)
+            while (res < 1.0 && res > -1.0)
+            {
+                res *= 10;
+                ++scale;
+            }
         std::string text = std::to_string(res);
         text.resize(5);
         text.append("e-");

@@ -40,6 +40,7 @@ HINASIM::DistanceConstraint::DistanceConstraint(Eigen::VectorXd &init_q, const E
 
 bool HINASIM::DistanceConstraint::solve(Eigen::VectorXd &q, const Eigen::SparseMatrix<double> &M_inv, double stiffness)
 {
+    double tracked_C = 0;
     omp_set_num_threads(8);
 #pragma omp parallel for
     for (int i = 0; i < Es.size(); ++i)
@@ -50,6 +51,10 @@ bool HINASIM::DistanceConstraint::solve(Eigen::VectorXd &q, const Eigen::SparseM
         Eigen::Vector6d dC = (B.transpose() * B * p) / (B * p).norm();
         Eigen::Vector6d dp = -stiffness * M_inv66.transpose() * (C * dC) / (dC.transpose() * M_inv66 * dC);
         q += Es[i].transpose() * dp;
+        tracked_C = C;
     }
+
+    record(tracked_C);
+
     return true;
 }
