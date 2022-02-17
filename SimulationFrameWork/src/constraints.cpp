@@ -5,7 +5,9 @@
 
 #include "constraints.h"
 
+#ifdef USE_OPENMP
 #include "omp.h"
+#endif
 
 #include <iostream>
 HINASIM::DistanceConstraint::DistanceConstraint(Eigen::VectorXd &init_q, const Eigen::MatrixXi &edges)
