@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <deque>
+#include <string>
 
 namespace HINAVIEWER::INSPECTOR
 {
@@ -23,9 +24,11 @@ namespace HINAVIEWER::INSPECTOR
     {
     public:
         std::deque<std::vector<double> > tracked_state_; // [index, {time, ...}]
+        std::vector<std::string> tracked_names_;
 
     public:
-        void record(double state);
+        void record(double state, const std::string& name = "untitled plot");
+
         double max = std::numeric_limits<double>::min();
         double min = std::numeric_limits<double>::max();
         size_t max_cache_ = 10000;

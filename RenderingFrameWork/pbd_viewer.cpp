@@ -197,7 +197,7 @@ void HINAVIEWER::PBDViewer::setup_inspector()
 
         for (int i = 0; i < inspector_list_.size(); ++i)
         {
-            inspector_list_[i]->plot("C", 1280 - 600 - 1, i * 150, 600, 150);
+            inspector_list_[i]->plot(inspector_list_[i]->trackable_->tracked_names_[inspector_list_[i]->index_].c_str(), 1280 - 600 - 1, i * 150, 600, 150);
         }
     };
 }

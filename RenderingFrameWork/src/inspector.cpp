@@ -21,7 +21,7 @@ double HINAVIEWER::INSPECTOR::Timeable::simulation_time_ = 0.0;
 double HINAVIEWER::INSPECTOR::Timeable::physics_rate = 0.0;
 long long HINAVIEWER::INSPECTOR::Timeable::physics_runtime = 0;
 
-void HINAVIEWER::INSPECTOR::Trackable::record(double state)
+void HINAVIEWER::INSPECTOR::Trackable::record(double state, const std::string &name)
 {
     std::vector<double> tmp{Timeable::simulation_time_, state};
     tracked_state_.emplace_back(tmp);
@@ -32,6 +32,8 @@ void HINAVIEWER::INSPECTOR::Trackable::record(double state)
     { return lhs[1] < rhs[1]; }))[1];
     min = (*std::min_element(tracked_state_.begin(), tracked_state_.end(), [](const std::vector<double> &lhs, const std::vector<double> &rhs)
     { return lhs[1] < rhs[1]; }))[1];
+
+    tracked_names_.emplace_back(name);
 }
 
 HINAVIEWER::INSPECTOR::Inspector *HINAVIEWER::INSPECTOR::Inspector::track(HINAVIEWER::INSPECTOR::Trackable *trackable, int index)

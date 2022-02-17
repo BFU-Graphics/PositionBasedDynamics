@@ -67,7 +67,7 @@ bool HINASIM::DistanceConstraint::solve(Eigen::VectorXd &q, const Eigen::SparseM
         tracked_C = C;
     }
 
-    record(tracked_C);
+    record(tracked_C, "Distance Constraint - C");
 
     return true;
 }
