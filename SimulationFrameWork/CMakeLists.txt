@@ -15,3 +15,6 @@ target_link_libraries(test_sim
         igl::opengl_glfw
         igl::opengl_glfw_imgui
         )
+if (USE_OpenMP)
+    add_definitions(-DUSE_OPENMP)
+endif ()

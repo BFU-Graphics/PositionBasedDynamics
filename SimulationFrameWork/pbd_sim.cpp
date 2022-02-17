@@ -72,7 +72,7 @@ void HINASIM::PBDSim::pbd_kernel_loop(double dt)
         // loop solverIterations times
         // projectConstraints(C_1,...,C_M+Mcoll ,p_1,...,p_N)
         // end loop
-        for (int i = 0; i < 50; ++i)
+        for (int i = 0; i < 5; ++i)
         {
             constraints_projection(o);
         }

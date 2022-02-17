@@ -3,7 +3,7 @@ project(PositionBasedDynamics)
 
 set(CMAKE_CXX_STANDARD 17)
 
-OPTION (USE_OpenMP "Use OpenMP" ON)
+OPTION (USE_OpenMP "Use OpenMP" OFF)
 IF(USE_OpenMP)
     FIND_PACKAGE(OpenMP REQUIRED)
     IF(OPENMP_FOUND)
@@ -35,9 +35,6 @@ set(MY_EXTERNAL_DIR ${CMAKE_SOURCE_DIR}/../Graphics-Dependencies/install) # meth
 
 # Find Packages
 find_package(MY_EIGEN REQUIRED)
-#find_package(MY_DISCREGRID REQUIRED)
-#find_package(MY_OPENCV REQUIRED)
-
 
 #if (APPLE)
 # Libigl

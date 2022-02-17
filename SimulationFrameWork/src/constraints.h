@@ -24,6 +24,10 @@ namespace HINASIM
 
         bool solve(Eigen::VectorXd &q, const Eigen::SparseMatrix<double>& M_inv, double stiffness) override;
 
+        /**
+         * Replace all content below at your will
+         */
+
     public: // const fields (won't change during the simulation)
         std::vector<Eigen::SparseMatrixd> Es; // election matrix group
         Eigen::Matrix36d B; // composition matrix group
