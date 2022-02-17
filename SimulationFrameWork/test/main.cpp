@@ -12,7 +12,7 @@ int main()
     HINASIM::PBDSim pbd_sim;
 
     HINASIM::DeformableObject obj;
-    obj.init_geometry(PBD_MODEL_DIR + std::string("cube.obj"));
+    obj.init_geometry(PBD_MODEL_DIR + std::string("bun_zipper_res3.ply"));
     HINASIM::DistanceConstraint dc(obj.q_, obj.E_);
     obj.set_inv_mass(0, 0).add_constraint(&dc);
 
@@ -20,7 +20,7 @@ int main()
 
     pbd_viewer.record(&obj);
     pbd_viewer.track(&dc, 1);
-    pbd_viewer.track(&dc, 2); // Multi-Inspector Enabled:)
+//    pbd_viewer.track(&dc, 2); // Multi-Inspector Enabled:)
 
     pbd_viewer.viewer().callback_post_draw = [&pbd_viewer, &obj](igl::opengl::glfw::Viewer &viewer) -> bool
     {
@@ -40,7 +40,7 @@ int main()
     std::thread simulation_thread(simulate);
     simulation_thread.detach();
 
-//    pbd_viewer.set_max_fps(60).launch_rendering();
+//    pbd_viewer.set_max_fps(60).launch_rendering("Simulation Framework Test 01");
     pbd_viewer.set_max_fps(60).show_inspector().launch_rendering("Simulation Framework Test 01");
 //    pbd_viewer.set_max_fps(60).focus_object(0).show_inspector().launch_rendering();
 

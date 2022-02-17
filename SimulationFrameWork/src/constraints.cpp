@@ -7,8 +7,11 @@
 
 #include "omp.h"
 
+#include <iostream>
 HINASIM::DistanceConstraint::DistanceConstraint(Eigen::VectorXd &init_q, const Eigen::MatrixXi &edges)
 {
+    std::clog << "Distance Constraint Sum: " << edges.rows() << std::endl;
+
     /**
      * Replace all content below at your will
      */

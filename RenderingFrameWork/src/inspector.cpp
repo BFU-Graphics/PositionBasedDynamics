@@ -122,7 +122,6 @@ void HINAVIEWER::INSPECTOR::Inspector::plot(float start_pos_x, float start_pos_y
     double min = trackable_->tracked_min[index_];
     double data_range = max - min;
 
-
     for (int i = 1; i < trackable_->max_cache_; ++i)
     {
         if (i < trackable_->tracked_state_.size())

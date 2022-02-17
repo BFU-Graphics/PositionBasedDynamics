@@ -16,6 +16,7 @@ void HINASIM::SimObject::init_geometry(const std::string &path)
         custom_init_geometry(V_, F_);
         return;
     }
+    std::string model_name = path.substr(path.find_last_of('/') + 1);
 
     std::string model_type = path.substr(path.find_last_of('.') + 1);
     if (model_type.empty())
@@ -30,6 +31,8 @@ void HINASIM::SimObject::init_geometry(const std::string &path)
 
     if (V_.rows() > 0)
         init_physical_state();
+
+    std::clog << "Model Name: " << model_name << "     Vertex Sum: " << V_.rows() << "     Face Sum: " << F_.rows() << std::endl;
 }
 
 void HINASIM::DeformableObject::init_physical_state()
