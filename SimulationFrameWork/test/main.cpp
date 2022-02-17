@@ -17,9 +17,10 @@ int main()
     obj.set_inv_mass(0, 0).add_constraint(&dc);
 
     pbd_sim.add_object(&obj);
+
     pbd_viewer.record(&obj);
     pbd_viewer.track(&dc, 1);
-    pbd_viewer.track(&dc, 2);
+    pbd_viewer.track(&dc, 2); // Multi-Inspector Enabled:)
 
     pbd_viewer.viewer().callback_post_draw = [&pbd_viewer, &obj](igl::opengl::glfw::Viewer &viewer) -> bool
     {

@@ -3,6 +3,9 @@ project(PositionBasedDynamics)
 
 set(CMAKE_CXX_STANDARD 17)
 
+OPTION(STATIC_RENDERING_LIB "Use Rendering Framework as static lib" OFF)
+OPTION(DYNAMIC_RENDERING_LIB "Use Rendering Framework as static lib" OFF)
+
 OPTION (USE_OpenMP "Use OpenMP" OFF)
 IF(USE_OpenMP)
     FIND_PACKAGE(OpenMP REQUIRED)
