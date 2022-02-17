@@ -19,8 +19,10 @@ void HINASIM::PBDSim::simulate(double dt)
     update_all_rendering_state();
 
     HINAVIEWER::INSPECTOR::Timeable::simulation_time_ += dt;
+    HINAVIEWER::INSPECTOR::Timeable::physics_rate = dt;
+    HINAVIEWER::INSPECTOR::Timeable::physics_runtime = HINASIM::UTILS::since(start).count();
 
-    std::cout << "Physics Rate(ms)=" << HINASIM::UTILS::since(start).count() << "ms" << std::endl;
+//    std::cout << "Physics Rate(ms)=" << HINAVIEWER::INSPECTOR::Timeable::physics_runtime << "ms" << std::endl;
 }
 
 void HINASIM::PBDSim::simulate_real_dt()
@@ -70,7 +72,7 @@ void HINASIM::PBDSim::pbd_kernel_loop(double dt)
         // loop solverIterations times
         // projectConstraints(C_1,...,C_M+Mcoll ,p_1,...,p_N)
         // end loop
-        for (int i = 0; i < 10; ++i)
+        for (int i = 0; i < 50; ++i)
         {
             constraints_projection(o);
         }

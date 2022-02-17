@@ -15,6 +15,8 @@ namespace HINAVIEWER::INSPECTOR
     {
     public:
         static double simulation_time_;
+        static double physics_rate;
+        static long long physics_runtime;
     };
 
     class Trackable : public Timeable

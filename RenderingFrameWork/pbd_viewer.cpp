@@ -34,6 +34,9 @@ void HINAVIEWER::PBDViewer::update_vertex_positions(unsigned int id, Eigen::Ref<
     viewer_.data_list[id].V = V;
     viewer_.data_list[id].compute_normals();
     viewer_.data_list[id].dirty |= igl::opengl::MeshGL::DIRTY_POSITION;
+
+    if (focus_object_ID > -1 && focus_object_ID < viewer_.data_list.size())
+        viewer_.core().align_camera_center(viewer_.data_list[focus_object_ID].V);
 }
 
 igl::opengl::glfw::Viewer &HINAVIEWER::PBDViewer::viewer()
@@ -83,7 +86,7 @@ HINAVIEWER::PBDViewer &HINAVIEWER::PBDViewer::set_full_screen()
 
 HINAVIEWER::PBDViewer &HINAVIEWER::PBDViewer::focus_object(int ID)
 {
-    viewer_.core().align_camera_center(viewer_.data_list[ID].V);
+    focus_object_ID = ID;
     return *this;
 }
 
@@ -144,6 +147,31 @@ void HINAVIEWER::PBDViewer::setup_menu()
         style.Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
         style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.00f, 0.00f, 1.00f, 0.35f);
         style.Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.20f, 0.20f, 0.20f, 0.35f);
+
+        if (ImGui::CollapsingHeader("Rendering Runtime Info", ImGuiTreeNodeFlags_DefaultOpen))
+        {
+            float w = ImGui::GetContentRegionAvailWidth();
+            float p = ImGui::GetStyle().FramePadding.x;
+
+            ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+        }
+
+        if (ImGui::CollapsingHeader("Physics Runtime Info", ImGuiTreeNodeFlags_DefaultOpen))
+        {
+            float w = ImGui::GetContentRegionAvailWidth();
+            float p = ImGui::GetStyle().FramePadding.x;
+
+            std::string simulation_runtime = std::to_string(HINAVIEWER::INSPECTOR::Timeable::simulation_time_);
+            simulation_runtime.resize(5);
+            simulation_runtime = "Total: " + simulation_runtime + "s";
+            ImGui::Text("%s", simulation_runtime.c_str());
+
+            ImGui::SameLine(0, p);
+
+            std::string physics_runtime = std::to_string(HINAVIEWER::INSPECTOR::Timeable::physics_runtime);
+            physics_runtime = "Current: " + physics_runtime + "ms";
+            ImGui::Text("%s", physics_runtime.c_str());
+        }
 
         // Draw parent menu content
         menu_.draw_viewer_menu();

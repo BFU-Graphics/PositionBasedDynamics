@@ -18,6 +18,8 @@
 #include <string>
 
 double HINAVIEWER::INSPECTOR::Timeable::simulation_time_ = 0.0;
+double HINAVIEWER::INSPECTOR::Timeable::physics_rate = 0.0;
+long long HINAVIEWER::INSPECTOR::Timeable::physics_runtime = 0;
 
 void HINAVIEWER::INSPECTOR::Trackable::record(double state)
 {
@@ -50,8 +52,6 @@ void HINAVIEWER::INSPECTOR::Inspector::plot(const char *label, float start_pos_x
             label, nullptr,
             ImGuiWindowFlags_NoSavedSettings
     );
-
-    Text("Rendering average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
     ImGuiContext &g = *GImGui;
     const ImGuiStyle &style = g.Style;
@@ -88,9 +88,6 @@ void HINAVIEWER::INSPECTOR::Inspector::plot(const char *label, float start_pos_x
                 normalized_to_pix(ImVec2(static_cast<float>(i) / static_cast<float>(trackable_->max_cache_), 0.97f)),
                 normalized_to_pix(ImVec2(static_cast<float>(i) / static_cast<float>(trackable_->max_cache_), 1.f)),
                 GetColorU32(ImGuiCol_TextDisabled), 1.2);
-//        std::string text = std::to_string(trackable_->tracked_state_[i][0]);
-//        text.resize(5);
-//        DrawList->AddText(normalized_to_pix(ImVec2(static_cast<float>(i) / static_cast<float>(trackable_->max_cache_), 0.97f)), GetColorU32(ImGuiCol_Text), text.c_str());
     }
 
     double max = trackable_->max;

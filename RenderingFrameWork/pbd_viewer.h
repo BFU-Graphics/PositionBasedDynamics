@@ -66,6 +66,7 @@ namespace HINAVIEWER
         bool enable_menu = true;
         bool enable_inspector = false;
         bool enable_custom_mouse_callback = false;
+        int focus_object_ID = -1;
     };
 }
 

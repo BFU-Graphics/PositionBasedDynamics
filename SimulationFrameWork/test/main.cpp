@@ -38,6 +38,7 @@ int main()
     std::thread simulation_thread(simulate);
     simulation_thread.detach();
 
-    pbd_viewer.set_max_fps(60).show_inspector().launch_rendering();
+    pbd_viewer.set_max_fps(60).launch_rendering();
+//    pbd_viewer.set_max_fps(60).focus_object(0).show_inspector().launch_rendering();
     return 0;
 }
