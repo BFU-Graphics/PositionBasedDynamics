@@ -17,7 +17,15 @@ void HINASIM::SimObject::init_geometry(const std::string &path)
         return;
     }
 
-    igl::readOBJ(path, V_, F_);
+    std::string model_type = path.substr(path.find_last_of('.') + 1);
+    if (model_type.empty())
+        return;
+    model_type = model_type.substr(0, 3);
+    if (model_type == "obj")
+        igl::readOBJ(path, V_, F_);
+    else if (model_type == "ply")
+        igl::readPLY(path, V_, F_);
+
     igl::edges(F_, E_);
 
     if (V_.rows() > 0)

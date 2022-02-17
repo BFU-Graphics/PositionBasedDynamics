@@ -197,6 +197,8 @@ void HINAVIEWER::PBDViewer::setup_inspector()
 
         for (int i = 0; i < inspector_list_.size(); ++i)
         {
+            if (inspector_list_[i]->trackable_->tracked_state_.empty())
+                continue; // fix the case rendering loop is faster than simulation loop
             inspector_list_[i]->plot(1280 - 600 - 1, i * 150, 600, 150);
         }
     };
