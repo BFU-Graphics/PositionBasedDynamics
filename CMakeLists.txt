@@ -29,13 +29,9 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/lib)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
-
 # Set My Variables
 set(MY_EXTERNAL_DIR ${CMAKE_SOURCE_DIR}/external) # default method
-#if (APPLE)
 set(MY_EXTERNAL_DIR ${CMAKE_SOURCE_DIR}/../Graphics-Dependencies/install) # method 2: READ CAREFULLY THIS LINE ~
-#endif ()
-
 
 # Find Packages
 find_package(MY_EIGEN REQUIRED)
@@ -57,13 +53,7 @@ include(libigl)
 include_directories(${CMAKE_SOURCE_DIR} ${MY_EXTERNAL_DIR}/include)
 link_directories(${MY_EXTERNAL_DIR}/bin ${MY_EXTERNAL_DIR}/lib)
 
-
-# Global Source Files
-#file(GLOB PBD_UTILS_FILES Utils/api/*.h Utils/api/*.cpp)
-#file(GLOB PBD_UTILS_FILES Utils/*.h Utils/*.cpp)
-#file(GLOB PBD_UTILS_VISUALIZATION_FILES Utils/visualization_src/*.h Utils/visualization_src/*.cpp)
-
-
+# All Visualization Files
 file(GLOB VISUALIZATION_FILES
         RenderingFrameWork/*.h
         RenderingFrameWork/*.cpp
@@ -77,8 +67,6 @@ add_definitions(
         -DPBD_TEXTURE_DIR="${CMAKE_SOURCE_DIR}/Resources/textures/"
 )
 
-
 # Sub Targets
 add_subdirectory(RenderingFrameWork)
 add_subdirectory(SimulationFrameWork)
-#add_subdirectory(Course01-minimal-pbd)
