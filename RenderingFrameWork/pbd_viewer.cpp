@@ -16,15 +16,15 @@ namespace HINAVIEWER
 
 HINAVIEWER::PBDViewer::PBDViewer(int width, int height, Eigen::Vector4f color) : width_(width), height_(height), color_(std::move(color))
 {
-    if (enable_menu) setup_menu();
-    if (enable_custom_mouse_callback) setup_callback();
-    if (enable_inspector) setup_inspector();
     viewer_.core().background_color = color_;
     viewer_.core().is_animating = true;
 }
 
 void HINAVIEWER::PBDViewer::launch_rendering(const std::string &window_name)
 {
+    if (enable_menu) setup_menu();
+    if (enable_custom_mouse_callback) setup_callback();
+    if (enable_inspector) setup_inspector();
     viewer_.launch_init(true, is_full_screen, window_name, width_, height_);
     viewer_.launch_rendering(true);
 }
