@@ -18,21 +18,25 @@ void HINASIM::PBDSim::simulate(double dt)
         o->p_.setZero();
 
         // (5) forall vertices i do v_i <- v_i + \Delta t * w_i * f_external
-        integrate_velocity_by_gravity(o->qdot_, dt);
+        integrate_velocity_by_gravity(o->qdot_, o->inv_mass_, dt);
 
         // (6) damping velocities v_i
         damping_velocity(o->qdot_);
 
         // (7) forall vertices i do p_i <- x_i + \Delta t * v_i
         predict_position(o->p_, o->q_, o->qdot_, dt);
-        // (8) forall vertices i do generateCollisionConstraints(x_i → p_i)
 
+        // (8) forall vertices i do generateCollisionConstraints(x_i → p_i)
         generate_collision_constraints(); // pass
+
         // (9) ~ (11)
         // loop solverIterations times
         // projectConstraints(C_1,...,C_M+Mcoll ,p_1,...,p_N)
         // end loop
-        constraints_projection(o);
+        for (int i = 0; i < 10; ++i)
+        {
+            constraints_projection(o);
+        }
 
         // (12) ~ (15) forall vertices i
         // v_i <- (p_i - x_i) / \Delta t
@@ -40,6 +44,7 @@ void HINASIM::PBDSim::simulate(double dt)
         update_q_and_qdot(o->q_, o->qdot_, o->p_, dt);
     }
 
+    update_all_rendering_state();
 
     HINAVIEWER::INSPECTOR::Timeable::simulation_time_ += dt;
 
@@ -51,11 +56,20 @@ void HINASIM::PBDSim::add_object(HINASIM::SimObject *object)
     objects_.emplace_back(object);
 }
 
-void HINASIM::PBDSim::integrate_velocity_by_gravity(Eigen::Ref<Eigen::VectorXd> qdot, double dt)
+void HINASIM::PBDSim::update_all_rendering_state()
+{
+    for (auto &o: objects_)
+    {
+        o->update_geometry_info();
+    }
+}
+
+void HINASIM::PBDSim::integrate_velocity_by_gravity(Eigen::Ref<Eigen::VectorXd> qdot, Eigen::Ref<Eigen::VectorXd> inv_mass, double dt)
 {
     for (int i = 0; i < qdot.size(); i += 3)
     {
-        qdot.segment<3>(i) += dt * gravity;
+        if (inv_mass(i / 3) != 0)
+            qdot.segment<3>(i) += dt * gravity;
     }
 }
 

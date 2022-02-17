@@ -31,7 +31,7 @@ int main()
     {
         while (!pause)
         {
-            pbd_sim.simulate(0.005);
+            pbd_sim.simulate(0.0002);
         }
     };
 

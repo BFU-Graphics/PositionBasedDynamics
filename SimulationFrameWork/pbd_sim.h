@@ -21,18 +21,20 @@ namespace HINASIM
     public:
         void add_object(SimObject *object);
 
+        void update_all_rendering_state();
+
     protected:
-        void integrate_velocity_by_gravity(Eigen::Ref<Eigen::VectorXd> qdot, double dt);
+        void integrate_velocity_by_gravity(Eigen::Ref<Eigen::VectorXd> qdot, Eigen::Ref<Eigen::VectorXd> inv_mass, double dt);
 
-        void damping_velocity(Eigen::Ref<Eigen::VectorXd> qdot);
+        static void damping_velocity(Eigen::Ref<Eigen::VectorXd> qdot);
 
-        void predict_position(Eigen::Ref<Eigen::VectorXd> p, Eigen::Ref<Eigen::VectorXd> q, Eigen::Ref<Eigen::VectorXd> qdot, double dt);
+        static void predict_position(Eigen::Ref<Eigen::VectorXd> p, Eigen::Ref<Eigen::VectorXd> q, Eigen::Ref<Eigen::VectorXd> qdot, double dt);
 
-        void generate_collision_constraints();
+        static void generate_collision_constraints();
 
-        void constraints_projection(SimObject *o);
+        static void constraints_projection(SimObject *o);
 
-        void update_q_and_qdot(Eigen::Ref<Eigen::VectorXd> q, Eigen::Ref<Eigen::VectorXd> qdot, Eigen::Ref<Eigen::VectorXd> p, double dt);
+        static void update_q_and_qdot(Eigen::Ref<Eigen::VectorXd> q, Eigen::Ref<Eigen::VectorXd> qdot, Eigen::Ref<Eigen::VectorXd> p, double dt);
 
     protected:
         typedef Constraint Joint;
