@@ -21,8 +21,6 @@ void HINASIM::PBDSim::simulate(double dt)
     HINAVIEWER::INSPECTOR::Timeable::simulation_time_ += dt;
     HINAVIEWER::INSPECTOR::Timeable::physics_rate = dt;
     HINAVIEWER::INSPECTOR::Timeable::physics_runtime = HINASIM::UTILS::since(start).count();
-
-//    std::cout << "Physics Rate(ms)=" << HINAVIEWER::INSPECTOR::Timeable::physics_runtime << "ms" << std::endl;
 }
 
 void HINASIM::PBDSim::simulate_real_dt()

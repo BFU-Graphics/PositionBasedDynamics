@@ -18,6 +18,12 @@ HINAVIEWER::PBDViewer::PBDViewer(int width, int height, Eigen::Vector4f color) :
 {
     viewer_.core().background_color = color_;
     viewer_.core().is_animating = true;
+    ffmpeg = nullptr;
+}
+
+HINAVIEWER::PBDViewer::~PBDViewer()
+{
+    fclose(ffmpeg);
 }
 
 void HINAVIEWER::PBDViewer::launch_rendering(const std::string &window_name)
@@ -202,4 +208,23 @@ void HINAVIEWER::PBDViewer::setup_inspector()
             inspector_list_[i]->plot(1280 - 600 - 1, i * 150, 600, 150);
         }
     };
+}
+
+HINAVIEWER::PBDViewer &HINAVIEWER::PBDViewer::save_to_mp4(const std::string &ffmpeg_path, const std::string &filename)
+{
+    std::string cmd_temp = ffmpeg_path + " -r 60 -f rawvideo -pix_fmt rgba -s 1280x800 -i - "
+                                         "-threads 0 -preset fast -y -pix_fmt yuv420p -crf 21 -vf vflip " + filename;
+    const char *cmd = cmd_temp.c_str();
+    ffmpeg = _popen(cmd, "wb");
+    return *this;
+}
+
+void HINAVIEWER::PBDViewer::write_current_frame()
+{
+    if (ffmpeg == nullptr)
+        return;
+
+    auto *pixels = new char[1280 * 800 * 4];
+    glReadPixels(0, 0, 1280, 800, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+    fwrite(pixels, sizeof(int) * 1280 * 800, 1, ffmpeg);
 }
