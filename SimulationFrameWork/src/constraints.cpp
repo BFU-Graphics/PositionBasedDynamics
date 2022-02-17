@@ -45,6 +45,7 @@ HINASIM::DistanceConstraint::DistanceConstraint(Eigen::VectorXd &init_q, const E
 bool HINASIM::DistanceConstraint::solve(Eigen::VectorXd &q, const Eigen::SparseMatrix<double> &M_inv, double stiffness)
 {
     double tracked_C = 0;
+    double sin_function = 0;
 
     /**
      * Replace all content below at your will
@@ -67,7 +68,9 @@ bool HINASIM::DistanceConstraint::solve(Eigen::VectorXd &q, const Eigen::SparseM
         tracked_C = C;
     }
 
-    record(tracked_C, "Distance Constraint - C");
+    sin_function = std::sin(HINAVIEWER::INSPECTOR::Timeable::simulation_time_);
+
+    record({tracked_C, sin_function}, {"Distance Constraint - C", "plot sin(time)"});
 
     return true;
 }

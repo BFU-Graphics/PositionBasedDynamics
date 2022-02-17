@@ -25,12 +25,12 @@ namespace HINAVIEWER::INSPECTOR
     public:
         std::deque<std::vector<double> > tracked_state_; // [index, {time, ...}]
         std::vector<std::string> tracked_names_;
+        std::vector<double> tracked_max;
+        std::vector<double> tracked_min;
 
     public:
-        void record(double state, const std::string& name = "untitled plot");
+        void record(const std::vector<double> &states, const std::vector<std::string> &names);
 
-        double max = std::numeric_limits<double>::min();
-        double min = std::numeric_limits<double>::max();
         size_t max_cache_ = 10000;
     };
 
@@ -39,7 +39,7 @@ namespace HINAVIEWER::INSPECTOR
     public:
         Inspector *track(Trackable *trackable, int index);
 
-        virtual void plot(const char *label, float start_pos_x, float start_pos_y, float width, float height);
+        virtual void plot(float start_pos_x, float start_pos_y, float width, float height);
 
         Trackable *trackable_;
         int index_;
@@ -48,7 +48,7 @@ namespace HINAVIEWER::INSPECTOR
     class ScalarTimeValueInspector : public Inspector
     {
     public:
-        void plot(const char *label, float start_pos_x, float start_pos_y, float width, float height) override;
+        void plot(float start_pos_x, float start_pos_y, float width, float height) override;
 
     public:
 

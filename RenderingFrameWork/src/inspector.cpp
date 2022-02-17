@@ -16,24 +16,50 @@
 #include <algorithm>
 #include <limits>
 #include <string>
+#include <iostream>
 
 double HINAVIEWER::INSPECTOR::Timeable::simulation_time_ = 0.0;
 double HINAVIEWER::INSPECTOR::Timeable::physics_rate = 0.0;
 long long HINAVIEWER::INSPECTOR::Timeable::physics_runtime = 0;
 
-void HINAVIEWER::INSPECTOR::Trackable::record(double state, const std::string &name)
+void HINAVIEWER::INSPECTOR::Trackable::record(const std::vector<double> &states, const std::vector<std::string> &names)
 {
-    std::vector<double> tmp{Timeable::simulation_time_, state};
+    if (states.empty() && states.size() != names.size())
+    {
+        std::cerr << "=============== Error Record Info ===============" << std::endl;
+        return;
+    }
+
+    if (tracked_names_.empty())
+    {
+        tracked_names_.resize(1 + names.size());
+        tracked_names_[0] = "Simulation Time";
+        for (int i = 0; i < names.size(); ++i)
+            tracked_names_[i + 1] = names[i];
+
+        tracked_max.resize(1 + names.size());
+        tracked_min.resize(1 + names.size());
+
+        std::fill(tracked_max.begin() + 1, tracked_max.end(), std::numeric_limits<double>::min());
+        std::fill(tracked_min.begin() + 1, tracked_min.end(), std::numeric_limits<double>::max());
+    }
+
+    std::vector<double> tmp;
+    tmp.resize(1 + states.size());
+    tmp[0] = HINAVIEWER::INSPECTOR::Timeable::simulation_time_;
+    for (int i = 0; i < states.size(); ++i)
+        tmp[i + 1] = states[i];
     tracked_state_.emplace_back(tmp);
     if (tracked_state_.size() > max_cache_)
         tracked_state_.pop_front();
 
-    max = (*std::max_element(tracked_state_.begin(), tracked_state_.end(), [](const std::vector<double> &lhs, const std::vector<double> &rhs)
-    { return lhs[1] < rhs[1]; }))[1];
-    min = (*std::min_element(tracked_state_.begin(), tracked_state_.end(), [](const std::vector<double> &lhs, const std::vector<double> &rhs)
-    { return lhs[1] < rhs[1]; }))[1];
-
-    tracked_names_.emplace_back(name);
+    for (int i = 1; i < tracked_names_.size(); ++i)
+    {
+        tracked_max[i] = (*std::max_element(tracked_state_.begin(), tracked_state_.end(), [&i](const std::vector<double> &lhs, const std::vector<double> &rhs)
+        { return lhs[i] < rhs[i]; }))[i];
+        tracked_min[i] = (*std::min_element(tracked_state_.begin(), tracked_state_.end(), [&i](const std::vector<double> &lhs, const std::vector<double> &rhs)
+        { return lhs[i] < rhs[i]; }))[i];
+    }
 }
 
 HINAVIEWER::INSPECTOR::Inspector *HINAVIEWER::INSPECTOR::Inspector::track(HINAVIEWER::INSPECTOR::Trackable *trackable, int index)
@@ -43,7 +69,7 @@ HINAVIEWER::INSPECTOR::Inspector *HINAVIEWER::INSPECTOR::Inspector::track(HINAVI
     return this;
 }
 
-void HINAVIEWER::INSPECTOR::Inspector::plot(const char *label, float start_pos_x, float start_pos_y, float width, float height)
+void HINAVIEWER::INSPECTOR::Inspector::plot(float start_pos_x, float start_pos_y, float width, float height)
 {
     using namespace ImGui;
 
@@ -51,7 +77,7 @@ void HINAVIEWER::INSPECTOR::Inspector::plot(const char *label, float start_pos_x
     SetNextWindowSize(ImVec2(width, height), ImGuiCond_FirstUseEver);
 
     Begin(
-            label, nullptr,
+            trackable_->tracked_names_[index_].c_str(), nullptr,
             ImGuiWindowFlags_NoSavedSettings
     );
 
@@ -74,7 +100,7 @@ void HINAVIEWER::INSPECTOR::Inspector::plot(const char *label, float start_pos_x
     Canvas = CalcItemSize(Canvas, style.FramePadding.x * 2.0f, style.FramePadding.y * 2.0f);
     ImRect bb(Window->DC.CursorPos, Window->DC.CursorPos + Canvas);
 
-    const ImGuiID id = Window->GetID(label);
+    const ImGuiID id = Window->GetID(trackable_->tracked_names_[index_].c_str());
     RenderFrame(bb.Min, bb.Max, GetColorU32(ImGuiCol_FrameBg, 1), true, Style.FrameRounding);
 
 
@@ -92,8 +118,8 @@ void HINAVIEWER::INSPECTOR::Inspector::plot(const char *label, float start_pos_x
                 GetColorU32(ImGuiCol_TextDisabled), 1.2);
     }
 
-    double max = trackable_->max;
-    double min = trackable_->min;
+    double max = trackable_->tracked_max[index_];
+    double min = trackable_->tracked_min[index_];
     double data_range = max - min;
 
 
@@ -145,7 +171,7 @@ void HINAVIEWER::INSPECTOR::Inspector::plot(const char *label, float start_pos_x
     End();
 }
 
-void HINAVIEWER::INSPECTOR::ScalarTimeValueInspector::plot(const char *label, float start_pos_x, float start_pos_y, float width, float height)
+void HINAVIEWER::INSPECTOR::ScalarTimeValueInspector::plot(float start_pos_x, float start_pos_y, float width, float height)
 {
-    Inspector::plot(label, start_pos_x, start_pos_y, width, height);
+    Inspector::plot(start_pos_x, start_pos_y, width, height);
 }
