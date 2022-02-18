@@ -55,6 +55,10 @@ namespace HINASIM
         Cloth(int rows, int cols, int width, int height);
 
         void init_geometry();
+
+    public:
+        int rows_, cols_;
+        int width_, height_;
     };
 }
 

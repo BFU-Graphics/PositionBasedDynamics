@@ -73,39 +73,39 @@ HINASIM::SimObject &HINASIM::SimObject::set_inv_mass(int index, double inv_mass)
     return *this;
 }
 
-HINASIM::Cloth::Cloth(int rows, int cols, int width, int height)
+HINASIM::Cloth::Cloth(int rows, int cols, int width, int height) : rows_(rows), cols_(cols), width_(width), height_(height)
 {
     custom_init_geometry = [&](Eigen::MatrixXd &V_, Eigen::MatrixXi &F_)
     {
-        const double dx = width / static_cast<double>(cols - 1);
-        const double dy = height / static_cast<double>(rows - 1);
+        const double dx = width_ / static_cast<double>(cols_ - 1);
+        const double dy = height_ / static_cast<double>(rows_ - 1);
 
-        V_.resize(rows * cols, 3);
-        F_.resize(2 * (rows - 1) * (cols - 1), 3);
+        V_.resize(rows_ * cols_, 3);
+        F_.resize(2 * (rows_ - 1) * (cols_ - 1), 3);
 
-        for (int i = 0; i < rows; ++i)
+        for (int i = 0; i < rows_; ++i)
         {
-            for (int j = 0; j < cols; ++j)
+            for (int j = 0; j < cols_; ++j)
             {
                 const auto x = static_cast<double>(dx * j);
                 const auto y = static_cast<double>(dy * i);
 
-                V_.row(i * cols + j) = Eigen::RowVector3d(x, 0.0, y);
+                V_.row(i * cols_ + j) = Eigen::RowVector3d(x, 0.0, y);
             }
         }
 
-        for (int i = 0; i < rows - 1; ++i)
+        for (int i = 0; i < rows_ - 1; ++i)
         {
-            for (int j = 0; j < cols - 1; ++j)
+            for (int j = 0; j < cols_ - 1; ++j)
             {
                 if (i % 2 == j % 2)
                 {
-                    F_.row(2 * (i * (cols - 1) + j)) = Eigen::RowVector3i(i * cols + j, (i + 1) * cols + j + 1, i * cols + j + 1);
-                    F_.row(2 * (i * (cols - 1) + j) + 1) = Eigen::RowVector3i(i * cols + j, (i + 1) * cols + j, (i + 1) * cols + j + 1);
+                    F_.row(2 * (i * (cols_ - 1) + j)) = Eigen::RowVector3i(i * cols_ + j, (i + 1) * cols_ + j + 1, i * cols_ + j + 1);
+                    F_.row(2 * (i * (cols_ - 1) + j) + 1) = Eigen::RowVector3i(i * cols_ + j, (i + 1) * cols_ + j, (i + 1) * cols_ + j + 1);
                 } else
                 {
-                    F_.row(2 * (i * (cols - 1) + j)) = Eigen::RowVector3i(i * cols + j, (i + 1) * cols + j, i * cols + j + 1);
-                    F_.row(2 * (i * (cols - 1) + j) + 1) = Eigen::RowVector3i(i * cols + j + 1, (i + 1) * cols + j, (i + 1) * cols + j + 1);
+                    F_.row(2 * (i * (cols_ - 1) + j)) = Eigen::RowVector3i(i * cols_ + j, (i + 1) * cols_ + j, i * cols_ + j + 1);
+                    F_.row(2 * (i * (cols_ - 1) + j) + 1) = Eigen::RowVector3i(i * cols_ + j + 1, (i + 1) * cols_ + j, (i + 1) * cols_ + j + 1);
                 }
             }
         }
