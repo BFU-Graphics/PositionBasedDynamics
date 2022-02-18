@@ -29,7 +29,7 @@ void HINASIM::PBDSim::simulate_real_dt()
 
     if (rest_time > 0)
     {
-        std::this_thread::sleep_for(std::chrono::microseconds((int) (rest_time)));
+        std::this_thread::sleep_for(std::chrono::microseconds((int) (rest_time * 1000)));
     }
 }
 
