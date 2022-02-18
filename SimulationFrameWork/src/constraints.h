@@ -27,7 +27,14 @@ namespace HINASIM
         bool solve(Eigen::MatrixXd &q, const Eigen::VectorXd &inv_mass, double stiffness) override;
 
     public:
+        /// p1_id, p2_id, rest_length
         std::vector<std::tuple<int, int, double>> distance_constraints_;
+    };
+
+    class DihedralConstraint : public Constraint
+    {
+    public:
+        bool solve(Eigen::MatrixXd &q, const Eigen::VectorXd &inv_mass, double stiffness) override;
     };
 }
 

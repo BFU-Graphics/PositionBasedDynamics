@@ -59,3 +59,8 @@ bool HINASIM::DistanceConstraint::solve(Eigen::MatrixXd &p, const Eigen::VectorX
 
     return true;
 }
+
+bool HINASIM::DihedralConstraint::solve(Eigen::MatrixXd &q, const Eigen::VectorXd &inv_mass, double stiffness)
+{
+    return true;
+}
