@@ -24,7 +24,10 @@ HINAVIEWER::PBDViewer::PBDViewer(int width, int height, Eigen::Vector4f color) :
 HINAVIEWER::PBDViewer::~PBDViewer()
 {
     if (ffmpeg != nullptr)
+#ifndef __APPLE__
         _pclose(ffmpeg);
+#endif
+        return;
 }
 
 void HINAVIEWER::PBDViewer::launch_rendering(const std::string &window_name)
@@ -217,7 +220,9 @@ HINAVIEWER::PBDViewer &HINAVIEWER::PBDViewer::save_to_mp4(const std::string &ffm
     std::string cmd_temp = ffmpeg_path + " -r 60 -f rawvideo -pix_fmt rgba -s 1280x800 -i - "
                                          "-threads 0 -preset fast -y -pix_fmt yuv420p -crf 21 -vf vflip " + filename;
     const char *cmd = cmd_temp.c_str();
+#ifndef __APPLE__
     ffmpeg = _popen(cmd, "wb");
+#endif
     return *this;
 }
 
