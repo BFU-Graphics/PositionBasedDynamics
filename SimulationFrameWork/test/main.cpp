@@ -30,7 +30,6 @@ int main()
     HINASIM::Cloth cloth(30, 30, 20, 20);
     cloth.init_geometry();
     HINASIM::DistanceConstraint dc_cloth(cloth.q_, cloth.E_);
-
     func(pbd_viewer, pbd_sim, cloth, dc_cloth);
 
 

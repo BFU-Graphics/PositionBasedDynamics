@@ -5,9 +5,8 @@
 
 #include "objects.h"
 
-#include "cmake-build-release/_deps/libigl-src/include/igl/edges.h"
-#include "cmake-build-release/_deps/libigl-src/include/igl/readOBJ.h"
-#include "cmake-build-release/_deps/libigl-src/include/igl/readPLY.h"
+#include <igl/readOBJ.h>
+#include <igl/readPLY.h>
 
 void HINASIM::SimObject::init_geometry(const std::string &path)
 {
@@ -27,7 +26,7 @@ void HINASIM::SimObject::init_geometry(const std::string &path)
     else if (model_type == "ply")
         igl::readPLY(path, V_, F_);
 
-    igl::edges(F_, E_);
+    build_neighbors(); // Edges info would be auto build ourselves
 
     if (V_.rows() > 0)
         init_physical_state();
@@ -119,7 +118,7 @@ void HINASIM::Cloth::init_geometry()
 
     custom_init_geometry(V_, F_);
 
-    igl::edges(F_, E_);
+    build_neighbors(); // Edges info would be auto build ourselves
 
     if (V_.rows() > 0)
         init_physical_state();
