@@ -11,7 +11,7 @@
 
 void func(HINAVIEWER::PBDViewer &pbd_viewer, HINASIM::PBDSim &pbd_sim, HINASIM::DeformableObject &obj, HINASIM::DistanceConstraint &dc)
 {
-    obj.set_inv_mass(0, 0).add_constraint(&dc);
+    obj.set_inv_mass(0, 0).set_inv_mass(29, 0).add_constraint(&dc);
     pbd_sim.add_object(&obj);
     pbd_viewer.record(&obj);
     pbd_viewer.track(&dc, 1);
@@ -22,15 +22,15 @@ int main()
     HINAVIEWER::PBDViewer pbd_viewer;
     HINASIM::PBDSim pbd_sim;
 
-    HINASIM::DeformableObject cube;
-    cube.init_geometry(PBD_MODEL_DIR + std::string("cube.obj"));
-    HINASIM::DistanceConstraint dc(cube.q_, cube.E_);
+//    HINASIM::DeformableObject cube;
+//    cube.init_geometry(PBD_MODEL_DIR + std::string("cube.obj"));
+//    HINASIM::DistanceConstraint dc(cube.q_, cube.E_);
+//    func(pbd_viewer, pbd_sim, cube, dc);
 
-    HINASIM::Cloth cloth(20, 20, 1, 1);
+    HINASIM::Cloth cloth(30, 30, 20, 20);
     cloth.init_geometry();
     HINASIM::DistanceConstraint dc_cloth(cloth.q_, cloth.E_);
 
-//    func(pbd_viewer, pbd_sim, cube, dc);
     func(pbd_viewer, pbd_sim, cloth, dc_cloth);
 
 

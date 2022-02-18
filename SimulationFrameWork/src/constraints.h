@@ -26,10 +26,6 @@ namespace HINASIM
 
         bool solve(Eigen::MatrixXd &q, const Eigen::VectorXd &inv_mass, double stiffness) override;
 
-        /**
-         * Replace all content below at your will
-         */
-
     public:
         std::vector<std::tuple<int, int, double>> distance_constraints_;
     };

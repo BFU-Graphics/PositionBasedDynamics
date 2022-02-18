@@ -32,10 +32,10 @@ HINASIM::DistanceConstraint::DistanceConstraint(Eigen::MatrixXd &init_q, const E
 
 bool HINASIM::DistanceConstraint::solve(Eigen::MatrixXd &p, const Eigen::VectorXd &inv_mass, double stiffness)
 {
-//#ifdef USE_OPENMP
-//    omp_set_num_threads(16);
-//#pragma omp parallel for
-//#endif
+#ifdef USE_OPENMP
+    omp_set_num_threads(16);
+#pragma omp parallel for
+#endif
     for (int i = 0; i < distance_constraints_.size(); ++i)
     {
         auto &dc = distance_constraints_[i];

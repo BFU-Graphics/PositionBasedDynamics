@@ -33,6 +33,7 @@ void HINAVIEWER::PBDViewer::launch_rendering(const std::string &window_name)
     if (enable_custom_mouse_callback) setup_callback();
     if (enable_inspector) setup_inspector();
     viewer_.launch_init(true, is_full_screen, window_name, width_, height_);
+    viewer_.core().align_camera_center(viewer_.data_list[0].V);
     viewer_.launch_rendering(true);
 }
 
