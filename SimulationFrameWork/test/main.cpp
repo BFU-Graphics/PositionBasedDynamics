@@ -26,7 +26,7 @@ int main()
     cube.init_geometry(PBD_MODEL_DIR + std::string("cube.obj"));
     HINASIM::DistanceConstraint dc(cube.q_, cube.E_);
 
-    HINASIM::Cloth cloth(30, 30, 3, 3);
+    HINASIM::Cloth cloth(20, 20, 3, 3);
     cloth.init_geometry();
     HINASIM::DistanceConstraint dc_cloth(cloth.q_, cloth.E_);
 
