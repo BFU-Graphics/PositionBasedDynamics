@@ -8,7 +8,7 @@
 
 #include "RenderingFrameWork/src/renderable.h"
 
-#include "constraints.h"
+#include "SimulationFrameWork/src/constraints.h"
 
 namespace HINASIM
 {
@@ -33,12 +33,10 @@ namespace HINASIM
         std::function<void(Eigen::MatrixXd &V_, Eigen::MatrixXi &F_)> custom_init_geometry;
 
     public:
-        Eigen::VectorXd q_;
-        Eigen::VectorXd qdot_;
-        Eigen::VectorXd p_;
-        Eigen::VectorXd inv_mass_;
-        Eigen::SparseMatrix<double> M_inv; // very big sparse inv mass Matrix, would be removed in the future!
-
+        Eigen::MatrixXd q_; // n x 3
+        Eigen::MatrixXd qdot_; // n x 3
+        Eigen::MatrixXd p_; // n x 3
+        Eigen::VectorXd inv_mass_; // n x 1
 
         std::vector<Constraint *> inner_constraints_;
     };

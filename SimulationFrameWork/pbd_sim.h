@@ -6,7 +6,7 @@
 #ifndef POSITIONBASEDDYNAMICS_PBD_SIM_H
 #define POSITIONBASEDDYNAMICS_PBD_SIM_H
 
-#include "src/objects.h"
+#include "SimulationFrameWork/src/objects.h"
 #include "src/constraints.h"
 
 #include <vector>
@@ -31,17 +31,17 @@ namespace HINASIM
     protected: // PBD Kernel Region
         void pbd_kernel_loop(double dt);
 
-        void integrate_velocity_by_gravity(Eigen::Ref<Eigen::VectorXd> qdot, Eigen::Ref<Eigen::VectorXd> inv_mass, double dt);
+        void integrate_velocity_by_gravity(Eigen::Ref<Eigen::MatrixXd> qdot, Eigen::Ref<Eigen::VectorXd> inv_mass, double dt);
 
-        static void damping_velocity(Eigen::Ref<Eigen::VectorXd> qdot);
+        static void damping_velocity(Eigen::Ref<Eigen::MatrixXd> qdot);
 
-        static void predict_position(Eigen::Ref<Eigen::VectorXd> p, Eigen::Ref<Eigen::VectorXd> q, Eigen::Ref<Eigen::VectorXd> qdot, double dt);
+        static void predict_position(Eigen::Ref<Eigen::MatrixXd> p, Eigen::Ref<Eigen::MatrixXd> q, Eigen::Ref<Eigen::MatrixXd> qdot, double dt);
 
         static void generate_collision_constraints();
 
         static void constraints_projection(SimObject *o);
 
-        static void update_q_and_qdot(Eigen::Ref<Eigen::VectorXd> q, Eigen::Ref<Eigen::VectorXd> qdot, Eigen::Ref<Eigen::VectorXd> p, double dt);
+        static void update_q_and_qdot(Eigen::Ref<Eigen::MatrixXd> q, Eigen::Ref<Eigen::MatrixXd> qdot, Eigen::Ref<Eigen::MatrixXd> p, double dt);
 
     public:
         typedef Constraint Joint;

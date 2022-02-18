@@ -16,8 +16,6 @@ void HINASIM::PBDSim::simulate(double dt)
 
     pbd_kernel_loop(dt);
 
-    update_all_rendering_state();
-
     HINAVIEWER::INSPECTOR::Timeable::simulation_time_ += dt;
     HINAVIEWER::INSPECTOR::Timeable::physics_rate = dt;
     HINAVIEWER::INSPECTOR::Timeable::physics_runtime = HINASIM::UTILS::since(start).count();
@@ -82,21 +80,21 @@ void HINASIM::PBDSim::pbd_kernel_loop(double dt)
     }
 }
 
-void HINASIM::PBDSim::integrate_velocity_by_gravity(Eigen::Ref<Eigen::VectorXd> qdot, Eigen::Ref<Eigen::VectorXd> inv_mass, double dt)
+void HINASIM::PBDSim::integrate_velocity_by_gravity(Eigen::Ref<Eigen::MatrixXd> qdot, Eigen::Ref<Eigen::VectorXd> inv_mass, double dt)
 {
-    for (int i = 0; i < qdot.size(); i += 3)
+    for (int i = 0; i < qdot.rows(); ++i)
     {
-        if (inv_mass(i / 3) != 0)
-            qdot.segment<3>(i) += dt * gravity;
+        if (inv_mass(i) != 0)
+            qdot.row(i) += dt * gravity.transpose();
     }
 }
 
-void HINASIM::PBDSim::damping_velocity(Eigen::Ref<Eigen::VectorXd> qdot)
+void HINASIM::PBDSim::damping_velocity(Eigen::Ref<Eigen::MatrixXd> qdot)
 {
     qdot *= 0.9999;
 }
 
-void HINASIM::PBDSim::predict_position(Eigen::Ref<Eigen::VectorXd> p, Eigen::Ref<Eigen::VectorXd> q, Eigen::Ref<Eigen::VectorXd> qdot, double dt)
+void HINASIM::PBDSim::predict_position(Eigen::Ref<Eigen::MatrixXd> p, Eigen::Ref<Eigen::MatrixXd> q, Eigen::Ref<Eigen::MatrixXd> qdot, double dt)
 {
     p = q + dt * qdot;
 }
@@ -110,11 +108,11 @@ void HINASIM::PBDSim::constraints_projection(SimObject *o)
 {
     for (auto &c: o->inner_constraints_)
     {
-        c->solve(o->p_, o->M_inv, 1 /** temp stiffness **/);
+        c->solve(o->p_, o->inv_mass_, 1 /** temp stiffness **/);
     }
 }
 
-void HINASIM::PBDSim::update_q_and_qdot(Eigen::Ref<Eigen::VectorXd> q, Eigen::Ref<Eigen::VectorXd> qdot, Eigen::Ref<Eigen::VectorXd> p, double dt)
+void HINASIM::PBDSim::update_q_and_qdot(Eigen::Ref<Eigen::MatrixXd> q, Eigen::Ref<Eigen::MatrixXd> qdot, Eigen::Ref<Eigen::MatrixXd> p, double dt)
 {
     qdot = (p - q) / dt;
     q = p;

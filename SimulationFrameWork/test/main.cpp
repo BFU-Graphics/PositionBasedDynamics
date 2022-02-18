@@ -26,7 +26,7 @@ int main()
     cube.init_geometry(PBD_MODEL_DIR + std::string("cube.obj"));
     HINASIM::DistanceConstraint dc(cube.q_, cube.E_);
 
-    HINASIM::Cloth cloth(20, 20, 3, 3);
+    HINASIM::Cloth cloth(20, 20, 1, 1);
     cloth.init_geometry();
     HINASIM::DistanceConstraint dc_cloth(cloth.q_, cloth.E_);
 
@@ -36,6 +36,7 @@ int main()
 
     pbd_viewer.viewer().callback_post_draw = [&pbd_viewer, &pbd_sim](igl::opengl::glfw::Viewer &viewer) -> bool
     {
+        pbd_sim.update_all_rendering_state();
         for (auto &o: pbd_sim.objects_)
         {
             pbd_viewer.update_vertex_positions(o->ID_, o->V_);
@@ -62,6 +63,7 @@ int main()
     pbd_viewer
             .set_max_fps(60)
 //            .show_inspector()
+//            .focus_object(0)
 #ifdef FFMPEG_PATH
                     .save_to_mp4(FFMPEG_PATH, "my_output.mp4")
 #endif

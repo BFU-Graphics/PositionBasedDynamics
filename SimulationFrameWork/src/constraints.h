@@ -9,29 +9,29 @@
 #include "RenderingFrameWork/src/inspector.h"
 #include "RenderingFrameWork/eigen_types.h"
 
+#include <tuple>
+
 namespace HINASIM
 {
     class Constraint
     {
     public:
-        virtual bool solve(Eigen::VectorXd &q, const Eigen::SparseMatrix<double> &M_inv, double stiffness) = 0;
+        virtual bool solve(Eigen::MatrixXd &q, const Eigen::VectorXd &inv_mass, double stiffness) = 0;
     };
 
     class DistanceConstraint : public Constraint, public HINAVIEWER::INSPECTOR::Trackable
     {
     public:
-        explicit DistanceConstraint(Eigen::VectorXd &init_q, const Eigen::MatrixXi &edges);
+        explicit DistanceConstraint(Eigen::MatrixXd &init_q, const Eigen::MatrixXi &edges);
 
-        bool solve(Eigen::VectorXd &q, const Eigen::SparseMatrix<double>& M_inv, double stiffness) override;
+        bool solve(Eigen::MatrixXd &q, const Eigen::VectorXd &inv_mass, double stiffness) override;
 
         /**
          * Replace all content below at your will
          */
 
-    public: // const fields (won't change during the simulation)
-        std::vector<Eigen::SparseMatrixd> Es; // election matrix group
-        Eigen::Matrix36d B; // composition matrix group
-        Eigen::VectorXd rest_length; // rest length group
+    public:
+        std::vector<std::tuple<int, int, double>> distance_constraints_;
     };
 }
 
