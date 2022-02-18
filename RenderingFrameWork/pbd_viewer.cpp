@@ -23,7 +23,8 @@ HINAVIEWER::PBDViewer::PBDViewer(int width, int height, Eigen::Vector4f color) :
 
 HINAVIEWER::PBDViewer::~PBDViewer()
 {
-    fclose(ffmpeg);
+    if (ffmpeg != nullptr)
+        _pclose(ffmpeg);
 }
 
 void HINAVIEWER::PBDViewer::launch_rendering(const std::string &window_name)

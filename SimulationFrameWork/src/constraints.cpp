@@ -59,7 +59,7 @@ bool HINASIM::DistanceConstraint::solve(Eigen::VectorXd &q, const Eigen::SparseM
 
     /// If you want to enable OpenMP CPU Multi-Thread Acceleration, turn on [OPTION (USE_OpenMP "Use OpenMP" OFF)] in root CmakeLists.txt, and reset cmake cache
 #ifdef USE_OPENMP
-    omp_set_num_threads(8);
+    omp_set_num_threads(16);
 #pragma omp parallel for
 #endif
     for (int i = 0; i < Es.size(); ++i)

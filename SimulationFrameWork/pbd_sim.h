@@ -43,7 +43,7 @@ namespace HINASIM
 
         static void update_q_and_qdot(Eigen::Ref<Eigen::VectorXd> q, Eigen::Ref<Eigen::VectorXd> qdot, Eigen::Ref<Eigen::VectorXd> p, double dt);
 
-    protected:
+    public:
         typedef Constraint Joint;
         std::vector<SimObject *> objects_;
         std::vector<Joint *> joints_;

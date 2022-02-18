@@ -22,15 +22,15 @@ namespace HINASIM
         virtual void update_geometry_info() = 0;
 
     public:
-        SimObject& add_constraint(Constraint *constraint);
+        SimObject &add_constraint(Constraint *constraint);
 
-        SimObject& set_inv_mass(double unified_inv_mass);
+        SimObject &set_inv_mass(double unified_inv_mass);
 
-        SimObject& set_inv_mass(int index, double inv_mass);
+        SimObject &set_inv_mass(int index, double inv_mass);
 
     public:
         /// once [custom_init_geometry] is not nullptr, this would replace default [init_geometry]
-        void (*custom_init_geometry)(Eigen::MatrixXd &V_, Eigen::MatrixXi &F_) = nullptr;
+        std::function<void(Eigen::MatrixXd &V_, Eigen::MatrixXi &F_)> custom_init_geometry;
 
     public:
         Eigen::VectorXd q_;
@@ -53,7 +53,10 @@ namespace HINASIM
 
     class Cloth : public DeformableObject
     {
+    public:
         Cloth(int rows, int cols, int width, int height);
+
+        void init_geometry();
     };
 }
 
