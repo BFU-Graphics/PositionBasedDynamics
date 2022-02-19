@@ -10,20 +10,12 @@ int main()
 
     // ======================================== Phase 1: Init Simulation World Info  ========================================
 
-    HINASIM::Cloth cloth(30, 30, 10, 10);
-    cloth.init_geometry();
-    HINASIM::DistanceConstraint dc_cloth(cloth.q_, cloth.E_);
-    HINASIM::DihedralConstraint dic_cloth(cloth.q_, cloth.EVF_, cloth.F_);
-    cloth
-            .set_inv_mass(0, 0)
-            .set_inv_mass(29, 0)
-            .add_constraint(&dc_cloth)
-            .add_constraint(&dic_cloth);
-
-
-    // remember to record your object to both simulation world and rendering world
-    pbd_sim.add_object(&cloth);
-    pbd_viewer.record(&cloth);
+    HINASIM::DeformableObject starry_fish;
+    starry_fish.init_geometry(PBD_MODEL_DIR + std::string("starry_fish.obj"));
+    HINASIM::DistanceConstraint dc(starry_fish.q_, starry_fish.E_);
+    starry_fish.set_inv_mass(0, 0).add_constraint(&dc);
+//    pbd_sim.add_object(&starry_fish);
+    pbd_viewer.record(&starry_fish);
 
     // ======================================== Phase 2: Set Up Simulation Thread ========================================
 

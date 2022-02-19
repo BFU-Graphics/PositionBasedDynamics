@@ -39,7 +39,7 @@ int main()
 
     pbd_viewer
             .set_max_fps(60)
-            .launch_rendering("Simulation Framework Test 01");
+            .launch_rendering("Test Cube");
 
     return 0;
 }

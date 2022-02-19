@@ -1,6 +1,8 @@
 set(TEST_EXAMPLES
         TestCloth
         TestCube
+        TestStarryFish
+        TestRigidBody
         )
 
 foreach (test ${TEST_EXAMPLES})

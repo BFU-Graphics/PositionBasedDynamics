@@ -145,3 +145,18 @@ void HINASIM::Cloth::init_geometry()
 
     std::clog << "Cloth Info: " << "Vertex: " << V_.rows() << " Faces: " << F_.rows() << std::endl;
 }
+
+void HINASIM::RigidBody::init_physical_state()
+{
+
+}
+
+void HINASIM::RigidBody::update_geometry_info()
+{
+
+}
+
+void HINASIM::RigidBody::update_mouse_drag()
+{
+
+}

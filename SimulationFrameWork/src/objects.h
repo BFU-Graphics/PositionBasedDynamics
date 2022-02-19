@@ -65,6 +65,16 @@ namespace HINASIM
         int rows_, cols_;
         int width_, height_;
     };
+
+    class RigidBody : public SimObject
+    {
+    public:
+        void init_physical_state() override;
+
+        void update_geometry_info() override;
+
+        void update_mouse_drag() override;
+    };
 }
 
 #endif //POSITIONBASEDDYNAMICS_OBJECTS_H
