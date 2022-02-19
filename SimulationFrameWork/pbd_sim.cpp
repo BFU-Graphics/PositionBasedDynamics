@@ -108,7 +108,7 @@ void HINASIM::PBDSim::constraints_projection(SimObject *o)
 {
     for (auto &c: o->inner_constraints_)
     {
-        c->solve(o->p_, o->inv_mass_, 1 /** temp stiffness **/);
+        c->solve(o->p_, o->inv_mass_);
     }
 }
 

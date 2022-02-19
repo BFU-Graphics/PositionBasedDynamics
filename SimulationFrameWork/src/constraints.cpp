@@ -30,7 +30,7 @@ HINASIM::DistanceConstraint::DistanceConstraint(Eigen::MatrixXd &init_q, const E
 
 }
 
-bool HINASIM::DistanceConstraint::solve(Eigen::MatrixXd &p, const Eigen::VectorXd &inv_mass, double stiffness)
+bool HINASIM::DistanceConstraint::solve(Eigen::MatrixXd &p, const Eigen::VectorXd &inv_mass)
 {
 #ifdef USE_OPENMP
     omp_set_num_threads(16);
@@ -50,8 +50,8 @@ bool HINASIM::DistanceConstraint::solve(Eigen::MatrixXd &p, const Eigen::VectorX
         double C = (p1 - p2).norm() - rest_length;
         Eigen::RowVector3d dC = (p1 - p2).normalized().transpose();
 
-        Eigen::RowVector3d dp_1 = -stiffness * (inv_mass_p1) / (inv_mass_p1 + inv_mass_p2) * C * dC;
-        Eigen::RowVector3d dp_2 = +stiffness * (inv_mass_p2) / (inv_mass_p1 + inv_mass_p2) * C * dC;
+        Eigen::RowVector3d dp_1 = -stiffness_ * (inv_mass_p1) / (inv_mass_p1 + inv_mass_p2) * C * dC;
+        Eigen::RowVector3d dp_2 = +stiffness_ * (inv_mass_p2) / (inv_mass_p1 + inv_mass_p2) * C * dC;
 
         p.row(p1_index) += dp_1;
         p.row(p2_index) += dp_2;
@@ -122,7 +122,7 @@ HINASIM::DihedralConstraint::DihedralConstraint(Eigen::MatrixXd &init_q, const s
     std::clog << "Dihedral Constraint Sum: " << dihedral_constraints_.size() << std::endl;
 }
 
-bool HINASIM::DihedralConstraint::solve(Eigen::MatrixXd &p, const Eigen::VectorXd &inv_mass, double stiffness)
+bool HINASIM::DihedralConstraint::solve(Eigen::MatrixXd &p, const Eigen::VectorXd &inv_mass)
 {
 #ifdef USE_OPENMP
     omp_set_num_threads(16);
@@ -181,7 +181,7 @@ bool HINASIM::DihedralConstraint::solve(Eigen::MatrixXd &p, const Eigen::VectorX
 
             if (lambda != 0.0)
             {
-                lambda = (phi - rest_angle) / lambda * stiffness;
+                lambda = (phi - rest_angle) / lambda * stiffness_;
 
                 if (n1.cross(n2).dot(e) > 0.0)
                     lambda = -lambda;

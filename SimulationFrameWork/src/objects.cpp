@@ -143,5 +143,5 @@ void HINASIM::Cloth::init_geometry()
     if (V_.rows() > 0)
         init_physical_state();
 
-    std::clog << "Cloth Info: " << V_.rows() << " / " << F_.rows() << std::endl;
+    std::clog << "Cloth Info: " << "Vertex: " << V_.rows() << " Faces: " << F_.rows() << std::endl;
 }

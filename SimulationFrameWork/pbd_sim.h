@@ -6,7 +6,7 @@
 #ifndef POSITIONBASEDDYNAMICS_PBD_SIM_H
 #define POSITIONBASEDDYNAMICS_PBD_SIM_H
 
-#include "SimulationFrameWork/src/objects.h"
+#include "src/objects.h"
 #include "src/constraints.h"
 
 #include <vector>
@@ -44,7 +44,7 @@ namespace HINASIM
         static void update_q_and_qdot(Eigen::Ref<Eigen::MatrixXd> q, Eigen::Ref<Eigen::MatrixXd> qdot, Eigen::Ref<Eigen::MatrixXd> p, double dt);
 
     public:
-        typedef Constraint Joint;
+        using Joint = Constraint;
         std::vector<SimObject *> objects_;
         std::vector<Joint *> joints_;
 
