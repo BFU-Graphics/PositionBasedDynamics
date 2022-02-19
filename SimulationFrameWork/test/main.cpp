@@ -11,6 +11,7 @@
 
 void func(HINAVIEWER::PBDViewer &pbd_viewer, HINASIM::PBDSim &pbd_sim, HINASIM::DeformableObject &obj, HINASIM::DistanceConstraint &dc)
 {
+//    obj.set_inv_mass(0, 0).add_constraint(&dc);
     obj.set_inv_mass(0, 0).set_inv_mass(29, 0).add_constraint(&dc);
     pbd_sim.add_object(&obj);
     pbd_viewer.record(&obj);
@@ -38,6 +39,7 @@ int main()
         pbd_sim.update_all_rendering_state();
         for (auto &o: pbd_sim.objects_)
         {
+            o->update_mouse_drag();
             pbd_viewer.update_vertex_positions(o->ID_, o->V_);
         }
 

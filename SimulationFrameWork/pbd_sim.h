@@ -26,12 +26,12 @@ namespace HINASIM
         void update_all_rendering_state();
 
     public:
-        PBDSim& fix_dt(double dt);
+        PBDSim &fix_dt(double dt);
 
     protected: // PBD Kernel Region
         void pbd_kernel_loop(double dt);
 
-        void integrate_velocity_by_gravity(Eigen::Ref<Eigen::MatrixXd> qdot, Eigen::Ref<Eigen::VectorXd> inv_mass, double dt);
+        void integrate_velocity_by_external_force(Eigen::Ref<Eigen::MatrixXd> qdot, Eigen::Ref<Eigen::MatrixXd> external_force, Eigen::Ref<Eigen::VectorXd> inv_mass, double dt);
 
         static void damping_velocity(Eigen::Ref<Eigen::MatrixXd> qdot);
 
@@ -49,7 +49,7 @@ namespace HINASIM
         std::vector<Joint *> joints_;
 
     protected: // Env
-        Eigen::Vector3d gravity{0, -9.8, 0};
+        Eigen::RowVector3d gravity_{0, -9.8, 0};
         double fixed_dt = 0.02;
     };
 }

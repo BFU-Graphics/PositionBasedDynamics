@@ -21,6 +21,8 @@ namespace HINASIM
 
         virtual void update_geometry_info() = 0;
 
+        virtual void update_mouse_drag() = 0;
+
     public:
         SimObject &add_constraint(Constraint *constraint);
 
@@ -38,6 +40,8 @@ namespace HINASIM
         Eigen::MatrixXd p_; // n x 3
         Eigen::VectorXd inv_mass_; // n x 1
 
+        Eigen::MatrixXd mouse_drag_force_; // n x 3
+
         std::vector<Constraint *> inner_constraints_;
     };
 
@@ -47,6 +51,8 @@ namespace HINASIM
         void init_physical_state() override;
 
         void update_geometry_info() override;
+
+        void update_mouse_drag() override;
     };
 
     class Cloth : public DeformableObject

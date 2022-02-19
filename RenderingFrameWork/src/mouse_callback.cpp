@@ -6,11 +6,6 @@
 #include "mouse_callback.h"
 #include "utils.h"
 
-namespace HINAVIEWER
-{
-    extern std::vector<std::pair<Eigen::MatrixXd, Eigen::MatrixXi>> g_geometry;
-}
-
 namespace HINAVIEWER::MOUSE_CALLBACK
 {
     //picking variables
@@ -37,7 +32,7 @@ bool HINAVIEWER::MOUSE_CALLBACK::mouse_down(igl::opengl::glfw::Viewer &viewer, i
 
     if (HINAVIEWER::UTILS::pick_nearest_vertices(g_picked_vertices, g_mouse_win,
                                                  viewer.core().view, viewer.core().proj, viewer.core().viewport,
-                                                 viewer.data().V, HINAVIEWER::g_geometry[0].second, 0.1))
+                                                 viewer.data().V, viewer.data().F, 0.1))
     {
 
         g_selected_obj = 0;
@@ -81,4 +76,24 @@ bool HINAVIEWER::MOUSE_CALLBACK::mouse_move(igl::opengl::glfw::Viewer &viewer, i
     }
 
     return false;
+}
+
+const Eigen::Vector3d &HINAVIEWER::MOUSE_CALLBACK::mouse_world()
+{
+    return g_mouse_world;
+}
+
+const Eigen::Vector3d &HINAVIEWER::MOUSE_CALLBACK::mouse_drag_world()
+{
+    return g_mouse_drag_world;
+}
+
+const std::vector<unsigned int> &HINAVIEWER::MOUSE_CALLBACK::picked_vertices()
+{
+    return g_picked_vertices;
+}
+
+bool HINAVIEWER::MOUSE_CALLBACK::is_mouse_dragging()
+{
+    return g_mouse_dragging;
 }

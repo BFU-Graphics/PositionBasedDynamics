@@ -5,6 +5,8 @@
 
 #include "objects.h"
 
+#include "RenderingFrameWork/src/mouse_callback.h"
+
 #include <igl/readOBJ.h>
 #include <igl/readPLY.h>
 
@@ -44,6 +46,9 @@ void HINASIM::DeformableObject::init_physical_state()
 
     p_.resize(q_.rows(), q_.cols());
 
+    mouse_drag_force_.resize(V_.rows(), 3);
+    mouse_drag_force_.setZero();
+
     inv_mass_.resize(V_.rows());
     inv_mass_.setOnes();
 }
@@ -51,6 +56,21 @@ void HINASIM::DeformableObject::init_physical_state()
 void HINASIM::DeformableObject::update_geometry_info()
 {
     V_ = q_;
+}
+
+void HINASIM::DeformableObject::update_mouse_drag()
+{
+    for (auto &v_index: HINAVIEWER::MOUSE_CALLBACK::picked_vertices())
+    {
+        double stiffness = HINAVIEWER::MOUSE_CALLBACK::is_mouse_dragging() ? 1e4 : 0;
+        Eigen::Vector3d mouse_drag_delta = HINAVIEWER::MOUSE_CALLBACK::mouse_drag_world() + Eigen::Vector3d::Constant(1e-6);
+        Eigen::Vector3d mouse_drag_force = stiffness * mouse_drag_delta;
+
+        mouse_drag_force_.row(v_index) += mouse_drag_force.transpose();
+    }
+
+    if (HINAVIEWER::MOUSE_CALLBACK::picked_vertices().empty())
+        mouse_drag_force_.setZero();
 }
 
 HINASIM::SimObject &HINASIM::SimObject::add_constraint(HINASIM::Constraint *constraint)

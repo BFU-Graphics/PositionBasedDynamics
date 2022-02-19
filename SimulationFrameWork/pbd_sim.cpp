@@ -53,7 +53,7 @@ void HINASIM::PBDSim::pbd_kernel_loop(double dt)
         o->p_.setZero();
 
         // (5) forall vertices i do v_i <- v_i + \Delta t * w_i * f_external
-        integrate_velocity_by_gravity(o->qdot_, o->inv_mass_, dt);
+        integrate_velocity_by_external_force(o->qdot_, o->mouse_drag_force_, o->inv_mass_, dt);
 
         // (6) damping velocities v_i
         damping_velocity(o->qdot_);
@@ -80,12 +80,12 @@ void HINASIM::PBDSim::pbd_kernel_loop(double dt)
     }
 }
 
-void HINASIM::PBDSim::integrate_velocity_by_gravity(Eigen::Ref<Eigen::MatrixXd> qdot, Eigen::Ref<Eigen::VectorXd> inv_mass, double dt)
+void HINASIM::PBDSim::integrate_velocity_by_external_force(Eigen::Ref<Eigen::MatrixXd> qdot, Eigen::Ref<Eigen::MatrixXd> external_force, Eigen::Ref<Eigen::VectorXd> inv_mass, double dt)
 {
     for (int i = 0; i < qdot.rows(); ++i)
     {
         if (inv_mass(i) != 0)
-            qdot.row(i) += dt * gravity.transpose();
+            qdot.row(i) += dt * (gravity_ + inv_mass(i) * external_force.row(i));
     }
 }
 

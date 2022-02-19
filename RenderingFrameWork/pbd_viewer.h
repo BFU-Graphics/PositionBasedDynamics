@@ -71,7 +71,7 @@ namespace HINAVIEWER
         bool is_full_screen = false;
         bool enable_menu = true;
         bool enable_inspector = false;
-        bool enable_custom_mouse_callback = false;
+        bool enable_custom_mouse_callback = true;
         int focus_object_ID = -1;
         FILE *ffmpeg;
     };
