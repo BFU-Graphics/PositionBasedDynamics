@@ -9,15 +9,6 @@
 /// SET FFMPEG PATH TO ENABLE OUTPUT MP4 VIDEO
 //#define FFMPEG_PATH "D:/ffmpeg-n4.4-latest-win64-gpl-4.4/bin/ffmpeg.exe"
 
-void func(HINAVIEWER::PBDViewer &pbd_viewer, HINASIM::PBDSim &pbd_sim, HINASIM::DeformableObject &obj, HINASIM::DistanceConstraint &dc)
-{
-//    obj.set_inv_mass(0, 0).add_constraint(&dc);
-    obj.set_inv_mass(0, 0).set_inv_mass(29, 0).add_constraint(&dc);
-    pbd_sim.add_object(&obj);
-    pbd_viewer.record(&obj);
-    pbd_viewer.track(&dc, 1);
-}
-
 int main()
 {
     HINAVIEWER::PBDViewer pbd_viewer;
@@ -31,8 +22,15 @@ int main()
     HINASIM::Cloth cloth(30, 30, 20, 20);
     cloth.init_geometry();
     HINASIM::DistanceConstraint dc_cloth(cloth.q_, cloth.E_);
-    func(pbd_viewer, pbd_sim, cloth, dc_cloth);
+    HINASIM::DihedralConstraint dic_cloth(cloth.q_, cloth.EVF_, cloth.F_);
+    cloth
+            .set_inv_mass(0, 0)
+            .set_inv_mass(29, 0)
+            .add_constraint(&dc_cloth)
+            .add_constraint(&dic_cloth);
 
+    pbd_sim.add_object(&cloth);
+    pbd_viewer.record(&cloth);
 
     pbd_viewer.viewer().callback_post_draw = [&pbd_viewer, &pbd_sim](igl::opengl::glfw::Viewer &viewer) -> bool
     {

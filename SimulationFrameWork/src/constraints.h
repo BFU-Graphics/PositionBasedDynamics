@@ -16,7 +16,7 @@ namespace HINASIM
     class Constraint
     {
     public:
-        virtual bool solve(Eigen::MatrixXd &q, const Eigen::VectorXd &inv_mass, double stiffness) = 0;
+        virtual bool solve(Eigen::MatrixXd &p, const Eigen::VectorXd &inv_mass, double stiffness) = 0;
     };
 
     class DistanceConstraint : public Constraint, public HINAVIEWER::INSPECTOR::Trackable
@@ -24,7 +24,7 @@ namespace HINASIM
     public:
         explicit DistanceConstraint(Eigen::MatrixXd &init_q, const Eigen::MatrixXi &edges);
 
-        bool solve(Eigen::MatrixXd &q, const Eigen::VectorXd &inv_mass, double stiffness) override;
+        bool solve(Eigen::MatrixXd &p, const Eigen::VectorXd &inv_mass, double stiffness) override;
 
     public:
         /// p1_id, p2_id, rest_length
@@ -34,7 +34,13 @@ namespace HINASIM
     class DihedralConstraint : public Constraint
     {
     public:
-        bool solve(Eigen::MatrixXd &q, const Eigen::VectorXd &inv_mass, double stiffness) override;
+        DihedralConstraint(Eigen::MatrixXd &init_q, const std::vector<std::vector<unsigned int>> &EVF, const Eigen::MatrixXi &F);
+
+        bool solve(Eigen::MatrixXd &p, const Eigen::VectorXd &inv_mass, double stiffness) override;
+
+    public:
+        /// axis_p1_id, axis_p2_id, side_p3_id, axis_p4_id, rest_angle
+        std::vector<std::tuple<int, int, int, int, double>> dihedral_constraints_;
     };
 }
 
