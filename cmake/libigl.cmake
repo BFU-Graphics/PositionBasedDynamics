@@ -1,20 +1,21 @@
-if(TARGET igl::core)
+if (TARGET igl::core)
     return()
-endif()
+endif ()
 
 include(FetchContent)
+if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(FETCHCONTENT_BASE_DIR "${MY_EXTERNAL_DIR}/fetched-content-Debug")
+else ()
+    set(FETCHCONTENT_BASE_DIR "${MY_EXTERNAL_DIR}/fetched-content-Release")
+endif ()
 FetchContent_Declare(
         libigl
         GIT_REPOSITORY https://github.com/libigl/libigl.git
         GIT_TAG v2.3.0
 )
-
-# Note: In libigl v3.0.0, the following will become a one-liner:
-# FetchContent_MakeAvailable(libigl)
-
 FetchContent_GetProperties(libigl)
-if(NOT libigl_POPULATED)
+if (NOT libigl_POPULATED)
     FetchContent_Populate(libigl)
-endif()
+endif ()
 list(PREPEND CMAKE_MODULE_PATH "${libigl_SOURCE_DIR}/cmake")
 include(${libigl_SOURCE_DIR}/cmake/libigl.cmake)

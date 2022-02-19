@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.15)
 project(PositionBasedDynamics)
 
+# Set My Variables
+set(MY_EXTERNAL_DIR ${CMAKE_SOURCE_DIR}/../Graphics-Dependencies/install) # Determine External Install Dir
+
 set(CMAKE_CXX_STANDARD 17)
 
 OPTION(STATIC_RENDERING_LIB "Use Rendering Framework as static lib" OFF)
@@ -32,22 +35,14 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/lib)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
 
-# Set My Variables
-set(MY_EXTERNAL_DIR ${CMAKE_SOURCE_DIR}/external) # default method
-set(MY_EXTERNAL_DIR ${CMAKE_SOURCE_DIR}/../Graphics-Dependencies/install) # method 2: READ CAREFULLY THIS LINE ~
-
 # Find Packages
 find_package(MY_EIGEN REQUIRED)
 
-#if (APPLE)
-# Libigl
 list(PREPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 option(LIBIGL_WITH_OPENGL "Use OpenGL" ON)
 option(LIBIGL_WITH_OPENGL_GLFW "Use GLFW" ON)
 option(LIBIGL_WITH_OPENGL_GLFW_IMGUI "Use ImGui" ON)
 include(libigl)
-#endif ()
-
 
 # Global Includes & Link Libraries
 include_directories(${CMAKE_SOURCE_DIR} ${MY_EXTERNAL_DIR}/include)
