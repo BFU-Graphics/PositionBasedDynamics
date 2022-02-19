@@ -1,1 +1,0 @@
-include_directories(${MY_EXTERNAL_DIR}/include/eigen3)
