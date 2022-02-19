@@ -9,16 +9,24 @@
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 
-namespace Eigen {
+namespace Eigen
+{
 
     //dense types
-    using Vector6d = Eigen::Matrix<double, 6,1>;
-    using Matrix36d = Eigen::Matrix<double, 3,6>;
-    using Matrix66d  = Eigen::Matrix<double, 6,6>;
-    using Matrix44f = Eigen::Matrix<float, 4,4>;
+    using Vector6d = Eigen::Matrix<double, 6, 1>;
+    using Matrix23d = Eigen::Matrix<double, 2, 3>;
+    using Matrix36d = Eigen::Matrix<double, 3, 6>;
+    using Matrix66d = Eigen::Matrix<double, 6, 6>;
+    using Matrix44f = Eigen::Matrix<float, 4, 4>;
     //sparse types
     using SparseMatrixd = Eigen::SparseMatrix<double>;
 
 }
+
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64)
+#define FORCE_INLINE __forceinline
+#else
+#define FORCE_INLINE __attribute__((always_inline))
+#endif
 
 #endif //POSITIONBASEDDYNAMICS_EIGEN_TYPES_H
