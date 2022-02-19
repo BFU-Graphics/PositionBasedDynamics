@@ -7,7 +7,6 @@
 #define POSITIONBASEDDYNAMICS_OBJECTS_H
 
 #include "RenderingFrameWork/src/renderable.h"
-
 #include "SimulationFrameWork/src/constraints.h"
 
 namespace HINASIM
