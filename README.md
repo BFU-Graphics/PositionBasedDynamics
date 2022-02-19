@@ -9,7 +9,7 @@
 
 ## Build Instruction
 
-**For all platform:**
+**For all platforms:**
 
 1. Clone [PositionBasedDynamics](https://github.com/BFU-Graphics/PositionBasedDynamics), or simply download this repo.
 2. cmake, and build
