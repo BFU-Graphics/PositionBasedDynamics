@@ -14,7 +14,7 @@ if (STATIC_RENDERING_LIB)
             igl::opengl_glfw
             igl::opengl_glfw_imgui
             )
-else (DYNAMIC_RENDERING_LIB)
+elseif (DYNAMIC_RENDERING_LIB)
     add_library(HinaRender SHARED ${VISUALIZATION_FILES})
     target_link_libraries(HinaRender
             PUBLIC
@@ -23,4 +23,5 @@ else (DYNAMIC_RENDERING_LIB)
             igl::opengl_glfw
             igl::opengl_glfw_imgui
             )
+else ()
 endif ()
