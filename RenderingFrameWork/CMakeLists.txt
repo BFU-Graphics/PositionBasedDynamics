@@ -6,7 +6,7 @@ file(GLOB RENDERING_FRAMEWORK_FILES
         )
 
 if (STATIC_RENDERING_LIB)
-    add_library(HinaRender ${VISUALIZATION_FILES})
+    add_library(HinaRender ${RENDERING_FRAMEWORK_FILES})
     target_link_libraries(HinaRender
             PUBLIC
             igl::core
@@ -15,7 +15,7 @@ if (STATIC_RENDERING_LIB)
             igl::opengl_glfw_imgui
             )
 elseif (DYNAMIC_RENDERING_LIB)
-    add_library(HinaRender SHARED ${VISUALIZATION_FILES})
+    add_library(HinaRender SHARED ${RENDERING_FRAMEWORK_FILES})
     target_link_libraries(HinaRender
             PUBLIC
             igl::core
