@@ -11,7 +11,7 @@ int main()
     // ======================================== Phase 1: Init Simulation World Info  ========================================
 
     HINASIM::DeformableObject starry_fish;
-    starry_fish.init_geometry(PBD_MODEL_DIR + std::string("starry_fish.obj"));
+    starry_fish.init_geometry("/Users/xayah/Desktop/GithubRepo/tree-gen/out/tree1.obj");
     HINASIM::DistanceConstraint dc(starry_fish.q_, starry_fish.E_);
     starry_fish.set_inv_mass(0, 0).add_constraint(&dc);
 //    pbd_sim.add_object(&starry_fish);

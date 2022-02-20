@@ -60,6 +60,7 @@ namespace HINASIM
 
     public:
 
+        
 
     public:
         struct CollisionObject
@@ -73,7 +74,12 @@ namespace HINASIM
             AABB aabb_;
         };
 
-        double tolerance_;
+        std::vector<CollisionObject> collision_objects_;
+    };
+
+    class DistanceFieldCollisionDetection
+    {
+    public:
 
     };
 }

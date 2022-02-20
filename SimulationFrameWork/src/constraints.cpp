@@ -26,14 +26,14 @@ HINASIM::DistanceConstraint::DistanceConstraint(Eigen::MatrixXd &init_q, const E
         Eigen::RowVector3d q2 = init_q.row(q2_index);
         distance_constraints_.emplace_back(std::make_tuple(q1_index, q2_index, (q1 - q2).norm()));
     }
-    std::clog << "Distance Constraint Sum: " << distance_constraints_.size() << std::endl;
+    std::clog << "Distance Constraint Sum: " << distance_constraints_.size() << " " << omp_get_max_threads() << std::endl;
 
 }
 
 bool HINASIM::DistanceConstraint::solve(Eigen::MatrixXd &p, const Eigen::VectorXd &inv_mass)
 {
 #ifdef USE_OPENMP
-    omp_set_num_threads(16);
+    omp_set_num_threads(omp_get_max_threads());
 #pragma omp parallel for
 #endif
     for (int i = 0; i < distance_constraints_.size(); ++i) // do not use for range form to avoid OpenMP bugs
@@ -125,7 +125,7 @@ HINASIM::DihedralConstraint::DihedralConstraint(Eigen::MatrixXd &init_q, const s
 bool HINASIM::DihedralConstraint::solve(Eigen::MatrixXd &p, const Eigen::VectorXd &inv_mass)
 {
 #ifdef USE_OPENMP
-    omp_set_num_threads(16);
+    omp_set_num_threads(omp_get_max_threads());
 #pragma omp parallel for
 #endif
     for (int i = 0; i < dihedral_constraints_.size(); ++i) // do not use for range form to avoid OpenMP bugs
@@ -193,5 +193,10 @@ bool HINASIM::DihedralConstraint::solve(Eigen::MatrixXd &p, const Eigen::VectorX
             }
         }
     }
+    return true;
+}
+
+bool HINASIM::RigidBodyContactConstraint::solve(Eigen::MatrixXd &p, const Eigen::VectorXd &inv_mass)
+{
     return true;
 }

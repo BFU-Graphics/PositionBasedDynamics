@@ -45,6 +45,16 @@ namespace HINASIM
         /// axis_p1_id, axis_p2_id, side_p3_id, axis_p4_id, rest_angle
         std::vector<std::tuple<int, int, int, int, double>> dihedral_constraints_;
     };
+
+    class RigidBodyContactConstraint : public Constraint
+    {
+    public:
+        bool solve(Eigen::MatrixXd &p, const Eigen::VectorXd &inv_mass) override;
+
+    public:
+        /// rigidbody1_id, rigidbody2_id, friction_coefficient, sum_impulses
+        std::vector<std::tuple<int, int, double, double>> distance_constraints_;
+    };
 }
 
 
