@@ -1,6 +1,6 @@
 /**
  * @author YC XIANG.
- * @date 02/15, 2022
+ * @date 02/21, 2022
  */
 
 #include "constraints.h"
@@ -193,10 +193,5 @@ bool HINASIM::DihedralConstraint::solve(Eigen::MatrixXd &p, const Eigen::VectorX
             }
         }
     }
-    return true;
-}
-
-bool HINASIM::RigidBodyContactConstraint::solve(Eigen::MatrixXd &p, const Eigen::VectorXd &inv_mass)
-{
     return true;
 }

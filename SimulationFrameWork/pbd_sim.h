@@ -8,6 +8,7 @@
 
 #include "src/objects.h"
 #include "src/constraints.h"
+#include "src/contact_constraints.h"
 
 #include <vector>
 
@@ -47,6 +48,7 @@ namespace HINASIM
         using Joint = Constraint;
         std::vector<SimObject *> objects_;
         std::vector<Joint *> joints_;
+        std::vector<RigidBodyContactConstraint *> rigid_body_contacts_constraints_;
 
     protected: // Env
         Eigen::RowVector3d gravity_{0, -9.8, 0};
