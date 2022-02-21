@@ -139,7 +139,7 @@ bool HINASIM::DihedralConstraint::solve(Eigen::MatrixXd &p, const Eigen::VectorX
         double rest_angle = std::get<4>(dc);
 
         if (inv_mass(side_p3_index) == 0 && inv_mass(side_p4_index) == 0)
-            return false;
+            continue;
 
         Eigen::Vector3d axis_p1 = p.row(axis_p1_index).transpose();
         Eigen::Vector3d axis_p2 = p.row(axis_p2_index).transpose();
