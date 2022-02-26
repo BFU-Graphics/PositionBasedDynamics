@@ -1,5 +1,5 @@
 #include "RenderingFrameWork/pbd_viewer.h"
-#include "../../pbd_sim.h"
+#include "SimulationFrameWork/pbd_sim.h"
 
 int main()
 {
@@ -12,11 +12,11 @@ int main()
 
     HINASIM::Cloth cloth(30, 30, 10, 10);
 
+    HINASIM::DistanceConstraint dc_cloth(cloth.V_, cloth.E_);
+    HINASIM::DihedralConstraint dic_cloth(cloth.V_, cloth.EVF_, cloth.F_);
+
     pbd_sim.add_object(&cloth);
     pbd_viewer.record(&cloth);
-
-    HINASIM::DistanceConstraint dc_cloth(cloth.x_, cloth.E_);
-    HINASIM::DihedralConstraint dic_cloth(cloth.x_, cloth.EVF_, cloth.F_);
 
     cloth
             .set_inv_mass(0, 0)

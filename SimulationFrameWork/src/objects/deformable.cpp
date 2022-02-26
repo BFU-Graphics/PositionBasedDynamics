@@ -33,7 +33,9 @@ HINASIM::DeformableObject &HINASIM::DeformableObject::set_inv_mass(int index, do
     inv_mass_(index) = inv_mass;
     return *this;
 }
+
 #include <iostream>
+
 void HINASIM::DeformableObject::init_physics_states()
 {
     x_.resize(V_.rows(), V_.cols());

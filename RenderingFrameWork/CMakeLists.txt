@@ -3,6 +3,8 @@ file(GLOB RENDERING_FRAMEWORK_FILES
         *.cpp
         src/*.h
         src/*.cpp
+        api/*.h
+        api/*.cpp
         )
 
 if (STATIC_RENDERING_LIB)

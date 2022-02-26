@@ -7,12 +7,12 @@ int main()
     HINASIM::PBDSim pbd_sim;
 
     HINASIM::DeformableObject cube(PBD_MODEL_DIR + std::string("cube.obj"));
-    
+
+    HINASIM::DistanceConstraint dc(cube.V_, cube.E_);
+    cube.set_inv_mass(4, 0).add_constraint(&dc);
+
     pbd_sim.add_object(&cube);
     pbd_viewer.record(&cube);
-
-    HINASIM::DistanceConstraint dc(cube.x_, cube.E_);
-    cube.set_inv_mass(4, 0).add_constraint(&dc);
 
     pbd_viewer.viewer().callback_post_draw = [&pbd_viewer, &pbd_sim](igl::opengl::glfw::Viewer &viewer) -> bool
     {

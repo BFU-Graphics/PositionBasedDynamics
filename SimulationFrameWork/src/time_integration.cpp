@@ -1,6 +1,7 @@
 #include "time_integration.h"
 
-void HINASIM::TimeIntegration::semi_implicit_integration_with_damping(const double h, const Eigen::VectorXd &inv_mass, Eigen::MatrixXd &predict_positions, const Eigen::MatrixXd &positions, Eigen::MatrixXd &velocities, const Eigen::MatrixXd &accelerations, double damping)
+void HINASIM::TimeIntegration::semi_implicit_integration_with_damping(const double h, const Eigen::VectorXd &inv_mass, Eigen::MatrixXd &predict_positions, const Eigen::MatrixXd &positions, Eigen::MatrixXd &velocities,
+                                                                      const Eigen::MatrixXd &accelerations, double damping)
 {
     assert(predict_positions.rows() == velocities.rows());
 

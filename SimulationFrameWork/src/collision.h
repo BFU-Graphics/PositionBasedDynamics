@@ -60,7 +60,6 @@ namespace HINASIM
 
     public:
 
-        
 
     public:
         struct CollisionObject
