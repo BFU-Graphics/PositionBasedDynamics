@@ -64,7 +64,7 @@ void HINASIM::PBDSim::pbd_kernel_loop(double dt)
     }
 
     // (8) forall vertices i do generateCollisionConstraints(x_i → p_i)
-    generate_collision_constraints(); // omit
+//    generate_collision_constraints(); // omit
 
     // (9) ~ (11)
     // loop solverIterations times
@@ -83,23 +83,58 @@ void HINASIM::PBDSim::pbd_kernel_loop(double dt)
 
 void HINASIM::PBDSim::external_force(HINASIM::SimObject *o)
 {
-    if (o->TYPE_ == SimObjectType::Deformable)
+    switch (o->TYPE_)
     {
-        auto *deformable = dynamic_cast<HINASIM::DeformableObject *>(o);
-        deformable->a_.setZero();
-        for (int i = 0; i < deformable->a_.rows(); ++i)
-            if (deformable->inv_mass_(i) != 0)
-                deformable->a_.row(i) = gravity_ + deformable->inv_mass_(i) * deformable->mouse_drag_force_.row(i);
+        case SimObjectType::Deformable:
+        {
+            auto *deformable = dynamic_cast<HINASIM::DeformableObject *>(o);
+            deformable->a_.setZero();
+            for (int i = 0; i < deformable->a_.rows(); ++i)
+                if (deformable->inv_mass_(i) != 0)
+                    deformable->a_.row(i) = gravity_ + deformable->inv_mass_(i) * deformable->mouse_drag_force_.row(i);
+        }
+            break;
+        case SimObjectType::RigidBody:
+        {
+            // TODO:
+            std::cerr << "Rigid Body Not Implemented yet" << std::endl;
+        }
+            break;
+        case SimObjectType::Fluid:
+        {
+            // TODO:
+            std::cerr << "Fluid Not Implemented yet" << std::endl;
+        }
+            break;
+        default:
+            break;
     }
 }
 
 void HINASIM::PBDSim::integrate_prediction_with_damping(HINASIM::SimObject *o, double dt, double damping)
 {
-    if (o->TYPE_ == SimObjectType::Deformable)
+    switch (o->TYPE_)
     {
-        auto *deformable = dynamic_cast<HINASIM::DeformableObject *>(o);
-        deformable->p_.setZero();
-        HINASIM::TimeIntegration::semi_implicit_integration_with_damping(dt, deformable->inv_mass_, deformable->p_, deformable->x_, deformable->v_, deformable->a_, damping);
+        case SimObjectType::Deformable:
+        {
+            auto *deformable = dynamic_cast<HINASIM::DeformableObject *>(o);
+            deformable->p_.setZero();
+            HINASIM::TimeIntegration::semi_implicit_integration_with_damping(dt, deformable->inv_mass_, deformable->p_, deformable->x_, deformable->v_, deformable->a_, damping);
+        }
+            break;
+        case SimObjectType::RigidBody:
+        {
+            // TODO:
+            std::cerr << "Rigid Body Not Implemented yet" << std::endl;
+        }
+            break;
+        case SimObjectType::Fluid:
+        {
+            // TODO:
+            std::cerr << "Fluid Not Implemented yet" << std::endl;
+        }
+        default:
+            break;
     }
 }
 
@@ -110,28 +145,69 @@ void HINASIM::PBDSim::generate_collision_constraints()
 
 void HINASIM::PBDSim::project_position_constraints()
 {
+    // solve internal constraints(aka. joints)
+    for (auto &j: joints_)
+    {
+        // TODO:
+    }
+
+    // solve inner constraints
     for (auto &o: objects_)
     {
-        if (o->TYPE_ == SimObjectType::Deformable)
+        switch (o->TYPE_)
         {
-            auto *deformable = dynamic_cast<HINASIM::DeformableObject *>(o);
-            for (int i = 0; i < 5; ++i)
+            case SimObjectType::Deformable:
             {
-                for (auto &c: deformable->inner_constraints_)
+                auto *deformable = dynamic_cast<HINASIM::DeformableObject *>(o);
+                for (int i = 0; i < 5; ++i)
                 {
-                    c->solve(deformable->p_, deformable->inv_mass_);
+                    for (auto &c: deformable->inner_constraints_)
+                    {
+                        c->solve(deformable->p_, deformable->inv_mass_);
+                    }
                 }
             }
+                break;
+            case SimObjectType::RigidBody:
+            {
+                // TODO:
+                std::cerr << "Rigid Body Not Implemented yet" << std::endl;
+            }
+                break;
+            case SimObjectType::Fluid:
+            {
+                // TODO:
+                std::cerr << "Fluid Not Implemented yet" << std::endl;
+            }
+            default:
+                break;
         }
     }
 }
 
 void HINASIM::PBDSim::update_positions_and_velocities(HINASIM::SimObject *o, double dt)
 {
-    if (o->TYPE_ == SimObjectType::Deformable)
+    switch (o->TYPE_)
     {
-        auto *deformable = dynamic_cast<HINASIM::DeformableObject *>(o);
-        HINASIM::TimeIntegration::velocity_update_first_order(dt, deformable->inv_mass_, deformable->p_, deformable->x_, deformable->v_);
-        deformable->x_ = deformable->p_;
+        case SimObjectType::Deformable:
+        {
+            auto *deformable = dynamic_cast<HINASIM::DeformableObject *>(o);
+            HINASIM::TimeIntegration::velocity_update_first_order(dt, deformable->inv_mass_, deformable->p_, deformable->x_, deformable->v_);
+            deformable->x_ = deformable->p_;
+        }
+            break;
+        case SimObjectType::RigidBody:
+        {
+            // TODO:
+            std::cerr << "Rigid Body Not Implemented yet" << std::endl;
+        }
+            break;
+        case SimObjectType::Fluid:
+        {
+            // TODO:
+            std::cerr << "Fluid Not Implemented yet" << std::endl;
+        }
+        default:
+            break;
     }
 }

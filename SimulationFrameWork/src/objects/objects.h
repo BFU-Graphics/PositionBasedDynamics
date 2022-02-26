@@ -17,6 +17,7 @@ namespace HINASIM
         NoType,
         Deformable,
         RigidBody,
+        Fluid,
     };
 
     class SimObject : public HINAVIEWER::RENDERABLE::Renderable, public HINAVIEWER::MOUSE_DRAGGABLE::Draggable
