@@ -1,7 +1,7 @@
 #ifndef POSITIONBASEDDYNAMICS_DRAGGABLE_H
 #define POSITIONBASEDDYNAMICS_DRAGGABLE_H
 
-#include "RenderingFrameWork/src/mouse_callback.h"
+#include "src/mouse_callback.h"
 
 namespace HINAVIEWER::MOUSE_DRAGGABLE
 {

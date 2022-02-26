@@ -1,13 +1,6 @@
-/**
- * @author YC XIANG.
- * @date 02/15, 2022
- */
-
 #include "objects.h"
 
 #include <utility>
-
-#include "RenderingFrameWork/src/mouse_callback.h"
 
 HINASIM::SimObject::SimObject(Eigen::Vector3d position, const Eigen::Quaterniond &rotation) : position_(std::move(position)), rotation_(rotation)
 {

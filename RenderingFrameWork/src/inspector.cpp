@@ -1,8 +1,3 @@
-/**
- * @author YC XIANG.
- * @date 02/15, 2022
- */
-
 #include "inspector.h"
 
 #define IMGUI_DEFINE_MATH_OPERATORS

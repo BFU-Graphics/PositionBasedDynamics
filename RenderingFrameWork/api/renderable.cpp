@@ -1,8 +1,3 @@
-/**
- * @author YC XIANG.
- * @date 02/16, 2022
- */
-
 #include "renderable.h"
 
 #include <igl/readOBJ.h>

@@ -1,8 +1,3 @@
-/**
- * @author YC XIANG.
- * @date 02/15, 2022
- */
-
 #include "pbd_sim.h"
 
 #include "RenderingFrameWork/src/inspector.h"
@@ -69,7 +64,7 @@ void HINASIM::PBDSim::pbd_kernel_loop(double dt)
 
     // (9) ~ (11)
     // loop solverIterations times
-    // projectConstraints(C_1,...,C_M+Mcoll ,p_1,...,p_N)
+    // projectConstraints(C_1,...,C_M+M_coll ,p_1,...,p_N)
     // end loop
     project_position_constraints();
 

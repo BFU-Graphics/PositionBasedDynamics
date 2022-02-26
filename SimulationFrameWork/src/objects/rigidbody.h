@@ -3,7 +3,6 @@
 
 #include "objects.h"
 
-
 namespace HINASIM
 {
     class RigidBody : public SimObject

@@ -1,13 +1,9 @@
-/**
- * @author YC XIANG.
- * @date 02/15, 2022
- */
-
 #ifndef POSITIONBASEDDYNAMICS_CONSTRAINTS_H
 #define POSITIONBASEDDYNAMICS_CONSTRAINTS_H
 
-#include "RenderingFrameWork/api/eigen_types.h"
+#include <Eigen/Dense>
 
+#include <vector>
 #include <tuple>
 
 namespace HINASIM

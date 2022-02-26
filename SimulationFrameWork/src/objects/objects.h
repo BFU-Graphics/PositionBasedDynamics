@@ -1,8 +1,3 @@
-/**
- * @author YC XIANG.
- * @date 02/15, 2022
- */
-
 #ifndef POSITIONBASEDDYNAMICS_OBJECTS_H
 #define POSITIONBASEDDYNAMICS_OBJECTS_H
 

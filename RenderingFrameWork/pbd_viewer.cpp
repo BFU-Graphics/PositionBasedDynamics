@@ -1,12 +1,7 @@
-/**
- * @author YC XIANG.
- * @date 02/15, 2022
- */
-
 #include "pbd_viewer.h"
+#include "src/mouse_callback.h"
 
 #include <utility>
-#include "src/mouse_callback.h"
 
 namespace HINAVIEWER
 {

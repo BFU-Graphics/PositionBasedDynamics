@@ -1,12 +1,12 @@
-/**
- * @author YC XIANG.
- * @date 02/15, 2022
- */
-
 #ifndef POSITIONBASEDDYNAMICS_UTILS_H
 #define POSITIONBASEDDYNAMICS_UTILS_H
 
-#include "RenderingFrameWork/api/eigen_types.h"
+#include <Eigen/Dense>
+
+namespace Eigen
+{
+    using Matrix44f = Eigen::Matrix<float, 4, 4>;
+}
 
 namespace HINAVIEWER::UTILS
 {

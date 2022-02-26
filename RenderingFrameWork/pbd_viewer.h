@@ -1,15 +1,10 @@
-/**
- * @author YC XIANG.
- * @date 02/15, 2022
- */
-
 #ifndef POSITIONBASEDDYNAMICS_PBD_VIEWER_H
 #define POSITIONBASEDDYNAMICS_PBD_VIEWER_H
 
 #define IMGUI_DEFINE_MATH_OPERATORS
 
+#include "api/renderable.h"
 #include "src/inspector.h"
-#include "RenderingFrameWork/api/renderable.h"
 
 #include <igl/opengl/glfw/Viewer.h>
 #include <igl/opengl/glfw/imgui/ImGuiMenu.h>

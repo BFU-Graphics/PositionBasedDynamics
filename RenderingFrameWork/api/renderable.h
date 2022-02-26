@@ -1,12 +1,7 @@
-/**
- * @author YC XIANG.
- * @date 02/16, 2022
- */
-
 #ifndef POSITIONBASEDDYNAMICS_RENDERABLE_H
 #define POSITIONBASEDDYNAMICS_RENDERABLE_H
 
-#include "eigen_types.h"
+#include <Eigen/Dense>
 
 #include <vector>
 #include <string>
