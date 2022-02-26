@@ -36,14 +36,13 @@ namespace HINASIM
         SimObjectType TYPE_;
 
     public:
-        void init_rendering_info();
+        virtual void init_rendering_info() final;
+
+        virtual void init_physics_states() = 0;
 
         virtual void update_rendering_info() = 0;
 
         virtual void update_physics_info() = 0;
-
-    public:
-        virtual void init_physics_states() = 0;
     };
 }
 

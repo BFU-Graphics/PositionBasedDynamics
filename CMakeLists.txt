@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.15)
 project(PositionBasedDynamics)
 
+OPTION(USE_OpenMP "Use OpenMP" ON)
 OPTION(STATIC_RENDERING_LIB "Use Rendering Framework as static lib" OFF)
 OPTION(DYNAMIC_RENDERING_LIB "Use Rendering Framework as static lib" OFF)
-OPTION(USE_OpenMP "Use OpenMP" ON)
 
 # Set Variables
 set(MY_EXTERNAL_DIR ${CMAKE_SOURCE_DIR}/../Graphics-Dependencies/install) # Determine External Install Dir
@@ -30,7 +30,6 @@ if (USE_OpenMP)
     endif ()
 endif ()
 
-list(PREPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 option(LIBIGL_WITH_OPENGL "Use OpenGL" ON)
 option(LIBIGL_WITH_OPENGL_GLFW "Use GLFW" ON)
 option(LIBIGL_WITH_OPENGL_GLFW_IMGUI "Use ImGui" ON)

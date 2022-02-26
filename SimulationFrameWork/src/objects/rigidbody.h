@@ -8,7 +8,38 @@ namespace HINASIM
 {
     class RigidBody : public SimObject
     {
+    public: // constructors
+        explicit RigidBody(const std::string &path, Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1});
 
+        explicit RigidBody(const std::function<void(Eigen::MatrixXd &V, Eigen::MatrixXi &F)> &custom_init_geometry, Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1});
+
+    public: // chained useful methods
+
+    public: // simulation state
+        Eigen::Vector3d x_; // linear position
+        Eigen::Vector3d v_; // linear velocity
+        Eigen::Vector3d a_; // linear acceleration
+        Eigen::Vector3d t_; // torque
+        Eigen::Quaterniond q_; // quaternion
+        Eigen::Vector3d omega_; // angular velocity
+
+        double inv_mass_;
+        Eigen::Vector3d inertia_tensor_local_;
+        Eigen::Matrix3d inertia_tensor_world_;
+        Eigen::Vector3d inv_inertia_tensor_local_;
+        Eigen::Matrix3d inv_inertia_tensor_world_;
+
+        Eigen::MatrixXd V_rest_;
+
+    protected: // disabled constructors
+        explicit RigidBody(Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1});
+
+    private:
+        void init_physics_states() override;
+
+        void update_rendering_info() override;
+
+        void update_physics_info() override;
     };
 }
 

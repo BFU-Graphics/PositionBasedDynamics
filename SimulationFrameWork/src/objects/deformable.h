@@ -7,12 +7,12 @@ namespace HINASIM
 {
     class DeformableObject : public SimObject
     {
-    public:
+    public: // constructors
         explicit DeformableObject(const std::string &path, Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1});
 
         explicit DeformableObject(const std::function<void(Eigen::MatrixXd &V, Eigen::MatrixXi &F)> &custom_init_geometry, Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1});
 
-    public:
+    public: // chained useful methods
         DeformableObject &add_constraint(InnerConstraint *constraint);
 
         DeformableObject &set_inv_mass(double unified_inv_mass);
@@ -28,17 +28,15 @@ namespace HINASIM
 
         std::vector<InnerConstraint *> inner_constraints_;
 
-    protected:
+    protected: // disabled constructors
         explicit DeformableObject(Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1});
 
-    private:
+    private: // overrides
         void init_physics_states() override;
 
         void update_rendering_info() override;
 
         void update_physics_info() override;
-
-        void update_mouse_drag_force() override;
     };
 
     class Cloth : public DeformableObject

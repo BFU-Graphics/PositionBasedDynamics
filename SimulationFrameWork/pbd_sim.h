@@ -6,6 +6,7 @@
 #ifndef POSITIONBASEDDYNAMICS_PBD_SIM_H
 #define POSITIONBASEDDYNAMICS_PBD_SIM_H
 
+#include "src/objects/rigidbody.h"
 #include "src/objects/deformable.h"
 #include "src/constraints/constraints.h"
 #include "src/time_integration.h"
