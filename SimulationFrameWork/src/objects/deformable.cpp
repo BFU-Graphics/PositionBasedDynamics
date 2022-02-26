@@ -44,6 +44,7 @@ void HINASIM::DeformableObject::init_physics_states()
     p_.resize(x_.rows(), x_.cols());
 
     x_ = Eigen::Map<Eigen::MatrixXd>(V_.data(), V_.rows(), V_.cols());
+    x_.rowwise() += position_.transpose();
     v_.setZero();
     a_.setZero();
     p_.setZero();
