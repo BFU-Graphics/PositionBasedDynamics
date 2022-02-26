@@ -1,10 +1,9 @@
 file(GLOB SIMULATION_FRAMEWORK_FILES
-        *.h
-        *.cpp
-        src/*.h
-        src/*.cpp
-        utils/*.h
-        utils/*.cpp
+        *.h *.cpp
+        src/*.h src/*.cpp
+        src/objects/*.h src/objects/*.cpp
+        src/constraints/*.h src/constraints/*.cpp
+        utils/*.h utils/*.cpp
         )
 
 if (USE_OpenMP)

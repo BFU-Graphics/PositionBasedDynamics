@@ -41,8 +41,8 @@ namespace HINAVIEWER::INSPECTOR
 
         virtual void plot(float start_pos_x, float start_pos_y, float width, float height);
 
-        Trackable *trackable_;
-        int index_;
+        Trackable *trackable_ = nullptr;
+        int index_ = -1;
     };
 
     class ScalarTimeValueInspector : public Inspector

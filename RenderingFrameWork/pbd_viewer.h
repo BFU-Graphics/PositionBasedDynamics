@@ -9,7 +9,7 @@
 #define IMGUI_DEFINE_MATH_OPERATORS
 
 #include "src/inspector.h"
-#include "src/renderable.h"
+#include "RenderingFrameWork/api/renderable.h"
 
 #include <igl/opengl/glfw/Viewer.h>
 #include <igl/opengl/glfw/imgui/ImGuiMenu.h>

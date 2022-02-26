@@ -1,8 +1,8 @@
 set(TEST_EXAMPLES
         TestCloth
         TestCube
-        TestStarryFish
-        TestRigidBody
+#        TestStarryFish
+#        TestRigidBody
         )
 
 foreach (test ${TEST_EXAMPLES})

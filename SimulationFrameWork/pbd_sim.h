@@ -6,9 +6,9 @@
 #ifndef POSITIONBASEDDYNAMICS_PBD_SIM_H
 #define POSITIONBASEDDYNAMICS_PBD_SIM_H
 
-#include "src/objects.h"
-#include "src/constraints.h"
-#include "src/contact_constraints.h"
+#include "SimulationFrameWork/src/objects/deformable.h"
+#include "SimulationFrameWork/src/constraints/constraints.h"
+#include "SimulationFrameWork/src/time_integration.h"
 
 #include <vector>
 
@@ -17,40 +17,34 @@ namespace HINASIM
     class PBDSim
     {
     public:
-        void simulate(double dt);
-
         void simulate_real_dt();
+
+        void simulate(double dt);
 
     public:
         void add_object(SimObject *object);
 
         void update_all_rendering_state();
 
-    public:
-        PBDSim &fix_dt(double dt);
-
-    protected: // PBD Kernel Region
+    protected: // pbd kernel process
         void pbd_kernel_loop(double dt);
 
-        void integrate_velocity_by_external_force(Eigen::Ref<Eigen::MatrixXd> qdot, Eigen::Ref<Eigen::MatrixXd> external_force, Eigen::Ref<Eigen::VectorXd> inv_mass, double dt);
+        void external_force(HINASIM::SimObject *o);
 
-        static void damping_velocity(Eigen::Ref<Eigen::MatrixXd> qdot);
+        static void integrate_prediction_with_damping(HINASIM::SimObject *o, double dt, double damping = 0.999);
 
-        static void predict_position(Eigen::Ref<Eigen::MatrixXd> p, Eigen::Ref<Eigen::MatrixXd> q, Eigen::Ref<Eigen::MatrixXd> qdot, double dt);
+        void generate_collision_constraints();
 
-        static void generate_collision_constraints();
+        void project_position_constraints();
 
-        static void constraints_projection(SimObject *o);
-
-        static void update_q_and_qdot(Eigen::Ref<Eigen::MatrixXd> q, Eigen::Ref<Eigen::MatrixXd> qdot, Eigen::Ref<Eigen::MatrixXd> p, double dt);
+        static void update_positions_and_velocities(HINASIM::SimObject *o, double dt);
 
     public:
         using Joint = Constraint;
         std::vector<SimObject *> objects_;
         std::vector<Joint *> joints_;
-        std::vector<RigidBodyContactConstraint *> rigid_body_contacts_constraints_;
 
-    protected: // Env
+    protected: // env
         Eigen::RowVector3d gravity_{0, -9.8, 0};
         double fixed_dt = 0.02;
     };

@@ -56,6 +56,8 @@ file(GLOB VISUALIZATION_FILES
         RenderingFrameWork/*.cpp
         RenderingFrameWork/src/*.h
         RenderingFrameWork/src/*.cpp
+        RenderingFrameWork/api/*.h
+        RenderingFrameWork/api/*.cpp
         )
 
 # Global Definitions
