@@ -13,7 +13,7 @@ namespace HINASIM
         explicit DeformableObject(const std::function<void(Eigen::MatrixXd &V, Eigen::MatrixXi &F)> &custom_init_geometry, Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1});
 
     public:
-        DeformableObject &add_constraint(Constraint *constraint);
+        DeformableObject &add_constraint(InnerConstraint *constraint);
 
         DeformableObject &set_inv_mass(double unified_inv_mass);
 
@@ -26,7 +26,7 @@ namespace HINASIM
         Eigen::MatrixXd p_; // n x 3
         Eigen::VectorXd inv_mass_; // n x 1
 
-        std::vector<Constraint *> inner_constraints_;
+        std::vector<InnerConstraint *> inner_constraints_;
 
     protected:
         explicit DeformableObject(Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1});
@@ -35,6 +35,8 @@ namespace HINASIM
         void init_physics_states() override;
 
         void update_rendering_info() override;
+
+        void update_physics_info() override;
 
         void update_mouse_drag_force() override;
     };

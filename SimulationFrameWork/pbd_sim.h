@@ -40,9 +40,8 @@ namespace HINASIM
         static void update_positions_and_velocities(HINASIM::SimObject *o, double dt);
 
     public:
-        using Joint = Constraint;
         std::vector<SimObject *> objects_;
-        std::vector<Joint *> joints_;
+        std::vector<class Joint *> joints_;
 
     protected: // env
         Eigen::RowVector3d gravity_{0, -9.8, 0};

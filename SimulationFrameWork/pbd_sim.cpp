@@ -211,4 +211,6 @@ void HINASIM::PBDSim::update_positions_and_velocities(HINASIM::SimObject *o, dou
         default:
             break;
     }
+
+    o->update_physics_info();
 }

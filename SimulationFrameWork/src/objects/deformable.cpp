@@ -16,7 +16,7 @@ HINASIM::DeformableObject::DeformableObject(const std::function<void(Eigen::Matr
     TYPE_ = HINASIM::SimObjectType::Deformable;
 }
 
-HINASIM::DeformableObject &HINASIM::DeformableObject::add_constraint(HINASIM::Constraint *constraint)
+HINASIM::DeformableObject &HINASIM::DeformableObject::add_constraint(HINASIM::InnerConstraint *constraint)
 {
     inner_constraints_.emplace_back(constraint);
     return *this;
@@ -58,6 +58,16 @@ void HINASIM::DeformableObject::init_physics_states()
 void HINASIM::DeformableObject::update_rendering_info()
 {
     V_ = x_;
+}
+
+void HINASIM::DeformableObject::update_physics_info()
+{
+    position_.setZero();
+    for (int i = 0; i < x_.rows(); ++i)
+    {
+        position_ += x_.row(i).transpose();
+    }
+    position_ /= static_cast<double>(x_.rows());
 }
 
 void HINASIM::DeformableObject::update_mouse_drag_force()

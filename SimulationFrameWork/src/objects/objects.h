@@ -40,6 +40,8 @@ namespace HINASIM
 
         virtual void update_rendering_info() = 0;
 
+        virtual void update_physics_info() = 0;
+
     public:
         virtual void init_physics_states() = 0;
     };

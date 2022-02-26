@@ -12,7 +12,7 @@
 
 namespace HINASIM
 {
-    class Constraint
+    class InnerConstraint
     {
     public:
         virtual bool solve(Eigen::MatrixXd &p, const Eigen::VectorXd &inv_mass) = 0;
@@ -21,7 +21,7 @@ namespace HINASIM
         double stiffness_ = 1.0;
     };
 
-    class DistanceConstraint : public Constraint
+    class DistanceConstraint : public InnerConstraint
     {
     public:
         explicit DistanceConstraint(Eigen::MatrixXd &init_x, const Eigen::MatrixXi &edges);
@@ -33,7 +33,7 @@ namespace HINASIM
         std::vector<std::tuple<int, int, double>> distance_constraints_;
     };
 
-    class DihedralConstraint : public Constraint
+    class DihedralConstraint : public InnerConstraint
     {
     public:
         DihedralConstraint(Eigen::MatrixXd &init_q, const std::vector<std::vector<unsigned int>> &EVF, const Eigen::MatrixXi &F);
