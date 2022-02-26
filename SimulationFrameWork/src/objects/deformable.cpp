@@ -38,13 +38,22 @@ HINASIM::DeformableObject &HINASIM::DeformableObject::set_inv_mass(int index, do
 
 void HINASIM::DeformableObject::init_physics_states()
 {
+    Eigen::Vector3d mass_center_local;
+    mass_center_local.setZero();
+    for (int i = 0; i < V_.rows(); ++i)
+    {
+        mass_center_local += V_.row(i);
+    }
+    mass_center_local /= static_cast<double>(V_.rows());
+    Eigen::Vector3d diff = position_ - mass_center_local;
+
     x_.resize(V_.rows(), V_.cols());
     v_.resize(V_.rows(), V_.cols());
     a_.resize(V_.rows(), V_.cols());
     p_.resize(x_.rows(), x_.cols());
 
     x_ = Eigen::Map<Eigen::MatrixXd>(V_.data(), V_.rows(), V_.cols());
-    x_.rowwise() += position_.transpose();
+    x_.rowwise() += diff.transpose();
     v_.setZero();
     a_.setZero();
     p_.setZero();

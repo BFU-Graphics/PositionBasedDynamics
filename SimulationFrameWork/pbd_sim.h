@@ -37,11 +37,15 @@ namespace HINASIM
 
     public:
         std::vector<SimObject *> objects_;
-        std::vector<class Joint *> joints_;
+        std::vector<class Joint *> joints_; // not used yet, for rigid-rigid situation
 
     protected: // env
         Eigen::RowVector3d gravity_{0, -9.8, 0};
         double fixed_dt = 0.02;
+
+    protected: // ! temporary collision response
+        static void collision_response_to_a_sphere(HINASIM::DeformableObject *deformable, const Eigen::Vector3d& center = {0, 0, 0}, double radius = 3.0);
+
     };
 }
 

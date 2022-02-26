@@ -188,6 +188,13 @@ void HINASIM::PBDSim::update_positions_and_velocities(HINASIM::SimObject *o, dou
         case SimObjectType::Deformable:
         {
             auto *deformable = dynamic_cast<HINASIM::DeformableObject *>(o);
+
+            //////////////////// TEMPORARY COLLISION RESPONSE ////////////////////
+
+            collision_response_to_a_sphere(deformable);
+
+            //////////////////// TEMPORARY COLLISION RESPONSE ////////////////////
+
             HINASIM::TimeIntegration::velocity_update_first_order(dt, deformable->inv_mass_, deformable->p_, deformable->x_, deformable->v_);
             deformable->x_ = deformable->p_;
         }
@@ -208,4 +215,20 @@ void HINASIM::PBDSim::update_positions_and_velocities(HINASIM::SimObject *o, dou
     }
 
     o->update_physics_info();
+}
+
+void HINASIM::PBDSim::collision_response_to_a_sphere(HINASIM::DeformableObject *deformable, const Eigen::Vector3d &center, double radius)
+{
+    for (int i = 0; i < deformable->p_.rows(); ++i)
+    {
+        if (deformable->inv_mass_(i) != 0)
+        {
+            Eigen::Vector3d arrow = deformable->p_.row(i).transpose() - center;
+            Eigen::Vector3d unit_direction = arrow.normalized();
+            double distance = arrow.norm();
+
+            if (distance < radius)
+                deformable->p_.row(i) = (unit_direction * radius).transpose();
+        }
+    }
 }

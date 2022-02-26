@@ -10,10 +10,11 @@ int main()
 
     // ======================================== Phase 1: Init Simulation World Info  ========================================
 
-    HINASIM::Cloth cloth(30, 30, 10, 10, {0, 5, 0});
+    HINASIM::Cloth cloth(30, 30, 10, 10, {0, 6, 3});
 
     HINASIM::DistanceConstraint dc_cloth(cloth.V_, cloth.E_);
     HINASIM::DihedralConstraint dic_cloth(cloth.V_, cloth.EVF_, cloth.F_);
+    dic_cloth.stiffness_  = 0.3;
 
     pbd_sim.add_object(&cloth);
     pbd_viewer.record(&cloth);
@@ -22,7 +23,8 @@ int main()
             .set_inv_mass(0, 0)
             .set_inv_mass(29, 0)
             .add_constraint(&dc_cloth)
-            .add_constraint(&dic_cloth);
+            .add_constraint(&dic_cloth)
+            ;
 
     // ======================================== Phase 2: Set Up Simulation Thread ========================================
 
