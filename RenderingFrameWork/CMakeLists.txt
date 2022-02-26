@@ -1,11 +1,4 @@
-file(GLOB RENDERING_FRAMEWORK_FILES
-        *.h
-        *.cpp
-        src/*.h
-        src/*.cpp
-        api/*.h
-        api/*.cpp
-        )
+include_directories(${CMAKE_SOURCE_DIR}/RenderingFrameWork)
 
 if (STATIC_RENDERING_LIB)
     add_library(HinaRender ${RENDERING_FRAMEWORK_FILES})

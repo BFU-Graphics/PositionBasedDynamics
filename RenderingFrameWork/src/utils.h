@@ -6,7 +6,7 @@
 #ifndef POSITIONBASEDDYNAMICS_UTILS_H
 #define POSITIONBASEDDYNAMICS_UTILS_H
 
-#include "../eigen_types.h"
+#include "RenderingFrameWork/api/eigen_types.h"
 
 namespace HINAVIEWER::UTILS
 {

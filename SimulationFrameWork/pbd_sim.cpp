@@ -5,6 +5,7 @@
 
 #include "pbd_sim.h"
 
+#include "RenderingFrameWork/src/inspector.h"
 #include "utils/performance_check.h"
 
 #include <thread>

@@ -1,7 +1,7 @@
 #ifndef POSITIONBASEDDYNAMICS_TIME_INTEGRATION_H
 #define POSITIONBASEDDYNAMICS_TIME_INTEGRATION_H
 
-#include "RenderingFrameWork/eigen_types.h"
+#include "RenderingFrameWork/api/eigen_types.h"
 
 namespace HINASIM
 {

@@ -6,7 +6,7 @@
 #ifndef POSITIONBASEDDYNAMICS_RENDERABLE_H
 #define POSITIONBASEDDYNAMICS_RENDERABLE_H
 
-#include "RenderingFrameWork/eigen_types.h"
+#include "eigen_types.h"
 
 #include <vector>
 #include <string>

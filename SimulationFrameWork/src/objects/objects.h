@@ -8,7 +8,8 @@
 
 #include "RenderingFrameWork/api/draggable.h"
 #include "RenderingFrameWork/api/renderable.h"
-#include "SimulationFrameWork/src/constraints/constraints.h"
+
+#include "src/constraints/constraints.h"
 
 namespace HINASIM
 {

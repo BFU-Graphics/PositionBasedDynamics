@@ -6,8 +6,7 @@
 #ifndef POSITIONBASEDDYNAMICS_CONSTRAINTS_H
 #define POSITIONBASEDDYNAMICS_CONSTRAINTS_H
 
-#include "RenderingFrameWork/src/inspector.h"
-#include "RenderingFrameWork/eigen_types.h"
+#include "RenderingFrameWork/api/eigen_types.h"
 
 #include <tuple>
 
@@ -22,10 +21,10 @@ namespace HINASIM
         double stiffness_ = 1.0;
     };
 
-    class DistanceConstraint : public Constraint, public HINAVIEWER::INSPECTOR::Trackable
+    class DistanceConstraint : public Constraint
     {
     public:
-        explicit DistanceConstraint(Eigen::MatrixXd &init_q, const Eigen::MatrixXi &edges);
+        explicit DistanceConstraint(Eigen::MatrixXd &init_x, const Eigen::MatrixXi &edges);
 
         bool solve(Eigen::MatrixXd &p, const Eigen::VectorXd &inv_mass) override;
 

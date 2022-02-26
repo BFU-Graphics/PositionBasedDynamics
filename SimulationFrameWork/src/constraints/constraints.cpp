@@ -13,8 +13,7 @@
 
 #include <iostream>
 
-
-HINASIM::DistanceConstraint::DistanceConstraint(Eigen::MatrixXd &init_q, const Eigen::MatrixXi &edges)
+HINASIM::DistanceConstraint::DistanceConstraint(Eigen::MatrixXd &init_x, const Eigen::MatrixXi &edges)
 {
     distance_constraints_.reserve(edges.rows());
 
@@ -22,12 +21,12 @@ HINASIM::DistanceConstraint::DistanceConstraint(Eigen::MatrixXd &init_q, const E
     {
         int q1_index = edges.row(i)(0);
         int q2_index = edges.row(i)(1);
-        Eigen::RowVector3d q1 = init_q.row(q1_index);
-        Eigen::RowVector3d q2 = init_q.row(q2_index);
+        Eigen::RowVector3d q1 = init_x.row(q1_index);
+        Eigen::RowVector3d q2 = init_x.row(q2_index);
         distance_constraints_.emplace_back(std::make_tuple(q1_index, q2_index, (q1 - q2).norm()));
     }
-    std::clog << "Distance Constraint Sum: " << distance_constraints_.size() << " " << omp_get_max_threads() << std::endl;
 
+    std::clog << "Distance Constraint Sum: " << distance_constraints_.size() << std::endl;
 }
 
 bool HINASIM::DistanceConstraint::solve(Eigen::MatrixXd &p, const Eigen::VectorXd &inv_mass)
@@ -60,7 +59,7 @@ bool HINASIM::DistanceConstraint::solve(Eigen::MatrixXd &p, const Eigen::VectorX
     return true;
 }
 
-HINASIM::DihedralConstraint::DihedralConstraint(Eigen::MatrixXd &init_q, const std::vector<std::vector<unsigned int>> &EVF, const Eigen::MatrixXi &F)
+HINASIM::DihedralConstraint::DihedralConstraint(Eigen::MatrixXd &init_x, const std::vector<std::vector<unsigned int>> &EVF, const Eigen::MatrixXi &F)
 {
     for (auto &evf: EVF)
     {
@@ -91,10 +90,10 @@ HINASIM::DihedralConstraint::DihedralConstraint(Eigen::MatrixXd &init_q, const s
             }
             if ((side_index1 != -1) && (side_index2 != -1))
             {
-                Eigen::Vector3d axis_p1 = init_q.row(vertex_index_1).transpose();
-                Eigen::Vector3d axis_p2 = init_q.row(vertex_index_2).transpose();
-                Eigen::Vector3d side_p3 = init_q.row(side_index1).transpose();;
-                Eigen::Vector3d side_p4 = init_q.row(side_index2).transpose();;
+                Eigen::Vector3d axis_p1 = init_x.row(vertex_index_1).transpose();
+                Eigen::Vector3d axis_p2 = init_x.row(vertex_index_2).transpose();
+                Eigen::Vector3d side_p3 = init_x.row(side_index1).transpose();;
+                Eigen::Vector3d side_p4 = init_x.row(side_index2).transpose();;
 
                 double elen = (axis_p1 - axis_p2).norm();
                 if (elen > 1e-6) // manage bad model condition

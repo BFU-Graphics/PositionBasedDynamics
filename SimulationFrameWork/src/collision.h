@@ -6,7 +6,7 @@
 #ifndef POSITIONBASEDDYNAMICS_COLLISION_H
 #define POSITIONBASEDDYNAMICS_COLLISION_H
 
-#include "RenderingFrameWork/eigen_types.h"
+#include "RenderingFrameWork/api/eigen_types.h"
 
 #include <limits>
 

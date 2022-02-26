@@ -1,14 +1,16 @@
-set(TEST_EXAMPLES
-        TestCloth
-        TestCube
-        #        TestStarryFish
-        #        TestRigidBody
+set(PBD_EXAMPLES
+        ClothSim01
         )
 
-foreach (test ${TEST_EXAMPLES})
+include_directories(
+        ${CMAKE_SOURCE_DIR}/RenderingFrameWork
+        ${CMAKE_SOURCE_DIR}/SimulationFrameWork
+)
+
+foreach (test ${PBD_EXAMPLES})
     if (STATIC_RENDERING_LIB)
         add_executable(${test} ${test}/main.cpp ${SIMULATION_FRAMEWORK_FILES})
-        target_link_directories(test_sim
+        target_link_directories(${test}
                 PUBLIC
                 ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}
                 )
@@ -19,7 +21,7 @@ foreach (test ${TEST_EXAMPLES})
                 )
     elseif (DYNAMIC_RENDERING_LIB)
         add_executable(${test} ${test}/main.cpp ${SIMULATION_FRAMEWORK_FILES})
-        target_link_directories(test_sim
+        target_link_directories(${test}
                 PUBLIC
                 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
                 )
@@ -29,7 +31,7 @@ foreach (test ${TEST_EXAMPLES})
                 HinaRender
                 )
     else ()
-        add_executable(${test} ${test}/main.cpp ${SIMULATION_FRAMEWORK_FILES} ${VISUALIZATION_FILES})
+        add_executable(${test} ${test}/main.cpp ${SIMULATION_FRAMEWORK_FILES} ${RENDERING_FRAMEWORK_FILES})
         target_link_libraries(${test}
                 PUBLIC
                 igl::core
