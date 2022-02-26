@@ -1,0 +1,13 @@
+#ifndef POSITIONBASEDDYNAMICS_DISTANCE_FIELD_COLLLISION_DETECTION_H
+#define POSITIONBASEDDYNAMICS_DISTANCE_FIELD_COLLLISION_DETECTION_H
+
+#include "collision_detection.h"
+
+namespace HINASIM
+{
+    class DistanceFieldCollisionDetection : public CollisionDetection
+    {
+
+    };
+}
+#endif //POSITIONBASEDDYNAMICS_DISTANCE_FIELD_COLLLISION_DETECTION_H
