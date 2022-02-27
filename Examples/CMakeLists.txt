@@ -1,7 +1,7 @@
 set(PBD_EXAMPLES
         ClothSim01
         CubeSim01
-        RigidSim01
+#        RigidSim01
         )
 
 include_directories(

@@ -30,10 +30,17 @@ void HINASIM::PBDSim::simulate_real_dt()
     }
 }
 
-void HINASIM::PBDSim::add_object(HINASIM::SimObject *object)
+HINASIM::PBDSim &HINASIM::PBDSim::add_object(HINASIM::SimObject *object)
 {
     object->init_physics_states();
     objects_.emplace_back(object);
+    return *this;
+}
+
+HINASIM::PBDSim &HINASIM::PBDSim::add_collider(HINASIM::CollisionObject *collider)
+{
+    colliders_.emplace_back(collider);
+    return *this;
 }
 
 void HINASIM::PBDSim::update_all_rendering_state()
@@ -60,13 +67,17 @@ void HINASIM::PBDSim::pbd_kernel_loop(double dt)
     }
 
     // (8) forall vertices i do generateCollisionConstraints(x_i → p_i)
-//    generate_collision_constraints(); // omit
+    generate_collision_constraints(); // omit it by now
 
     // (9) ~ (11)
     // loop solverIterations times
     // projectConstraints(C_1,...,C_M+M_coll ,p_1,...,p_N)
     // end loop
     project_position_constraints();
+
+    //////////////////// TEMPORARY COLLISION RESPONSE ////////////////////
+    collision_response();
+    //////////////////// TEMPORARY COLLISION RESPONSE ////////////////////
 
     // (12) ~ (15) forall vertices i
     // v_i <- (p_i - x_i) / \Delta t
@@ -136,7 +147,7 @@ void HINASIM::PBDSim::integrate_prediction_with_damping(HINASIM::SimObject *o, d
 
 void HINASIM::PBDSim::generate_collision_constraints()
 {
-
+    // TODO:
 }
 
 void HINASIM::PBDSim::project_position_constraints()
@@ -189,12 +200,6 @@ void HINASIM::PBDSim::update_positions_and_velocities(HINASIM::SimObject *o, dou
         {
             auto *deformable = dynamic_cast<HINASIM::DeformableObject *>(o);
 
-            //////////////////// TEMPORARY COLLISION RESPONSE ////////////////////
-
-            collision_response_to_a_sphere(deformable);
-
-            //////////////////// TEMPORARY COLLISION RESPONSE ////////////////////
-
             HINASIM::TimeIntegration::velocity_update_first_order(dt, deformable->inv_mass_, deformable->p_, deformable->x_, deformable->v_);
             deformable->x_ = deformable->p_;
         }
@@ -217,6 +222,53 @@ void HINASIM::PBDSim::update_positions_and_velocities(HINASIM::SimObject *o, dou
     o->update_physics_info();
 }
 
+void HINASIM::PBDSim::collision_response()
+{
+    for (auto &o: objects_)
+    {
+        switch (o->TYPE_)
+        {
+            case SimObjectType::Deformable:
+            {
+                auto *deformable = dynamic_cast<HINASIM::DeformableObject *>(o);
+
+                for (auto &collider: colliders_)
+                {
+                    switch (collider->TYPE_)
+                    {
+                        case CollisionObjectType::Sphere:
+                        {
+                            auto sc = dynamic_cast<SphereCollider *>(collider);
+                            collision_response_to_a_sphere(deformable, sc->position_, sc->radius_);
+                        }
+                            break;
+                        case CollisionObjectType::Box:
+                        {
+                        }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+                break;
+            case SimObjectType::RigidBody:
+            {
+                // TODO:
+                std::cerr << "Rigid Body Not Implemented yet" << std::endl;
+            }
+                break;
+            case SimObjectType::Fluid:
+            {
+                // TODO:
+                std::cerr << "Fluid Not Implemented yet" << std::endl;
+            }
+            default:
+                break;
+        }
+    }
+}
+
 void HINASIM::PBDSim::collision_response_to_a_sphere(HINASIM::DeformableObject *deformable, const Eigen::Vector3d &center, double radius)
 {
     for (int i = 0; i < deformable->p_.rows(); ++i)
@@ -228,7 +280,7 @@ void HINASIM::PBDSim::collision_response_to_a_sphere(HINASIM::DeformableObject *
             double distance = arrow.norm();
 
             if (distance < radius)
-                deformable->p_.row(i) = (unit_direction * radius).transpose();
+                deformable->p_.row(i) = (unit_direction * radius).transpose() + Eigen::RowVector3d(1e-1, 1e-1, 1e-1);
         }
     }
 }

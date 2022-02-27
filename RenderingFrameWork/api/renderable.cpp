@@ -17,8 +17,6 @@ void HINAVIEWER::RENDERABLE::Renderable::load_model_from_path(const std::string 
     else
         return;
 
-    build_neighbors(); // Edges info would be auto build ourselves
-
     std::clog << "Model Name: " << model_name << "     Vertex Sum: " << V_.rows() << "     Face Sum: " << F_.rows() << std::endl;
 }
 

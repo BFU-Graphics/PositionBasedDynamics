@@ -11,9 +11,10 @@ int main()
     HINASIM::DistanceConstraint dc(cube.V_, cube.E_);
 
     pbd_sim.add_object(&cube);
-    pbd_viewer.record(&cube);
 
     cube.set_inv_mass(4, 0).add_constraint(&dc);
+
+    pbd_viewer.record(&cube);
 
     pbd_viewer.viewer().callback_post_draw = [&pbd_viewer, &pbd_sim](igl::opengl::glfw::Viewer &viewer) -> bool
     {

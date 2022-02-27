@@ -10,20 +10,26 @@ int main()
 
     // ======================================== Phase 1: Init Simulation World Info  ========================================
 
-    HINASIM::Cloth cloth(30, 30, 10, 10, {0, 6, 3});
+    HINASIM::Cloth cloth(30, 30, 15, 15, {0, 6, 0});
 
     HINASIM::DistanceConstraint dc_cloth(cloth.V_, cloth.E_);
     HINASIM::DihedralConstraint dic_cloth(cloth.V_, cloth.EVF_, cloth.F_);
     dic_cloth.stiffness_ = 0.3;
 
-    pbd_sim.add_object(&cloth); // !important: make sure to set/alter all physics states after SimObjects were added into PBDSim
-    pbd_viewer.record(&cloth);
+    HINASIM::SphereCollider sphere_collider({0, 0, 0}, 3);
+
+    pbd_sim // !important: make sure to add all objects before set/alter any physics state
+            .add_object(&cloth)
+            .add_collider(&sphere_collider);
 
     cloth // !important: make sure to set/alter all physics states after SimObjects were added into PBDSim
             .set_inv_mass(0, 0)
             .set_inv_mass(29, 0)
             .add_constraint(&dc_cloth)
             .add_constraint(&dic_cloth);
+
+    pbd_viewer.record(&cloth);
+    pbd_viewer.record(&sphere_collider);
 
     // ======================================== Phase 2: Set Up Simulation Thread ========================================
 

@@ -59,10 +59,12 @@ int HINAVIEWER::PBDViewer::record(HINAVIEWER::RENDERABLE::Renderable *renderable
         ID = viewer_.append_mesh();
 
     viewer_.data(ID).set_mesh(renderable->V_, renderable->F_);
-    viewer_.data(ID).set_colors(Eigen::RowVector3d(244, 165, 130) / 255.);
+    viewer_.data(ID).set_colors(renderable->color_.transpose());
 
     renderable->is_recorded_ = true;
     renderable->ID_ = ID;
+
+    object_list_.emplace_back(ID);
 
     return ID;
 }

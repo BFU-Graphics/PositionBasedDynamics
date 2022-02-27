@@ -27,7 +27,7 @@ bool HINAVIEWER::MOUSE_CALLBACK::mouse_down(igl::opengl::glfw::Viewer &viewer, i
 
     if (HINAVIEWER::UTILS::pick_nearest_vertices(g_picked_vertices, g_mouse_win,
                                                  viewer.core().view, viewer.core().proj, viewer.core().viewport,
-                                                 viewer.data().V, viewer.data().F, 0.1))
+                                                 viewer.data(0).V, viewer.data(0).F, 0.1))
     {
 
         g_selected_obj = 0;

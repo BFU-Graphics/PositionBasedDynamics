@@ -3,6 +3,7 @@
 
 #include "src/objects/rigidbody.h"
 #include "src/objects/deformable.h"
+#include "src/simple_collision/collision_objects.h"
 #include "src/constraints/constraints.h"
 #include "src/time_integration.h"
 
@@ -18,7 +19,9 @@ namespace HINASIM
         void simulate(double dt);
 
     public:
-        void add_object(SimObject *object);
+        PBDSim& add_object(SimObject *object);
+
+        PBDSim& add_collider(CollisionObject *collider);
 
         void update_all_rendering_state();
 
@@ -39,12 +42,16 @@ namespace HINASIM
         std::vector<SimObject *> objects_;
         std::vector<class Joint *> joints_; // not used yet, for rigid-rigid situation
 
-    protected: // env
+    protected: // Env vars
         Eigen::RowVector3d gravity_{0, -9.8, 0};
         double fixed_dt = 0.02;
 
-    protected: // ! temporary collision response
-        static void collision_response_to_a_sphere(HINASIM::DeformableObject *deformable, const Eigen::Vector3d& center = {0, 0, 0}, double radius = 3.0);
+    protected: // ! TO DELETE IN THE FUTURE
+        std::vector<CollisionObject *> colliders_;
+
+        void collision_response();
+
+        static void collision_response_to_a_sphere(HINASIM::DeformableObject *deformable, const Eigen::Vector3d &center = {0, 0, 0}, double radius = 3.0);
 
     };
 }

@@ -45,7 +45,7 @@ namespace HINAVIEWER
 
         PBDViewer &show_inspector();
 
-        PBDViewer &save_to_mp4(const std::string& ffmpeg_path, const std::string& filename = "output.mp4");
+        PBDViewer &save_to_mp4(const std::string &ffmpeg_path, const std::string &filename = "output.mp4");
 
     protected:
         void setup_menu();
