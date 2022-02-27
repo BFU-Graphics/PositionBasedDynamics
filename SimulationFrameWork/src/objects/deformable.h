@@ -3,6 +3,8 @@
 
 #include "objects.h"
 
+#include "src/constraints/constraints.h"
+
 namespace HINASIM
 {
     class DeformableObject : public SimObject
@@ -31,7 +33,7 @@ namespace HINASIM
     protected: // disabled constructors
         explicit DeformableObject(Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1});
 
-    private: // overrides
+    protected: // overrides
         void init_physics_states() override;
 
         void update_rendering_info() override;

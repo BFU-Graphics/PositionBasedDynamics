@@ -33,7 +33,7 @@ namespace HINASIM
     protected: // disabled constructors
         explicit RigidBody(Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1});
 
-    private:
+    protected:
         void init_physics_states() override;
 
         void update_rendering_info() override;

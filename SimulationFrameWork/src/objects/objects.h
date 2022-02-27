@@ -4,8 +4,6 @@
 #include "RenderingFrameWork/api/draggable.h"
 #include "RenderingFrameWork/api/renderable.h"
 
-#include "src/constraints/constraints.h"
-
 namespace HINASIM
 {
     enum class SimObjectType

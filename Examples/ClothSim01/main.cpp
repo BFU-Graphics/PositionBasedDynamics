@@ -14,17 +14,16 @@ int main()
 
     HINASIM::DistanceConstraint dc_cloth(cloth.V_, cloth.E_);
     HINASIM::DihedralConstraint dic_cloth(cloth.V_, cloth.EVF_, cloth.F_);
-    dic_cloth.stiffness_  = 0.3;
+    dic_cloth.stiffness_ = 0.3;
 
-    pbd_sim.add_object(&cloth);
+    pbd_sim.add_object(&cloth); // !important: make sure to set/alter all physics states after SimObjects were added into PBDSim
     pbd_viewer.record(&cloth);
 
-    cloth
+    cloth // !important: make sure to set/alter all physics states after SimObjects were added into PBDSim
             .set_inv_mass(0, 0)
             .set_inv_mass(29, 0)
             .add_constraint(&dc_cloth)
-            .add_constraint(&dic_cloth)
-            ;
+            .add_constraint(&dic_cloth);
 
     // ======================================== Phase 2: Set Up Simulation Thread ========================================
 
@@ -33,7 +32,7 @@ int main()
     {
         while (!pause)
         {
-            pbd_sim.simulate_real_dt();
+            pbd_sim.simulate_real_dt(); // simulate with real time elapsed;
         }
     };
 
