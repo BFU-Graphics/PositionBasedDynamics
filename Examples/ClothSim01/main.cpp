@@ -14,7 +14,8 @@ int main()
 
     HINASIM::DistanceConstraint dc_cloth(cloth.V_, cloth.E_);
     HINASIM::DihedralConstraint dic_cloth(cloth.V_, cloth.EVF_, cloth.F_);
-    dic_cloth.stiffness_ = 0.3;
+    dc_cloth.stiffness_ = 0.7;
+    dic_cloth.stiffness_ = 0.1;
 
     HINASIM::SphereCollider sphere_collider({0, 0, 0}, 3);
 
