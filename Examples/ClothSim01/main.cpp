@@ -10,7 +10,11 @@ int main()
 
     // ======================================== Phase 1: Init Simulation World Info  ========================================
 
-    HINASIM::Cloth cloth(30, 30, 10, 10, {0, 6, 3});
+    int rows = 100;
+    int cols = 100;
+    int width = 10;
+    int height = 10;
+    HINASIM::Cloth cloth(rows, cols, width, height, {0, 6, 3});
 
     HINASIM::DistanceConstraint dc_cloth(cloth.V_, cloth.E_);
     HINASIM::DihedralConstraint dic_cloth(cloth.V_, cloth.EVF_, cloth.F_);
@@ -25,7 +29,7 @@ int main()
 
     cloth // !important: make sure to set/alter all physics states after SimObjects were added into PBDSim
             .set_inv_mass(0, 0)
-            .set_inv_mass(29, 0)
+            .set_inv_mass(cols - 1, 0)
             .add_constraint(&dc_cloth)
             .add_constraint(&dic_cloth);
 
