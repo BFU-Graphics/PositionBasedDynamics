@@ -18,7 +18,7 @@
 
 ### Deformable Material
 
-<img src="./Resources/images/cloth_sim.png"  />
+<img src="./Resources/images/cloth_sim01.png"  />
 
 ### Rigid Body Dynamics
 
