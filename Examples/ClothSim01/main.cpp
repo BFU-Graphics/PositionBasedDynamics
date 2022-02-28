@@ -10,8 +10,8 @@ int main()
 
     // ======================================== Phase 1: Init Simulation World Info  ========================================
 
-    int rows = 100;
-    int cols = 100;
+    int rows = 30;
+    int cols = 30;
     int width = 10;
     int height = 10;
     HINASIM::Cloth cloth(rows, cols, width, height, {0, 6, 3});
