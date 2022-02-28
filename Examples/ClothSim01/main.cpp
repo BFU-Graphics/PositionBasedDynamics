@@ -10,7 +10,7 @@ int main()
 
     // ======================================== Phase 1: Init Simulation World Info  ========================================
 
-    HINASIM::Cloth cloth(30, 30, 15, 15, {0, 6, 0});
+    HINASIM::Cloth cloth(30, 30, 10, 10, {0, 6, 3});
 
     HINASIM::DistanceConstraint dc_cloth(cloth.V_, cloth.E_);
     HINASIM::DihedralConstraint dic_cloth(cloth.V_, cloth.EVF_, cloth.F_);

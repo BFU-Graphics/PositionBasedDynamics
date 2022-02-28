@@ -271,6 +271,8 @@ void HINASIM::PBDSim::collision_response()
 
 void HINASIM::PBDSim::collision_response_to_a_sphere(HINASIM::DeformableObject *deformable, const Eigen::Vector3d &center, double radius)
 {
+    const double eps = 1e-2;
+    radius = radius + eps; // a little larger sphere
     for (int i = 0; i < deformable->p_.rows(); ++i)
     {
         if (deformable->inv_mass_(i) != 0)
@@ -280,7 +282,7 @@ void HINASIM::PBDSim::collision_response_to_a_sphere(HINASIM::DeformableObject *
             double distance = arrow.norm();
 
             if (distance < radius)
-                deformable->p_.row(i) = (unit_direction * radius).transpose() + Eigen::RowVector3d(1e-1, 1e-1, 1e-1);
+                deformable->p_.row(i) = (unit_direction * radius).transpose();
         }
     }
 }
