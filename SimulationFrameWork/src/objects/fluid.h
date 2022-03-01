@@ -14,6 +14,9 @@ namespace HINASIM
     public: // simulation state
 
     protected: // disabled constructors
+        Eigen::MatrixXd x_; // n x 3
+        Eigen::MatrixXd v_; // n x 3
+        Eigen::MatrixXd a_; // n x 3
 
     protected: // overrides
 

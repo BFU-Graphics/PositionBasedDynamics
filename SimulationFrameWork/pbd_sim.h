@@ -51,7 +51,7 @@ namespace HINASIM
 
         void collision_response();
 
-        static void collision_response_to_a_sphere(HINASIM::DeformableObject *deformable, const Eigen::Vector3d &center = {0, 0, 0}, double radius = 3.0);
+        static void collision_response_to_a_sphere(HINASIM::DeformableObject *deformable, const Eigen::Vector3d &center, double radius);
     };
 }
 

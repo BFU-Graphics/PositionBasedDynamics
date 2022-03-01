@@ -29,7 +29,7 @@ namespace HINAVIEWER::RENDERABLE
         std::vector<std::vector<unsigned int>> VF_; // Vertex-faces - size = [#faces x ?], row = [face1_index, face2_index, ... ...]
         std::vector<std::vector<unsigned int>> FE_; // Face-edges - size = [#faces x 3], row = [edge1_index, edge2_index, edge3_index]
         std::vector<std::vector<unsigned int>> EVF_; // Edge-vertices-faces - size = [#edges x 4], row = [v1_index, v2_index, face1_index, face2_index]
-        bool is_closed_;
+        bool is_closed_; // is a closed_mesh?
 
     };
 }

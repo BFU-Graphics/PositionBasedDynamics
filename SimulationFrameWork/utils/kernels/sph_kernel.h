@@ -1,0 +1,14 @@
+#ifndef POSITIONBASEDDYNAMICS_SPH_KERNEL_H
+#define POSITIONBASEDDYNAMICS_SPH_KERNEL_H
+
+#include <Eigen/Dense>
+
+namespace HINASIM::UTILS
+{
+    class SPHStdKernel
+    {
+
+    };
+}
+
+#endif //POSITIONBASEDDYNAMICS_SPH_KERNEL_H
