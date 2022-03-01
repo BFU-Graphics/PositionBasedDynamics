@@ -37,7 +37,7 @@ namespace HINASIM
         bool solve(Eigen::MatrixXd &p, const Eigen::VectorXd &inv_mass) override;
 
     public:
-        /// axis_p1_id, axis_p2_id, side_p3_id, axis_p4_id, rest_angle
+        /// axis_p1_id, axis_p2_id, side_p3_id, side_p4_id, rest_angle
         std::vector<std::tuple<int, int, int, int, double>> dihedral_constraints_;
     };
 }

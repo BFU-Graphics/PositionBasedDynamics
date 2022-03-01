@@ -65,8 +65,13 @@ HINASIM::DihedralConstraint::DihedralConstraint(Eigen::MatrixXd &init_x, const s
 
         if ((face_index_1 != 0xffffffff) && (face_index_2 != 0xffffffff))
         {
-            unsigned int side_index1 = -1;
-            unsigned int side_index2 = -1;
+            //    axis_p1 *-------* side_p3
+            //            /\     /
+            //           /  \   /
+            //          /    \ /
+            // side_p4 *----- * axis_p2
+            unsigned int side_index1 = 0xffffffff;
+            unsigned int side_index2 = 0xffffffff;
             for (int i = 0; i < 3; ++i)
             {
                 if ((F.row(face_index_1)(i) != vertex_index_1) && (F.row(face_index_1)(i) != vertex_index_2))
@@ -83,7 +88,7 @@ HINASIM::DihedralConstraint::DihedralConstraint(Eigen::MatrixXd &init_x, const s
                     break;
                 }
             }
-            if ((side_index1 != -1) && (side_index2 != -1))
+            if ((side_index1 != 0xffffffff) && (side_index2 != 0xffffffff))
             {
                 Eigen::Vector3d axis_p1 = init_x.row(vertex_index_1).transpose();
                 Eigen::Vector3d axis_p2 = init_x.row(vertex_index_2).transpose();

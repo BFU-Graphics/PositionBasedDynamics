@@ -34,8 +34,6 @@ HINASIM::DeformableObject &HINASIM::DeformableObject::set_inv_mass(int index, do
     return *this;
 }
 
-#include <iostream>
-
 void HINASIM::DeformableObject::init_physics_states()
 {
     Eigen::Vector3d mass_center_local;
@@ -72,6 +70,7 @@ void HINASIM::DeformableObject::update_rendering_info()
 
 void HINASIM::DeformableObject::update_physics_info()
 {
+    // update deformable object's position to its mass center
     position_.setZero();
     for (int i = 0; i < x_.rows(); ++i)
     {

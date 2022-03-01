@@ -29,8 +29,6 @@ namespace HINASIM
     public:
         CollisionObjectType TYPE_;
         Eigen::Vector3d position_;
-
-    public:
     };
 
     class SphereCollider : public CollisionObject

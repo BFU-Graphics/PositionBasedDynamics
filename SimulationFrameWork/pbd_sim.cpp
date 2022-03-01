@@ -63,7 +63,7 @@ void HINASIM::PBDSim::pbd_kernel_loop(double dt)
         // forall vertices i do v_i <- v_i + \Delta t * w_i * f_external
         // damping velocities v_i
         // forall vertices i do p_i <- x_i + \Delta t * v_i
-        integrate_prediction_with_damping(o, dt);
+        integrate_prediction_with_damping(o, dt, 0.99);
     }
 
     // (8) forall vertices i do generateCollisionConstraints(x_i → p_i)
@@ -166,7 +166,7 @@ void HINASIM::PBDSim::project_position_constraints()
             case SimObjectType::Deformable:
             {
                 auto *deformable = dynamic_cast<HINASIM::DeformableObject *>(o);
-                for (int i = 0; i < 5; ++i)
+                for (int i = 0; i < 15; ++i) // solve multiple times to ensure convergence
                 {
                     for (auto &c: deformable->inner_constraints_)
                     {
