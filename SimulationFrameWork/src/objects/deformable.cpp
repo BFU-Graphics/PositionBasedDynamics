@@ -40,7 +40,7 @@ void HINASIM::DeformableObject::init_physics_states()
     mass_center_local.setZero();
     for (int i = 0; i < V_.rows(); ++i)
     {
-        mass_center_local += V_.row(i);
+        mass_center_local += V_.row(i).transpose();
     }
     mass_center_local /= static_cast<double>(V_.rows());
     Eigen::Vector3d diff = position_ - mass_center_local;
