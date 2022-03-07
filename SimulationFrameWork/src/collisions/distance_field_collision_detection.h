@@ -11,7 +11,7 @@ namespace HINASIM
     public:
         explicit DistanceFieldCollisionObject(class SimObject *object);
 
-        virtual ~DistanceFieldCollisionObject() = default;
+        ~DistanceFieldCollisionObject() override = default;
 
     public:
         class SimObject *object_; // the object that
@@ -45,13 +45,15 @@ namespace HINASIM
         ~DistanceFieldCollisionDetection() override = default;
 
     public:
-        void collision_detection() override;
-
-    public:
         struct ContactData
         {
 
         };
+
+        void collision_detection() override;
+
+        void collision_detection_rigid_rigid(class RigidBody *rb1, DistanceFieldCollisionObject *co1, class RigidBody *rb2, DistanceFieldCollisionObject *co2, std::vector<std::vector<ContactData> > &contacts_mt, double restitution, double friction);
+
     };
 }
 #endif //POSITIONBASEDDYNAMICS_DISTANCE_FIELD_COLLISION_DETECTION_H

@@ -27,6 +27,11 @@ namespace HINASIM
     class CollisionObject
     {
     public:
+        explicit CollisionObject() = default;
+
+        virtual ~CollisionObject() = default;
+
+    public:
         AABB aabb;
         int objectID{};
         CollisionObjectType TYPE_{};
