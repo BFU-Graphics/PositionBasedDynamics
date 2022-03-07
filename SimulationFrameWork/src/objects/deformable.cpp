@@ -77,6 +77,8 @@ void HINASIM::DeformableObject::update_physics_info()
         position_ += x_.row(i).transpose();
     }
     position_ /= static_cast<double>(x_.rows());
+
+    // TODO: update rotation_
 }
 
 HINASIM::Cloth::Cloth(int rows, int cols, int width, int height, Eigen::Vector3d position, const Eigen::Quaterniond &rotation) : rows_(rows), cols_(cols), width_(width), height_(height), DeformableObject(std::move(position), rotation)

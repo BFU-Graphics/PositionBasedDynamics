@@ -1,21 +1,23 @@
 #include "rigidbody.h"
 
-HINASIM::RigidBody::RigidBody(Eigen::Vector3d position, const Eigen::Quaterniond &rotation) : SimObject(std::move(position), rotation)
+HINASIM::RigidBody::RigidBody(Eigen::Vector3d position, const Eigen::Quaterniond &rotation, double density) : SimObject(std::move(position), rotation)
 {
     TYPE_ = HINASIM::SimObjectType::RigidBody;
 }
 
-HINASIM::RigidBody::RigidBody(const std::string &path, Eigen::Vector3d position, const Eigen::Quaterniond &rotation) : SimObject(path, std::move(position), rotation)
+HINASIM::RigidBody::RigidBody(const std::string &path, Eigen::Vector3d position, const Eigen::Quaterniond &rotation, double density) : SimObject(path, std::move(position), rotation)
 {
     TYPE_ = HINASIM::SimObjectType::RigidBody;
 }
 
-HINASIM::RigidBody::RigidBody(const std::function<void(Eigen::MatrixXd &, Eigen::MatrixXi &)> &custom_init_geometry, Eigen::Vector3d position, const Eigen::Quaterniond &rotation) : SimObject(custom_init_geometry,
-                                                                                                                                                                                               std::move(position), rotation)
+HINASIM::RigidBody::RigidBody(const std::function<void(Eigen::MatrixXd &, Eigen::MatrixXi &)> &custom_init_geometry, Eigen::Vector3d position, const Eigen::Quaterniond &rotation, double density) : SimObject(custom_init_geometry,
+                                                                                                                                                                                                               std::move(position), rotation)
 {
     TYPE_ = HINASIM::SimObjectType::RigidBody;
 }
+
 #include <iostream>
+
 void HINASIM::RigidBody::init_physics_states()
 {
     x_ = position_;

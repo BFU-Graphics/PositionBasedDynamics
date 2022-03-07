@@ -21,22 +21,19 @@ namespace HINASIM
     {
         RigidBody,
         TriangleModel,
-        TetModel
+        TetModel,
+    };
+
+    class CollisionObject
+    {
+    public:
+        AABB aabb;
+        int objectID{};
+        CollisionObjectType TYPE_{};
     };
 
     class CollisionDetection
     {
-        struct CollisionObject
-        {
-            AABB aabb;
-            int objectID{};
-            CollisionObjectType TYPE_{};
-        };
-
-        struct CollisionObjectWithoutGeometry : public CollisionObject
-        {
-
-        };
 
     protected:
         typedef void (*ContactCallbackFunction)(const ContactType contactType, const unsigned int bodyIndex1, const unsigned int bodyIndex2,
@@ -56,7 +53,6 @@ namespace HINASIM
         SolidContactCallbackFunction solidContactCB_;
         void *contactCBUserData_;
         void *solidContactCBUserData_;
-        std::vector<CollisionObject *> collision_objects_;
 
         static void updateAABB(const Eigen::Vector3d &p, AABB &aabb);
 
@@ -92,6 +88,18 @@ namespace HINASIM
         void setSolidContactCallback(CollisionDetection::SolidContactCallbackFunction val, void *userData);
 
         // TODO: UPDATE AABBS
+
+
+
+
+
+
+
+
+
+
+    public:
+        std::vector<CollisionObject *> collision_objects_;
     };
 }
 

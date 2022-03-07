@@ -8,9 +8,9 @@ namespace HINASIM
     class RigidBody : public SimObject
     {
     public: // constructors
-        explicit RigidBody(const std::string &path, Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1});
+        explicit RigidBody(const std::string &path, Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1}, double density = 100.0);
 
-        explicit RigidBody(const std::function<void(Eigen::MatrixXd &V, Eigen::MatrixXi &F)> &custom_init_geometry, Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1});
+        explicit RigidBody(const std::function<void(Eigen::MatrixXd &V, Eigen::MatrixXi &F)> &custom_init_geometry, Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1}, double density = 100.0);
 
     public: // chained useful methods
 
@@ -28,10 +28,10 @@ namespace HINASIM
         Eigen::Vector3d inv_inertia_tensor_local_;
         Eigen::Matrix3d inv_inertia_tensor_world_;
 
-        Eigen::MatrixXd V_rest_;
+        Eigen::MatrixXd V_rest_; // rest pose of a rigid body
 
     protected: // disabled constructors
-        explicit RigidBody(Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1});
+        explicit RigidBody(Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1}, double density = 100.0);
 
     protected:
         void init_physics_states() override;

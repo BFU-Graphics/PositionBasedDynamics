@@ -14,6 +14,8 @@ namespace HINASIM
     class AABB
     {
     public:
+        explicit AABB() = default;
+
         explicit AABB(const Eigen::MatrixXd &V)
         {
             aabb_[0] << std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max();
