@@ -22,7 +22,7 @@ HINASIM::Collider &HINASIM::Collider::update_aabb()
 HINASIM::DistanceFieldCollider::DistanceFieldCollider(HINASIM::SimObject *o, bool inside_collision) : Collider(o), inside_collision_(inside_collision)
 {
     bvh_ = new PointCloudBSH();
-    bvh_->init(o->V_);
+    bvh_->init(object_->V_);
     bvh_->construct();
 }
 
@@ -31,9 +31,19 @@ HINASIM::DistanceFieldCollider::~DistanceFieldCollider()
     delete bvh_;
 }
 
+HINASIM::DistanceFieldCollider &HINASIM::DistanceFieldCollider::update_bvh()
+{
+    bvh_->init(object_->V_);
+    bvh_->update();
+    return *this;
+}
+
 HINASIM::SphereColliderDF::SphereColliderDF(HINASIM::SimObject *o, bool inside_collision) : DistanceFieldCollider(o, inside_collision)
 {
-
+    double length_x = std::abs(aabb_->aabb_[1].x() - aabb_->aabb_[0].x());
+    double length_y = std::abs(aabb_->aabb_[1].y() - aabb_->aabb_[0].y());
+    double length_z = std::abs(aabb_->aabb_[1].z() - aabb_->aabb_[0].z());
+    radius_ = std::max({length_x, length_y, length_z});
 }
 
 double HINASIM::SphereColliderDF::distance(const Eigen::Vector3d &x, double tolerance)

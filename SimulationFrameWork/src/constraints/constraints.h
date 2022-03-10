@@ -32,7 +32,7 @@ namespace HINASIM
     class DihedralConstraint : public InnerConstraint
     {
     public:
-        DihedralConstraint(Eigen::MatrixXd &init_q, const std::vector<std::vector<unsigned int>> &EVF, const Eigen::MatrixXi &F);
+        explicit DihedralConstraint(Eigen::MatrixXd &init_q, const std::vector<std::vector<unsigned int>> &EVF, const Eigen::MatrixXi &F);
 
         bool solve(Eigen::MatrixXd &p, const Eigen::VectorXd &inv_mass) override;
 

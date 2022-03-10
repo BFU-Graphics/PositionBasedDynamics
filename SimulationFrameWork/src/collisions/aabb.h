@@ -14,8 +14,6 @@ namespace HINASIM
     class AABB
     {
     public:
-        explicit AABB() = default;
-
         explicit AABB(const Eigen::MatrixXd &V)
         {
             calc_aabb(V);

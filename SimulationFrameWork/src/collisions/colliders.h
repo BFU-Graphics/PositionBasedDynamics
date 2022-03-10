@@ -10,16 +10,16 @@ namespace HINASIM
     {
     public:
         explicit Collider(class SimObject *o);
-        ~Collider();
+        virtual ~Collider();
 
     public:
         virtual Collider &update_aabb();
 
-    protected:
+    public:
         AABB *aabb_;
 
     public:
-        class SimObject *object_; // the object Collider was attached;
+        class SimObject *object_; // the object Collider was attached to;
     };
 
 
@@ -27,11 +27,13 @@ namespace HINASIM
     {
     public:
         explicit DistanceFieldCollider(class SimObject *o, bool inside_collision);
-        ~DistanceFieldCollider();
+        ~DistanceFieldCollider() override;
+
+    public:
+        virtual DistanceFieldCollider &update_bvh();
 
     public:
 //        virtual bool collision_test(const Eigen::Vector3d &x, double tolerance, Eigen::Vector3d &contact_point, Eigen::Vector3d &normal, double distance, double max_distance);
-
         virtual double distance(const Eigen::Vector3d &x, double tolerance) = 0;
 
     protected:
