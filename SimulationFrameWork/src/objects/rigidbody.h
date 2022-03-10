@@ -28,6 +28,14 @@ namespace HINASIM
         Eigen::Matrix3d inv_inertia_tensor_world_;
 
         Eigen::MatrixXd V_rest_; // rest pose of a rigid body
+        double restitution_; // TODO: to init here
+        double friction_; // TODO: to init here
+
+        // transformation required to transform a point to local space or vice vera
+        Eigen::Matrix3d transformation_R_;
+        Eigen::Vector3d transformation_v1_;
+        Eigen::Vector3d transformation_v2_;
+        Eigen::Vector3d transformation_R_X_v1_;
 
     protected: // disabled constructors
         explicit RigidBody(Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1}, double density = 100.0);

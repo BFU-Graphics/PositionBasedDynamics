@@ -16,6 +16,9 @@ namespace HINASIM
 
     public:
         void collision_detection() override;
+
+    private:
+        void collision_detection_RB_RB(class RigidBody *rb1, DistanceFieldCollider *co1, class RigidBody *rb2, DistanceFieldCollider *co2, std::vector<std::vector<ContactData>> &contacts_mt);
     };
 }
 

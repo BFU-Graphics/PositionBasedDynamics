@@ -33,8 +33,12 @@ HINASIM::DistanceFieldCollider::~DistanceFieldCollider()
 
 HINASIM::DistanceFieldCollider &HINASIM::DistanceFieldCollider::update_bvh()
 {
+    if (object_->TYPE_ == SimObjectType::RigidBody) // NOTE: NO NEED TO UPDATE
+        return *this;
+
     bvh_->init(object_->V_);
     bvh_->update();
+
     return *this;
 }
 

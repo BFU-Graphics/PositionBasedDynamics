@@ -36,7 +36,7 @@ namespace HINASIM
 //        virtual bool collision_test(const Eigen::Vector3d &x, double tolerance, Eigen::Vector3d &contact_point, Eigen::Vector3d &normal, double distance, double max_distance);
         virtual double distance(const Eigen::Vector3d &x, double tolerance) = 0;
 
-    protected:
+    public:
         PointCloudBSH *bvh_;
         bool inside_collision_;
     };
