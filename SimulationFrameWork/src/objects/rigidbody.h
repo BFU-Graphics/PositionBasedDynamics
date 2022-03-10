@@ -8,8 +8,8 @@ namespace HINASIM
     class RigidBody : public SimObject
     {
     public: // constructors
-        explicit RigidBody(const std::string &path, Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1}, double density = 100.0);
-        explicit RigidBody(const std::function<void(Eigen::MatrixXd &V, Eigen::MatrixXi &F)> &custom_init_geometry, Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1}, double density = 100.0);
+        explicit RigidBody(const std::string &path, Eigen::Vector3d position = {0, 0, 0}, Eigen::Vector3d rotation = {0, 0, 0}, Eigen::Vector3d scale = {1, 1, 1}, double density = 100.0);
+        explicit RigidBody(const std::function<void(Eigen::MatrixXd &V, Eigen::MatrixXi &F)> &custom_init_geometry, Eigen::Vector3d position = {0, 0, 0}, Eigen::Vector3d rotation = {0, 0, 0}, Eigen::Vector3d scale = {1, 1, 1}, double density = 100.0);
 
     public: // chained useful methods
 
@@ -31,14 +31,8 @@ namespace HINASIM
         double restitution_; // TODO: to init here
         double friction_; // TODO: to init here
 
-        // transformation required to transform a point to local space or vice vera
-        Eigen::Matrix3d transformation_R_;
-        Eigen::Vector3d transformation_v1_;
-        Eigen::Vector3d transformation_v2_;
-        Eigen::Vector3d transformation_R_X_v1_;
-
     protected: // disabled constructors
-        explicit RigidBody(Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1}, double density = 100.0);
+        explicit RigidBody(Eigen::Vector3d position = {0, 0, 0}, Eigen::Vector3d rotation = {0, 0, 0}, Eigen::Vector3d scale = {1, 1, 1}, double density = 100.0);
 
     protected:
         void init_physics_states() override;

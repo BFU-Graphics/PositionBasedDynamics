@@ -18,13 +18,14 @@ namespace HINASIM
     class SimObject : public HINAVIEWER::RENDERABLE::Renderable, public HINAVIEWER::MOUSE_DRAGGABLE::Draggable
     {
     protected:
-        explicit SimObject(Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1});
-        explicit SimObject(const std::string &path, Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1});
-        explicit SimObject(const std::function<void(Eigen::MatrixXd &V, Eigen::MatrixXi &F)> &custom_init_geometry, Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1});
+        explicit SimObject(Eigen::Vector3d position = {0, 0, 0}, Eigen::Vector3d rotation = {0, 0, 0}, Eigen::Vector3d scale = {1, 1, 1});
+        explicit SimObject(const std::string &path, Eigen::Vector3d position = {0, 0, 0}, Eigen::Vector3d rotation = {0, 0, 0}, Eigen::Vector3d scale = {1, 1, 1});
+        explicit SimObject(const std::function<void(Eigen::MatrixXd &V, Eigen::MatrixXi &F)> &custom_init_geometry, Eigen::Vector3d position = {0, 0, 0}, Eigen::Vector3d rotation = {0, 0, 0}, Eigen::Vector3d scale = {1, 1, 1});
 
     public:
         Eigen::Vector3d position_;
-        Eigen::Quaterniond rotation_;
+        Eigen::Vector3d rotation_;
+        Eigen::Vector3d scale_;
         SimObjectType TYPE_;
 
     public:

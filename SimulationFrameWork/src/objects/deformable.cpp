@@ -1,17 +1,19 @@
 #include "deformable.h"
 
-HINASIM::DeformableObject::DeformableObject(Eigen::Vector3d position, const Eigen::Quaterniond &rotation) : SimObject(std::move(position), rotation)
+#include <utility>
+
+HINASIM::DeformableObject::DeformableObject(Eigen::Vector3d position, Eigen::Vector3d rotation, Eigen::Vector3d scale) : SimObject(std::move(position), std::move(rotation), std::move(scale))
 {
     TYPE_ = HINASIM::SimObjectType::Deformable;
 }
 
-HINASIM::DeformableObject::DeformableObject(const std::string &path, Eigen::Vector3d position, const Eigen::Quaterniond &rotation) : SimObject(path, std::move(position), rotation)
+HINASIM::DeformableObject::DeformableObject(const std::string &path, Eigen::Vector3d position, Eigen::Vector3d rotation, Eigen::Vector3d scale) : SimObject(path, std::move(position), std::move(rotation), std::move(scale))
 {
     TYPE_ = HINASIM::SimObjectType::Deformable;
 }
 
-HINASIM::DeformableObject::DeformableObject(const std::function<void(Eigen::MatrixXd &, Eigen::MatrixXi &)> &custom_init_geometry, Eigen::Vector3d position, const Eigen::Quaterniond &rotation) : SimObject(custom_init_geometry,
-                                                                                                                                                                                                             std::move(position), rotation)
+HINASIM::DeformableObject::DeformableObject(const std::function<void(Eigen::MatrixXd &, Eigen::MatrixXi &)> &custom_init_geometry, Eigen::Vector3d position, Eigen::Vector3d rotation, Eigen::Vector3d scale) : SimObject(custom_init_geometry,
+                                                                                                                                                                                                             std::move(position), std::move(rotation), std::move(scale))
 {
     TYPE_ = HINASIM::SimObjectType::Deformable;
 }
@@ -81,7 +83,7 @@ void HINASIM::DeformableObject::update_physics_info()
     // TODO: update rotation_
 }
 
-HINASIM::Cloth::Cloth(int rows, int cols, int width, int height, Eigen::Vector3d position, const Eigen::Quaterniond &rotation) : rows_(rows), cols_(cols), width_(width), height_(height), DeformableObject(std::move(position), rotation)
+HINASIM::Cloth::Cloth(int rows, int cols, int width, int height, Eigen::Vector3d position, Eigen::Vector3d rotation, Eigen::Vector3d scale) : rows_(rows), cols_(cols), width_(width), height_(height), DeformableObject(std::move(position), std::move(rotation), std::move(scale))
 {
     const double dx = width_ / static_cast<double>(cols_ - 1);
     const double dy = height_ / static_cast<double>(rows_ - 1);
