@@ -26,7 +26,7 @@ void HINASIM::DistanceFieldCollisionDetection::collision_detection()
         {
             auto *dfc = dynamic_cast<DistanceFieldCollider *>(colliders_[i]);
             dfc->update_aabb();
-            dfc->update_bvh(); // Rigid Body don't need to update BVH at runtime
+            dfc->update_bvh(); // NOTE: Rigid Body don't need to update BVH at runtime
         }
     }
 
@@ -67,6 +67,15 @@ void HINASIM::DistanceFieldCollisionDetection::collision_detection()
             auto *rb1 = dynamic_cast<RigidBody *>(body1);
             auto *rb2 = dynamic_cast<RigidBody *>(body2);
             collision_detection_RB_RB(rb1, collider1, rb2, collider2, contacts_mt);
+        }
+    }
+
+    // generate collision contact constraints
+    for (auto &contacts: contacts_mt)
+    {
+        for (auto &contact: contacts)
+        {
+            // TODO: generate contacts constraints
         }
     }
 }
