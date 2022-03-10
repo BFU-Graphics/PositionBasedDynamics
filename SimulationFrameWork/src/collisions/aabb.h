@@ -18,9 +18,14 @@ namespace HINASIM
 
         explicit AABB(const Eigen::MatrixXd &V)
         {
+            calc_aabb(V);
+        };
+
+    public:
+        void calc_aabb(const Eigen::MatrixXd &V)
+        {
             aabb_[0] << std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max();
             aabb_[1] << std::numeric_limits<double>::min(), std::numeric_limits<double>::min(), std::numeric_limits<double>::min();
-
             for (int i = 0; i < V.rows(); ++i)
             {
                 if (aabb_[0](0) > V.row(i)(0)) aabb_[0](0) = V.row(i)(0);
@@ -30,8 +35,9 @@ namespace HINASIM
                 if (aabb_[1](1) < V.row(i)(1)) aabb_[1](1) = V.row(i)(1);
                 if (aabb_[1](2) < V.row(i)(2)) aabb_[1](2) = V.row(i)(2);
             }
-        };
+        }
 
+    public:
         Eigen::Vector3d aabb_[2];
 
         static FORCE_INLINE bool intersection(const AABB &a1, const AABB &a2)

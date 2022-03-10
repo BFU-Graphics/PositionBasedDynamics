@@ -17,13 +17,6 @@ namespace HINASIM
         ParticleSolid,
     };
 
-    enum class CollisionObjectType
-    {
-        RigidBody,
-        TriangleModel,
-        TetModel,
-    };
-
     class CollisionObject
     {
     public:
@@ -33,8 +26,7 @@ namespace HINASIM
 
     public:
         AABB aabb;
-        int objectID{};
-        CollisionObjectType TYPE_{};
+        class SimObject *object_; // the object that
     };
 
     class CollisionDetection

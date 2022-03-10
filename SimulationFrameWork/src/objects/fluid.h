@@ -19,11 +19,8 @@ namespace HINASIM
         Eigen::MatrixXd a_; // n x 3
 
     protected: // overrides
-
         void init_physics_states() override;
-
         void update_rendering_info() override;
-
         void update_physics_info() override;
     };
 }

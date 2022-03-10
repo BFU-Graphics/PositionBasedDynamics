@@ -9,7 +9,6 @@ namespace HINASIM
     {
     public: // constructors
         explicit RigidBody(const std::string &path, Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1}, double density = 100.0);
-
         explicit RigidBody(const std::function<void(Eigen::MatrixXd &V, Eigen::MatrixXi &F)> &custom_init_geometry, Eigen::Vector3d position = {0, 0, 0}, const Eigen::Quaterniond &rotation = {0, 0, 0, 1}, double density = 100.0);
 
     public: // chained useful methods
@@ -18,9 +17,9 @@ namespace HINASIM
         Eigen::Vector3d x_; // linear position
         Eigen::Vector3d v_; // linear velocity
         Eigen::Vector3d a_; // linear acceleration
-        Eigen::Vector3d t_; // torque
         Eigen::Quaterniond q_; // quaternion
         Eigen::Vector3d omega_; // angular velocity
+        Eigen::Vector3d t_; // torque
 
         double inv_mass_;
         Eigen::Vector3d inertia_tensor_local_;
@@ -35,9 +34,7 @@ namespace HINASIM
 
     protected:
         void init_physics_states() override;
-
         void update_rendering_info() override;
-
         void update_physics_info() override;
     };
 }

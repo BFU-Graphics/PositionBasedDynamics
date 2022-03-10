@@ -15,27 +15,19 @@ namespace HINASIM
     {
     public:
         void simulate_real_dt();
-
         void simulate(double dt);
 
     public:
-        PBDSim& add_object(SimObject *object);
-
-        PBDSim& add_collider(CollisionObject *collider);
-
+        PBDSim &add_object(SimObject *object);
+        PBDSim &add_collider(CollisionObject *collider);
         void update_all_rendering_state();
 
     protected: // pbd kernel process
         void pbd_kernel_loop(double dt);
-
         void external_force(HINASIM::SimObject *o);
-
         static void integrate_prediction_with_damping(HINASIM::SimObject *o, double dt, double damping = 0.999);
-
         void generate_collision_constraints();
-
         void project_position_constraints();
-
         static void update_positions_and_velocities(HINASIM::SimObject *o, double dt);
 
     public:
@@ -48,9 +40,7 @@ namespace HINASIM
 
     protected: // ! TO DELETE IN THE FUTURE
         std::vector<CollisionObject *> colliders_;
-
         void collision_response();
-
         static void collision_response_to_a_sphere(HINASIM::DeformableObject *deformable, const Eigen::Vector3d &center, double radius);
     };
 }

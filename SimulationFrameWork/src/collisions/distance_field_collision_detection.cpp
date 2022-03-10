@@ -2,7 +2,7 @@
 
 #include "src/objects/rigidbody.h"
 
-HINASIM::DistanceFieldCollisionObject::DistanceFieldCollisionObject(SimObject *object)
+HINASIM::DistanceFieldCollisionObject::DistanceFieldCollisionObject(HINASIM::SimObject *object)
 {
     assert(object); // ensure object is not nullptr
 
@@ -17,6 +17,11 @@ double HINASIM::DistanceFieldCollisionSphere::distance(const Eigen::Vector3d &x,
 
     const double dist = (d.norm() - radius_);
     return invertSDF_ ? (-dist - tolerance) : (dist - tolerance);
+}
+
+HINASIM::DistanceFieldCollisionSphere::DistanceFieldCollisionSphere(HINASIM::SimObject *o) : DistanceFieldCollisionObject(o)
+{
+    radius_ = 1;
 }
 
 // ======================================== Distance Collision Detection ========================================
@@ -72,4 +77,9 @@ void HINASIM::DistanceFieldCollisionDetection::collision_detection_rigid_rigid(R
 {
 
 
+}
+
+void HINASIM::DistanceFieldCollisionDetection::add_collider_sphere(HINASIM::RigidBody *sphere, bool /* TODO: invert_sdf */)
+{
+    collision_objects_.emplace_back(new DistanceFieldCollisionSphere(sphere));
 }
