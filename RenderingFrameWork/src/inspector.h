@@ -33,7 +33,6 @@ namespace HINAVIEWER::INSPECTOR
     {
     public:
         Inspector *track(Trackable *trackable, int index);
-
         virtual void plot(float start_pos_x, float start_pos_y, float width, float height);
 
         Trackable *trackable_ = nullptr;

@@ -16,9 +16,7 @@ namespace HINASIM
 
     protected:
         [[nodiscard]] Eigen::Vector3d entity_position(unsigned int i) const override;
-
         void compute_hull(unsigned int b, unsigned int n, BoundingSphere &hull) const override;
-
         void compute_hull_approx(unsigned int b, unsigned int n, BoundingSphere &hull) const override;
 
     private:

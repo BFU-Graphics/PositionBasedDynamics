@@ -6,26 +6,26 @@
 
 namespace HINASIM
 {
-    class Colliders
+    class Collider
     {
-    protected:
-        explicit Colliders(class SimObject *o);
-        ~Colliders();
+    public:
+        explicit Collider(class SimObject *o);
+        ~Collider();
 
     public:
-        virtual Colliders &update_aabb();
+        virtual Collider &update_aabb();
 
     protected:
         AABB *aabb_;
 
     public:
-        class SimObject *object_;
+        class SimObject *object_; // the object Collider was attached;
     };
 
 
-    class DistanceFieldCollider : public Colliders
+    class DistanceFieldCollider : public Collider
     {
-    protected:
+    public:
         explicit DistanceFieldCollider(class SimObject *o, bool inside_collision);
         ~DistanceFieldCollider();
 

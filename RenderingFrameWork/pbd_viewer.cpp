@@ -22,7 +22,7 @@ HINAVIEWER::PBDViewer::~PBDViewer()
 #ifndef __APPLE__
         _pclose(ffmpeg);
 #endif
-        return;
+    return;
 }
 
 void HINAVIEWER::PBDViewer::launch_rendering(const std::string &window_name)

@@ -2,24 +2,24 @@
 
 #include "src/objects/objects.h"
 
-HINASIM::Colliders::Colliders(SimObject *o)
+HINASIM::Collider::Collider(SimObject *o)
 {
     object_ = o;
     aabb_ = new AABB(o->V_);
 }
 
-HINASIM::Colliders::~Colliders()
+HINASIM::Collider::~Collider()
 {
     delete aabb_;
 }
 
-HINASIM::Colliders &HINASIM::Colliders::update_aabb()
+HINASIM::Collider &HINASIM::Collider::update_aabb()
 {
     aabb_->calc_aabb(object_->V_);
     return *this;
 }
 
-HINASIM::DistanceFieldCollider::DistanceFieldCollider(HINASIM::SimObject *o, bool inside_collision) : Colliders(o), inside_collision_(inside_collision)
+HINASIM::DistanceFieldCollider::DistanceFieldCollider(HINASIM::SimObject *o, bool inside_collision) : Collider(o), inside_collision_(inside_collision)
 {
     bvh_ = new PointCloudBSH();
     bvh_->init(o->V_);
