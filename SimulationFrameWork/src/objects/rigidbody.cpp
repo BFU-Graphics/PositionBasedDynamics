@@ -21,7 +21,7 @@ void HINASIM::RigidBody::determine_mass_properties(double density)
 {
 
 }
-#include <iostream>
+
 void HINASIM::RigidBody::init_physics_states()
 {
     x_ = position_;

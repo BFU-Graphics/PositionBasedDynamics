@@ -5,8 +5,6 @@
 
 #include <thread>
 
-#include <iostream>
-
 void HINASIM::PBDSim::simulate(double dt)
 {
     auto start = std::chrono::steady_clock::now();
@@ -97,20 +95,22 @@ void HINASIM::PBDSim::external_force(HINASIM::SimObject *o)
             auto *deformable = dynamic_cast<HINASIM::DeformableObject *>(o);
             deformable->a_.setZero();
             for (int i = 0; i < deformable->a_.rows(); ++i)
-                if (deformable->inv_mass_(i) != 0)
+                if (deformable->inv_mass_(i) != 0.0)
                     deformable->a_.row(i) = gravity_ + deformable->inv_mass_(i) * deformable->mouse_drag_force_.row(i);
         }
             break;
         case SimObjectType::RigidBody:
         {
-            // TODO:
-            std::cerr << "Rigid Body Not Implemented yet" << std::endl;
+            auto *rigid_body = dynamic_cast<HINASIM::RigidBody *>(o);
+            rigid_body->a_.setZero();
+            rigid_body->t_.setZero();
+            if (rigid_body->inv_mass_ != 0.0)
+                rigid_body->a_ = gravity_; // TODO: allow drag force
         }
             break;
         case SimObjectType::Fluid:
         {
-            // TODO:
-            std::cerr << "Fluid Not Implemented yet" << std::endl;
+            // TODO: Fluid Not Implemented yet
         }
             break;
         default:
@@ -158,8 +158,7 @@ void HINASIM::PBDSim::integrate_prediction_with_damping(HINASIM::SimObject *o, d
             break;
         case SimObjectType::Fluid:
         {
-            // TODO:
-            std::cerr << "Fluid Not Implemented yet" << std::endl;
+            // TODO: Fluid Not Implemented yet
         }
         default:
             break;
@@ -196,16 +195,11 @@ void HINASIM::PBDSim::project_position_constraints()
                 }
             }
                 break;
-            case SimObjectType::RigidBody:
-            {
-                // TODO:
-                std::cerr << "Rigid Body Not Implemented yet" << std::endl;
-            }
+            case SimObjectType::RigidBody: // NOTE: Rigid Body normally DON'T have any inner constraint
                 break;
             case SimObjectType::Fluid:
             {
-                // TODO:
-                std::cerr << "Fluid Not Implemented yet" << std::endl;
+                // TODO: Fluid Not Implemented yet
             }
             default:
                 break;
@@ -227,13 +221,12 @@ void HINASIM::PBDSim::update_positions_and_velocities(HINASIM::SimObject *o, dou
             break;
         case SimObjectType::RigidBody:
         {
-            std::cerr << "Rigid Body Not Implemented yet" << std::endl;
+            // TODO: Rigid Body Not Implemented yet
         }
             break;
         case SimObjectType::Fluid:
         {
-            // TODO:
-            std::cerr << "Fluid Not Implemented yet" << std::endl;
+            // TODO: Fluid Not Implemented yet
         }
         default:
             break;
@@ -274,14 +267,12 @@ void HINASIM::PBDSim::collision_response()
                 break;
             case SimObjectType::RigidBody:
             {
-                // TODO:
-                std::cerr << "Rigid Body Not Implemented yet" << std::endl;
+                // TODO: Rigid Body Not Implemented yet
             }
                 break;
             case SimObjectType::Fluid:
             {
-                // TODO:
-                std::cerr << "Fluid Not Implemented yet" << std::endl;
+                // TODO: Fluid Not Implemented yet
             }
             default:
                 break;
