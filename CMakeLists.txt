@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 project(PositionBasedDynamics)
 
-OPTION(USE_OpenMP "Use OpenMP" ON)
+OPTION(USE_OpenMP "Use OpenMP" OFF)
 OPTION(STATIC_RENDERING_LIB "Use Rendering Framework as static lib" OFF)
 OPTION(DYNAMIC_RENDERING_LIB "Use Rendering Framework as static lib" OFF)
 

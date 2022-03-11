@@ -33,7 +33,7 @@ namespace HINASIM
         virtual DistanceFieldCollider &update_bvh();
 
     public:
-//        virtual bool collision_test(const Eigen::Vector3d &x, double tolerance, Eigen::Vector3d &contact_point, Eigen::Vector3d &normal, double distance, double max_distance);
+        virtual bool collision_test(const Eigen::Vector3d &x, double tolerance, Eigen::Vector3d &contact_point, Eigen::Vector3d &normal, double &distance, double max_distance) = 0;
         virtual double distance(const Eigen::Vector3d &x, double tolerance) = 0;
 
     public:
@@ -48,6 +48,7 @@ namespace HINASIM
         explicit SphereColliderDF(class SimObject *o, bool inside_collision = false);
 
     public:
+        bool collision_test(const Eigen::Vector3d &x, double tolerance, Eigen::Vector3d &contact_point, Eigen::Vector3d &normal, double &distance, double max_distance) override;
         double distance(const Eigen::Vector3d &x, double tolerance) final;
 
     private:

@@ -47,9 +47,9 @@ namespace HINASIM
                 const double min1 = a2.aabb_[0](i);
                 const double max1 = a2.aabb_[1](i);
                 if (((max0 < min1) || (min0 > max1)))
-                    return true;
+                    return false;
             }
-            return false;
+            return true;
         }
     };
 }

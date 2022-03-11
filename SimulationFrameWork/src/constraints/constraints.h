@@ -24,7 +24,7 @@ namespace HINASIM
 
         bool solve(Eigen::MatrixXd &p, const Eigen::VectorXd &inv_mass) override;
 
-    public:
+    private:
         /// p1_id, p2_id, rest_length
         std::vector<std::tuple<int, int, double>> distance_constraints_;
     };
@@ -36,7 +36,7 @@ namespace HINASIM
 
         bool solve(Eigen::MatrixXd &p, const Eigen::VectorXd &inv_mass) override;
 
-    public:
+    private:
         /// axis_p1_id, axis_p2_id, side_p3_id, side_p4_id, rest_angle
         std::vector<std::tuple<int, int, int, int, double>> dihedral_constraints_;
     };

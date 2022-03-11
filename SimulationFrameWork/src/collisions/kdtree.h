@@ -9,6 +9,7 @@
 #include <queue>
 #include <algorithm>
 #include <functional>
+#include <iostream>
 
 namespace HINASIM
 {

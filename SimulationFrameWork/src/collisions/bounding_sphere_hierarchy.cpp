@@ -19,7 +19,7 @@ void HINASIM::PointCloudBSH::compute_hull(unsigned int b, unsigned int n, HINASI
     Eigen::MatrixXd sub_vertices;
     sub_vertices.resize(n, 3);
 
-    for (unsigned int i = n; i < b + n; ++i)
+    for (unsigned int i = b; i < b + n; ++i)
         sub_vertices.row(i - b) = V_.row(list_[i]);
 
     const BoundingSphere s(sub_vertices);

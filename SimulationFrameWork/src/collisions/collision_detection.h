@@ -10,10 +10,9 @@ namespace HINASIM
 {
     enum class ContactType
     {
-        RigidBody,
-        Particle,
-        ParticleRigidBody,
-        ParticleSolid,
+        RigidBody, // Rigid-Rigid Contact
+
+        // TODO: support more contact types
     };
 
     struct ContactData
@@ -34,6 +33,9 @@ namespace HINASIM
     public:
         CollisionDetection();
         virtual ~CollisionDetection();
+
+    public:
+        void add_rigid_body_contact();
 
     public:
         virtual void collision_detection() = 0;

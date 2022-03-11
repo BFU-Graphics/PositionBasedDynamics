@@ -44,14 +44,31 @@ HINASIM::DistanceFieldCollider &HINASIM::DistanceFieldCollider::update_bvh()
 
 HINASIM::SphereColliderDF::SphereColliderDF(HINASIM::SimObject *o, bool inside_collision) : DistanceFieldCollider(o, inside_collision)
 {
-    double length_x = std::abs(aabb_->aabb_[1].x() - aabb_->aabb_[0].x());
-    double length_y = std::abs(aabb_->aabb_[1].y() - aabb_->aabb_[0].y());
-    double length_z = std::abs(aabb_->aabb_[1].z() - aabb_->aabb_[0].z());
-    radius_ = std::max({length_x, length_y, length_z});
+    const BoundingSphere bs(o->V_);
+    radius_ = bs.r_;
 }
 
 double HINASIM::SphereColliderDF::distance(const Eigen::Vector3d &x, double tolerance)
 {
     const double dist = (x.norm() - radius_);// TODO: recheck this
     return inside_collision_ ? (-dist - tolerance) : (dist - tolerance);
+}
+#include <iostream>
+bool HINASIM::SphereColliderDF::collision_test(const Eigen::Vector3d &x, double tolerance, Eigen::Vector3d &contact_point, Eigen::Vector3d &normal, double &distance, double max_distance)
+{
+    const Eigen::Vector3d d = x;
+    const double dl = d.norm();
+    distance = inside_collision_ ? (radius_ - dl - tolerance) : (dl - radius_ - tolerance);
+
+    if (distance < max_distance)
+    {
+        if (dl < 1.e-6) // NOTE: maybe no use here
+            normal.setZero();
+        else
+            normal = inside_collision_ ? (d / -dl) : (d / dl);
+        contact_point = (radius_ + tolerance) * normal;
+        return true;
+    }
+
+    return false;
 }

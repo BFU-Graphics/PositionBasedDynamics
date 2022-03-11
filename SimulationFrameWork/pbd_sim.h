@@ -5,6 +5,8 @@
 #include "src/objects/deformable.h"
 #include "src/simple_collision/collision_objects.h"
 #include "src/constraints/constraints.h"
+#include "src/constraints/joints.h"
+#include "src/constraints/contacts.h"
 #include "src/time_integration.h"
 
 #include <vector>
@@ -32,7 +34,8 @@ namespace HINASIM
 
     public:
         std::vector<SimObject *> objects_;
-        std::vector<class Joint *> joints_; // not used yet, for rigid-rigid situation
+        std::vector<Joint *> joints_; // not used yet, for rigid-rigid situation
+        std::vector<ContactConstraint *> contacts_; // for collision response, update every sim loop
 
     protected: // Env vars
         Eigen::RowVector3d gravity_{0, -9.8, 0};

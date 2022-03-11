@@ -31,8 +31,8 @@ namespace HINASIM
         Eigen::MatrixXd V_rest_; // rest pose of a rigid body
         Eigen::Vector3d C_rest_; // rest center of mass
 
-        double restitution_; // TODO: to init here
-        double friction_; // TODO: to init here
+        double restitution_{0.5}; // TODO: to init here
+        double friction_{0.2}; // TODO: to init here
 
         // transformation required to transform a point to local space or vice vera
         Eigen::Matrix3d transformation_R_;

@@ -21,7 +21,7 @@ void HINASIM::RigidBody::determine_mass_properties(double density)
 {
 
 }
-
+#include <iostream>
 void HINASIM::RigidBody::init_physics_states()
 {
     x_ = position_;
@@ -49,7 +49,9 @@ void HINASIM::RigidBody::init_physics_states()
     transformation_v1_ = -q_initial_.inverse().matrix() * x0_mat_; // TODO:
     transformation_v2_ = (q_ * q_mat_.inverse()).matrix() * x0_mat_ + x_; // TODO:
 
-    V_rest_ = V_;
+    V_rest_ = Eigen::Map<Eigen::MatrixXd>(V_.data(), V_.rows(), V_.cols());
+    for (int i = 0; i < V_.rows(); ++i)
+        V_.row(i) = (q_.toRotationMatrix() * V_rest_.row(i).transpose() + x_).transpose();
 
     mouse_drag_force_.resize(V_.rows(), 3);
     mouse_drag_force_.setZero();
@@ -57,7 +59,8 @@ void HINASIM::RigidBody::init_physics_states()
 
 void HINASIM::RigidBody::update_rendering_info()
 {
-
+    for (int i = 0; i < V_.rows(); ++i)
+        V_.row(i) = (q_.toRotationMatrix() * V_rest_.row(i).transpose() + x_).transpose();
 }
 
 void HINASIM::RigidBody::update_physics_info()

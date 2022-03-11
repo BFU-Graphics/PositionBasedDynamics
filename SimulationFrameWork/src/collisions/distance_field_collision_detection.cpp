@@ -6,7 +6,7 @@
 #include "omp.h"
 #endif
 
-HINASIM::CollisionDetection &HINASIM::DistanceFieldCollisionDetection::add_collider_sphere(HINASIM::SimObject *o)
+HINASIM::DistanceFieldCollisionDetection &HINASIM::DistanceFieldCollisionDetection::add_collider_sphere(HINASIM::SimObject *o)
 {
     colliders_.emplace_back(new SphereColliderDF(o));
     return *this;
@@ -21,14 +21,12 @@ void HINASIM::DistanceFieldCollisionDetection::collision_detection()
 #pragma omp parallel for
 #endif
     for (int i = 0; i < colliders_.size(); ++i)
-    {
         if (dynamic_cast<DistanceFieldCollider *>(colliders_[i]))
         {
             auto *dfc = dynamic_cast<DistanceFieldCollider *>(colliders_[i]);
             dfc->update_aabb();
             dfc->update_bvh(); // NOTE: Rigid Body don't need to update BVH at runtime
         }
-    }
 
     // Broad Phase collision detection
     std::vector<std::pair<unsigned int, unsigned int>> collider_pairs;
@@ -43,9 +41,9 @@ void HINASIM::DistanceFieldCollisionDetection::collision_detection()
 
     // Narrow Phase collision detection
     std::vector<std::vector<ContactData>> contacts_mt; // multi-thread contacts
+    contacts_mt.resize(1);
 #ifdef USE_OPENMP
 #ifdef _DEBUG
-    contacts_mt.resize(1);
 #else
     contacts_mt.resize(omp_get_max_threads());
 #endif
@@ -83,73 +81,76 @@ void HINASIM::DistanceFieldCollisionDetection::collision_detection()
 void HINASIM::DistanceFieldCollisionDetection::collision_detection_RB_RB(HINASIM::RigidBody *rb1, HINASIM::DistanceFieldCollider *co1, HINASIM::RigidBody *rb2, HINASIM::DistanceFieldCollider *co2,
                                                                          std::vector<std::vector<ContactData>> &contacts_mt)
 {
+    if (rb1->inv_mass_ == 0.0 && rb2->inv_mass_ == 0.0)
+        return;
+
     const double restitution = rb1->restitution_ * rb2->restitution_;
     const double friction = rb1->friction_ + rb2->friction_;
 
-    if (rb1->inv_mass_ == 0.0 && rb2->inv_mass_ == 0.0)
+    const Eigen::Vector3d &com2 = rb2->position_;
+
+    const Eigen::Matrix3d &R = rb2->transformation_R_;
+    const Eigen::Vector3d &v1 = rb2->transformation_v1_;
+    const Eigen::Vector3d &v2 = rb2->transformation_v2_;
+
+    const PointCloudBSH *bvh = co1->bvh_;
+
+    // TODO: NOT COMPLETE YET BELOW
+    std::function<bool(unsigned int, unsigned int)> predicate = [&](unsigned int node_index, unsigned int depth)
     {
-        const Eigen::Vector3d &com2 = rb2->position_;
+        const BoundingSphere &bs = bvh->hull(node_index);
+        const Eigen::Vector3d &sphere_x = bs.x_;
+        const Eigen::Vector3d sphere_x_w = rb1->q_ * sphere_x + rb1->x_; // TODO: potential bugs
 
-        const Eigen::Matrix3d &R = rb2->transformation_R_;
-        const Eigen::Vector3d &v1 = rb2->transformation_v1_;
-        const Eigen::Vector3d &v2 = rb2->transformation_v2_;
+        Eigen::AlignedBox3d box3f;
+        box3f.extend(co2->aabb_->aabb_[0]);
+        box3f.extend(co2->aabb_->aabb_[1]);
+        const double dist = box3f.exteriorDistance(sphere_x_w);
 
-        const PointCloudBSH *bvh = co1->bvh_;
-
-        // TODO: NOT COMPLETE YET BELOW
-        std::function<bool(unsigned int, unsigned int)> predicate = [&](unsigned int node_index, unsigned int depth)
+        // Test if center of bounding sphere intersects AABB
+        if (dist < bs.r_)
         {
-            const BoundingSphere &bs = bvh->hull(node_index);
-            const Eigen::Vector3d &sphere_x = bs.x_;
-            const Eigen::Vector3d sphere_x_w = rb1->q_ * sphere_x + rb1->x_; // TODO: potential bugs
+            // Test if distance of center of bounding sphere to collision object is smaller than the radius
+            const Eigen::Vector3d x = R * (sphere_x_w - com2) + v1;
+            const double dist2 = co2->distance(x, tolerance_);
+            if (dist2 == std::numeric_limits<double>::max()) // TODO: ??? maybe to delete this in the future
+                return true;
+            if (dist2 < bs.r_)
+                return true;
+        }
+        return false;
+    };
 
-            Eigen::AlignedBox3d box3f;
-            box3f.extend(co2->aabb_->aabb_[0]);
-            box3f.extend(co2->aabb_->aabb_[1]);
-            const double dist = box3f.exteriorDistance(sphere_x_w);
+    std::function<void(unsigned int, unsigned int)> cb = [&](unsigned int node_index, unsigned int depth)
+    {
+        auto const &node = bvh->node(node_index);
+        if (!node.is_leaf())
+            return;
 
-            // Test if center of bounding sphere intersects AABB
-            if (dist < bs.r_)
+        for (auto i = node.begin; i < node.begin + node.n; ++i)
+        {
+            unsigned int index = bvh->entity(i);
+            const Eigen::Vector3d &x_w = rb1->q_.toRotationMatrix() * rb1->V_rest_.row(index).transpose() + rb1->x_;
+            const Eigen::Vector3d x = R * (x_w - com2) + v1; // local position according to [RigidBody 2]
+            Eigen::Vector3d cp{}, n{};
+            double dist = 0;
+            if (co2->collision_test(x, tolerance_, cp, n, dist, 0.0))
             {
-                // Test if distance of center of bounding sphere to collision object is smaller than the radius
-                const Eigen::Vector3d x = R * (sphere_x_w - com2) + v1;
-                const double dist2 = co2->distance(x, tolerance_);
-                if (dist2 == std::numeric_limits<double>::max())
-                    return true;
-                if (dist2 < bs.r_)
-                    return true;
+                const Eigen::Vector3d cp_w = R.transpose() * cp + v2;
+                const Eigen::Vector3d n_w = R.transpose() * n;
+
+                int tid = 0;
+#ifdef USE_OPENMP
+#ifdef _DEBUG
+                tid = 0;
+#else
+                int tid = omp_get_thread_num();
+#endif
+#endif
+                contacts_mt[tid].push_back({ContactType::RigidBody, rb1, rb2, x_w, cp_w, n_w, dist, restitution, friction});
             }
-            return false;
-        };
+        }
+    };
 
-        std::function<void(unsigned int, unsigned int)> cb = [&](unsigned int node_index, unsigned int depth)
-        {
-            auto const &node = bvh->node(node_index);
-            if (!node.is_leaf())
-                return;
-
-//            for (auto i = node.begin; i < node.begin + node.n; ++i)
-//            {
-//                unsigned int index = bvh->entity(i);
-//                const Eigen::Vector3d &x_w = vd.getPosition(index);
-//                const Eigen::Vector3d x = R * (x_w - com2) + v1;
-//                Eigen::Vector3d cp, n;
-//                double dist;
-//                if (co2->collisionTest(x, tolerance_, cp, n, dist))
-//                {
-//                    const Eigen::Vector3d cp_w = R.transpose() * cp + v2;
-//                    const Eigen::Vector3d n_w = R.transpose() * n;
-//
-//#ifdef _DEBUG
-//                    int tid = 0;
-//#else
-//                    int tid = omp_get_thread_num();
-//#endif
-////                    contacts_mt[tid].push_back({0, co1->m_bodyIndex, co2->m_bodyIndex, x_w, cp_w, n_w, dist, restitutionCoeff, frictionCoeff});
-//                }
-//            }
-        };
-
-        bvh->traverse_depth_first(predicate, cb);
-    }
+    bvh->traverse_depth_first(predicate, cb);
 }

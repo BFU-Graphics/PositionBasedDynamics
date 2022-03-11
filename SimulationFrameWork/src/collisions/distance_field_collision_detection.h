@@ -12,7 +12,7 @@ namespace HINASIM
         ~DistanceFieldCollisionDetection() override = default;
 
     public:
-        CollisionDetection &add_collider_sphere(class SimObject *o);
+        DistanceFieldCollisionDetection &add_collider_sphere(class SimObject *o);
 
     public:
         void collision_detection() override;
