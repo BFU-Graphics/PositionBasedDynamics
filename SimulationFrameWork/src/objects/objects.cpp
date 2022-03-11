@@ -33,7 +33,7 @@ void HINASIM::SimObject::init_rendering_info()
     assert(F_.rows() > 0);
 
     // do mesh scaling
-    for (int i = 0; i < V_.size(); ++i)
+    for (int i = 0; i < V_.rows(); ++i)
     {
         V_.row(i)(0) *= scale_(0);
         V_.row(i)(1) *= scale_(1);

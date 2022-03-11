@@ -61,7 +61,7 @@ int main()
     };
 
     pbd_viewer
-            .set_max_fps(65)
+            .set_max_fps(120)
             .launch_rendering("Test Cloth");
 
     return 0;

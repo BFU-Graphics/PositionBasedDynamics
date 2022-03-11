@@ -25,9 +25,9 @@ void HINASIM::RigidBody::init_physics_states()
     v_.setZero();
     a_.setZero();
     t_.setZero();
-    Eigen::AngleAxisd roll_angle((rotation_.z() * M_PI) / 180, Eigen::Vector3d::UnitZ());
-    Eigen::AngleAxisd yaw_angle((rotation_.y() * M_PI) / 180, Eigen::Vector3d::UnitY());
-    Eigen::AngleAxisd pitch_angle((rotation_.x() * M_PI) / 180, Eigen::Vector3d::UnitX());
+    Eigen::AngleAxisd roll_angle((rotation_.z() * 3.141592653) / 180, Eigen::Vector3d::UnitZ());
+    Eigen::AngleAxisd yaw_angle((rotation_.y() * 3.141592653) / 180, Eigen::Vector3d::UnitY());
+    Eigen::AngleAxisd pitch_angle((rotation_.x() * 3.141592653) / 180, Eigen::Vector3d::UnitX());
     q_ = roll_angle * yaw_angle * pitch_angle;
     omega_.setZero();
 
