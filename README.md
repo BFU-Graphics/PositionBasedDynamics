@@ -22,7 +22,7 @@
 
 ### Rigid Body Dynamics
 
-comming soon
+<img src="./Resources/images/rigidbody_sim01.png"  />
 
 ### Fluid Dynamics
 
@@ -35,3 +35,8 @@ comming soon
 - [x] distance constraint
 - [x] dihedral constraint
 - [ ] penetration constraint
+
+### Rigid Body
+
+- [x] global BVH collision detection
+- [x] rigid-rigid contact constraint
