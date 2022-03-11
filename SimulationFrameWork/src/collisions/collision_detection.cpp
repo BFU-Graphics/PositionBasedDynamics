@@ -25,3 +25,9 @@ void HINASIM::CollisionDetection::add_rigid_body_contact(HINASIM::RigidBody *rb1
 {
     dynamic_cast<RigidBodyContactConstraint *>(contacts_[0])->add_contact(rb1, rb2, contact_point1, contact_point2, contact_normal, contact_distance, restitution, friction);
 }
+
+void HINASIM::CollisionDetection::contacts_solve()
+{
+    for (auto &contact: contacts_)
+        contact->solve();
+}

@@ -34,10 +34,21 @@ namespace HINASIM
                                                            const Eigen::Vector3d &acceleration,
                                                            const Eigen::Matrix3d &inertia_world,
                                                            const Eigen::Matrix3d &inv_inertia_world,
-                                                           Eigen::Quaterniond &rotation,
+                                                           Eigen::Quaterniond &predicted_rotation,
+                                                           const Eigen::Quaterniond &rotation,
                                                            Eigen::Vector3d &angular_velocity,
-                                                           const Eigen::Vector3d& torque,
+                                                           const Eigen::Vector3d &torque,
                                                            double damping);
+
+        static void velocity_update_first_order(double h,
+                                                double inv_mass,
+                                                const Eigen::Vector3d &predicted_position,
+                                                const Eigen::Vector3d &position,
+                                                Eigen::Vector3d &velocity,
+                                                const Eigen::Quaterniond &predicted_rotation,
+                                                const Eigen::Quaterniond &rotation,
+                                                Eigen::Vector3d &angular_velocity
+        );
     };
 }
 

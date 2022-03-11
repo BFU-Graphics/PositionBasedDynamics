@@ -43,6 +43,8 @@ namespace HINASIM
     public:
         virtual void collision_detection() = 0;
 
+        virtual void contacts_solve() final;
+
     protected:
         std::vector<Collider *> colliders_;
         double tolerance_;

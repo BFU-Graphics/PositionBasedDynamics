@@ -64,9 +64,6 @@ void HINASIM::PBDSim::pbd_kernel_loop(double dt)
         integrate_prediction_with_damping(o, dt, 0.99);
     }
 
-    // (8) forall vertices i do generateCollisionConstraints(x_i → p_i)
-    generate_collision_constraints();
-
     // (9) ~ (11)
     // loop solverIterations times
     // projectConstraints(C_1,...,C_M+M_coll ,p_1,...,p_N)
@@ -84,6 +81,12 @@ void HINASIM::PBDSim::pbd_kernel_loop(double dt)
     {
         update_positions_and_velocities(o, dt);
     }
+
+    // (8) forall vertices i do generateCollisionConstraints(x_i → p_i)
+    // collision detection
+    generate_collision_constraints();
+
+    project_velocity_constraints();
 }
 
 void HINASIM::PBDSim::external_force(HINASIM::SimObject *o)
@@ -141,6 +144,7 @@ void HINASIM::PBDSim::integrate_prediction_with_damping(HINASIM::SimObject *o, d
         {
             auto *rigid_body = dynamic_cast<HINASIM::RigidBody *>(o);
             rigid_body->p_x_.setZero();
+            rigid_body->p_q_.setIdentity();
             HINASIM::TimeIntegrationRigidBody::semi_implicit_integration_with_damping(
                     dt,
                     rigid_body->inv_mass_,
@@ -150,10 +154,13 @@ void HINASIM::PBDSim::integrate_prediction_with_damping(HINASIM::SimObject *o, d
                     rigid_body->a_,
                     rigid_body->inertia_tensor_world_,
                     rigid_body->inv_inertia_tensor_world_,
-                    rigid_body->q_, rigid_body->omega_,
+                    rigid_body->p_q_,
+                    rigid_body->q_,
+                    rigid_body->omega_,
                     rigid_body->t_,
                     damping
             );
+            // TODO: maybe need to update inertia tensors
         }
             break;
         case SimObjectType::Fluid:
@@ -167,7 +174,8 @@ void HINASIM::PBDSim::integrate_prediction_with_damping(HINASIM::SimObject *o, d
 
 void HINASIM::PBDSim::generate_collision_constraints()
 {
-    collision_engine_->collision_detection();
+    if (collision_engine_)
+        collision_engine_->collision_detection();
 }
 
 void HINASIM::PBDSim::project_position_constraints()
@@ -187,12 +195,8 @@ void HINASIM::PBDSim::project_position_constraints()
             {
                 auto *deformable = dynamic_cast<HINASIM::DeformableObject *>(o);
                 for (int i = 0; i < 15; ++i) // solve multiple times to ensure convergence
-                {
                     for (auto &c: deformable->inner_constraints_)
-                    {
                         c->solve(deformable->p_, deformable->inv_mass_);
-                    }
-                }
             }
                 break;
             case SimObjectType::RigidBody: // NOTE: Rigid Body normally DON'T have any inner constraint
@@ -207,6 +211,13 @@ void HINASIM::PBDSim::project_position_constraints()
     }
 }
 
+void HINASIM::PBDSim::project_velocity_constraints()
+{
+    if (collision_engine_)
+        for (int i = 0; i < 10; ++i)
+            collision_engine_->contacts_solve();
+}
+
 void HINASIM::PBDSim::update_positions_and_velocities(HINASIM::SimObject *o, double dt)
 {
     switch (o->TYPE_)
@@ -214,14 +225,31 @@ void HINASIM::PBDSim::update_positions_and_velocities(HINASIM::SimObject *o, dou
         case SimObjectType::Deformable:
         {
             auto *deformable = dynamic_cast<HINASIM::DeformableObject *>(o);
-
-            HINASIM::TimeIntegrationDeformable::velocity_update_first_order(dt, deformable->inv_mass_, deformable->p_, deformable->x_, deformable->v_);
+            HINASIM::TimeIntegrationDeformable::velocity_update_first_order(
+                    dt,
+                    deformable->inv_mass_,
+                    deformable->p_,
+                    deformable->x_,
+                    deformable->v_
+            );
             deformable->x_ = deformable->p_;
         }
             break;
         case SimObjectType::RigidBody:
         {
-            // TODO: Rigid Body Not Implemented yet
+            auto *rigid_body = dynamic_cast<HINASIM::RigidBody *>(o);
+            HINASIM::TimeIntegrationRigidBody::velocity_update_first_order(
+                    dt,
+                    rigid_body->inv_mass_,
+                    rigid_body->p_x_,
+                    rigid_body->x_,
+                    rigid_body->v_,
+                    rigid_body->p_q_,
+                    rigid_body->q_,
+                    rigid_body->omega_
+            );
+            rigid_body->x_ = rigid_body->p_x_;
+            rigid_body->q_ = rigid_body->p_q_;
         }
             break;
         case SimObjectType::Fluid:

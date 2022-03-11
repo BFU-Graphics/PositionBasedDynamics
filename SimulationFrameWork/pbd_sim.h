@@ -30,6 +30,7 @@ namespace HINASIM
         static void integrate_prediction_with_damping(HINASIM::SimObject *o, double dt, double damping = 0.999);
         void generate_collision_constraints();
         void project_position_constraints();
+        void project_velocity_constraints();
         static void update_positions_and_velocities(HINASIM::SimObject *o, double dt);
 
     public:
@@ -37,7 +38,7 @@ namespace HINASIM
         std::vector<Joint *> joints_; // not used yet, for rigid-rigid situation
 
     protected: // Env vars
-        CollisionDetection *collision_engine_;
+        CollisionDetection *collision_engine_ = nullptr;
         Eigen::RowVector3d gravity_{0, -9.8, 0};
         double fixed_dt = 0.02;
 

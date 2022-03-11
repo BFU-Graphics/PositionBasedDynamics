@@ -29,7 +29,7 @@ void HINASIM::DistanceFieldCollisionDetection::collision_detection()
         }
 
     // Broad Phase collision detection
-    std::vector <std::pair<unsigned int, unsigned int>> collider_pairs;
+    std::vector<std::pair<unsigned int, unsigned int>> collider_pairs;
     for (int i = 0; i < colliders_.size() - 1; ++i)
         for (int j = i + 1; j < colliders_.size(); ++j)
             if (AABB::intersection(*(colliders_[i]->aabb_), *(colliders_[j]->aabb_)))
@@ -40,7 +40,7 @@ void HINASIM::DistanceFieldCollisionDetection::collision_detection()
             }
 
     // Narrow Phase collision detection
-    std::vector <std::vector<ContactData>> contacts_mt; // multi-thread contacts
+    std::vector<std::vector<ContactData>> contacts_mt; // multi-thread contacts
     contacts_mt.resize(1);
 #ifdef USE_OPENMP
 #ifdef _DEBUG

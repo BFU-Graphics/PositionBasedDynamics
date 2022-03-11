@@ -22,7 +22,8 @@ namespace HINASIM
         Eigen::Vector3d omega_; // angular velocity
         Eigen::Vector3d t_; // torque
 
-        Eigen::Vector3d p_x_; // predicted_linear position
+        Eigen::Vector3d p_x_; // predicted linear position
+        Eigen::Quaterniond p_q_; // predicted angular quaternion
 
         double inv_mass_;
         Eigen::Vector3d inertia_tensor_local_;
