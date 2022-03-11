@@ -53,7 +53,7 @@ int main()
 
     pbd_viewer
             .set_max_fps(120)
-            .launch_rendering("Test Cloth");
+            .launch_rendering("Test Rigid Body");
 
     return 0;
 }
