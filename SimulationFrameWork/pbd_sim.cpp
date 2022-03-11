@@ -70,9 +70,9 @@ void HINASIM::PBDSim::pbd_kernel_loop(double dt)
     // end loop
     project_position_constraints();
 
-//    //////////////////// TEMPORARY COLLISION RESPONSE ////////////////////
-//    collision_response();
-//    //////////////////// TEMPORARY COLLISION RESPONSE ////////////////////
+    //////////////////// TEMPORARY COLLISION RESPONSE ////////////////////
+    collision_response();
+    //////////////////// TEMPORARY COLLISION RESPONSE ////////////////////
 
     // (12) ~ (15) forall vertices i
     // v_i <- (p_i - x_i) / \Delta t
