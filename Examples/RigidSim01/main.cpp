@@ -51,6 +51,8 @@ int main()
         return false;
     };
 
+    pbd_viewer.viewer().core().camera_zoom = 0.3;
+
     pbd_viewer
             .set_max_fps(120)
             .launch_rendering("Test Rigid Body");
