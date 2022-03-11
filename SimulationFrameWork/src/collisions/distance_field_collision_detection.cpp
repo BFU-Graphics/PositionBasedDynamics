@@ -29,7 +29,7 @@ void HINASIM::DistanceFieldCollisionDetection::collision_detection()
         }
 
     // Broad Phase collision detection
-    std::vector<std::pair<unsigned int, unsigned int>> collider_pairs;
+    std::vector <std::pair<unsigned int, unsigned int>> collider_pairs;
     for (int i = 0; i < colliders_.size() - 1; ++i)
         for (int j = i + 1; j < colliders_.size(); ++j)
             if (AABB::intersection(*(colliders_[i]->aabb_), *(colliders_[j]->aabb_)))
@@ -40,7 +40,7 @@ void HINASIM::DistanceFieldCollisionDetection::collision_detection()
             }
 
     // Narrow Phase collision detection
-    std::vector<std::vector<ContactData>> contacts_mt; // multi-thread contacts
+    std::vector <std::vector<ContactData>> contacts_mt; // multi-thread contacts
     contacts_mt.resize(1);
 #ifdef USE_OPENMP
 #ifdef _DEBUG
@@ -60,6 +60,8 @@ void HINASIM::DistanceFieldCollisionDetection::collision_detection()
         auto *body1 = collider1->object_;
         auto *body2 = collider2->object_;
 
+        // NOTE: only rigid-rigid contact currently
+        // TODO: support more contact types in the future
         if (dynamic_cast<RigidBody *>(body1) && dynamic_cast<RigidBody *>(body2))
         {
             auto *rb1 = dynamic_cast<RigidBody *>(body1);
@@ -73,7 +75,18 @@ void HINASIM::DistanceFieldCollisionDetection::collision_detection()
     {
         for (auto &contact: contacts)
         {
-            // TODO: generate contacts constraints
+            // NOTE: only rigid-rigid contact currently
+            // TODO: support more contact types in the future
+            add_rigid_body_contact(
+                    dynamic_cast<RigidBody *>(contact.object1),
+                    dynamic_cast<RigidBody *>(contact.object2),
+                    contact.contact_point1,
+                    contact.contact_point2,
+                    contact.normal,
+                    contact.distance,
+                    contact.restitution,
+                    contact.friction
+            );
         }
     }
 }
@@ -95,12 +108,11 @@ void HINASIM::DistanceFieldCollisionDetection::collision_detection_RB_RB(HINASIM
 
     const PointCloudBSH *bvh = co1->bvh_;
 
-    // TODO: NOT COMPLETE YET BELOW
     std::function<bool(unsigned int, unsigned int)> predicate = [&](unsigned int node_index, unsigned int depth)
     {
         const BoundingSphere &bs = bvh->hull(node_index);
         const Eigen::Vector3d &sphere_x = bs.x_;
-        const Eigen::Vector3d sphere_x_w = rb1->q_ * sphere_x + rb1->x_; // TODO: potential bugs
+        const Eigen::Vector3d sphere_x_w = rb1->q_.toRotationMatrix() * sphere_x + rb1->x_; // TODO: potential bugs
 
         Eigen::AlignedBox3d box3f;
         box3f.extend(co2->aabb_->aabb_[0]);

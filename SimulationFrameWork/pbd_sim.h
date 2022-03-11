@@ -6,7 +6,7 @@
 #include "src/simple_collision/collision_objects.h"
 #include "src/constraints/constraints.h"
 #include "src/constraints/joints.h"
-#include "src/constraints/contacts.h"
+#include "src/collisions/collision_detection.h"
 #include "src/time_integration.h"
 
 #include <vector>
@@ -20,8 +20,8 @@ namespace HINASIM
         void simulate(double dt);
 
     public:
+        PBDSim &set_collision_engine(CollisionDetection *collision_engine);
         PBDSim &add_object(SimObject *object);
-        PBDSim &add_collider(CollisionObject *collider);
         void update_all_rendering_state();
 
     protected: // pbd kernel process
@@ -35,13 +35,14 @@ namespace HINASIM
     public:
         std::vector<SimObject *> objects_;
         std::vector<Joint *> joints_; // not used yet, for rigid-rigid situation
-        std::vector<ContactConstraint *> contacts_; // for collision response, update every sim loop
 
     protected: // Env vars
+        CollisionDetection *collision_engine_;
         Eigen::RowVector3d gravity_{0, -9.8, 0};
         double fixed_dt = 0.02;
 
-    protected: // ! TO DELETE IN THE FUTURE
+    public: // ! TO DELETE IN THE FUTURE
+        PBDSim &add_collider(CollisionObject *collider);
         std::vector<CollisionObject *> colliders_;
         void collision_response();
         static void collision_response_to_a_sphere(HINASIM::DeformableObject *deformable, const Eigen::Vector3d &center, double radius);

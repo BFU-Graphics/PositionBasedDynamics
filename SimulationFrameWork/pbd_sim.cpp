@@ -286,3 +286,9 @@ void HINASIM::PBDSim::collision_response_to_a_sphere(HINASIM::DeformableObject *
         }
     }
 }
+
+HINASIM::PBDSim &HINASIM::PBDSim::set_collision_engine(HINASIM::CollisionDetection *collision_engine)
+{
+    collision_engine_ = collision_engine;
+    return *this;
+}

@@ -11,6 +11,9 @@ namespace HINASIM
     class ContactConstraint
     {
     public:
+        virtual ~ContactConstraint() = default;
+
+    public:
         virtual bool solve() = 0;
 
     public:
@@ -20,7 +23,7 @@ namespace HINASIM
     class RigidBodyContactConstraint : public ContactConstraint
     {
     public:
-        void add_contact(class RigidBody *rb1, class RigidBody *rb2, const Eigen::Vector3d& contact_point1, const Eigen::Vector3d& contact_point2, const Eigen::Vector3d& contact_normal, double contact_distance, double restitution,
+        void add_contact(class RigidBody *rb1, class RigidBody *rb2, const Eigen::Vector3d &contact_point1, const Eigen::Vector3d &contact_point2, const Eigen::Vector3d &contact_normal, double contact_distance, double restitution,
                          double friction);
         bool solve() override;
 
