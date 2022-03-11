@@ -34,6 +34,8 @@ void HINASIM::RigidBody::init_physics_states()
     q_ = roll_angle * yaw_angle * pitch_angle;
     omega_.setZero();
 
+    p_x_.setZero();
+
     inv_mass_ = 1;
     inertia_tensor_local_.setOnes();
     inertia_tensor_world_.setZero();

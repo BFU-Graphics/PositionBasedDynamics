@@ -67,7 +67,7 @@ void HINASIM::PBDSim::pbd_kernel_loop(double dt)
     }
 
     // (8) forall vertices i do generateCollisionConstraints(x_i → p_i)
-    generate_collision_constraints(); // omit it by now
+    generate_collision_constraints();
 
     // (9) ~ (11)
     // loop solverIterations times
@@ -126,13 +126,34 @@ void HINASIM::PBDSim::integrate_prediction_with_damping(HINASIM::SimObject *o, d
         {
             auto *deformable = dynamic_cast<HINASIM::DeformableObject *>(o);
             deformable->p_.setZero();
-            HINASIM::TimeIntegration::semi_implicit_integration_with_damping(dt, deformable->inv_mass_, deformable->p_, deformable->x_, deformable->v_, deformable->a_, damping);
+            HINASIM::TimeIntegrationDeformable::semi_implicit_integration_with_damping(
+                    dt,
+                    deformable->inv_mass_,
+                    deformable->p_,
+                    deformable->x_,
+                    deformable->v_,
+                    deformable->a_,
+                    damping
+            );
         }
             break;
         case SimObjectType::RigidBody:
         {
-            // TODO:
-            std::cerr << "Rigid Body Not Implemented yet" << std::endl;
+            auto *rigid_body = dynamic_cast<HINASIM::RigidBody *>(o);
+            rigid_body->p_x_.setZero();
+            HINASIM::TimeIntegrationRigidBody::semi_implicit_integration_with_damping(
+                    dt,
+                    rigid_body->inv_mass_,
+                    rigid_body->p_x_,
+                    rigid_body->x_,
+                    rigid_body->v_,
+                    rigid_body->a_,
+                    rigid_body->inertia_tensor_world_,
+                    rigid_body->inv_inertia_tensor_world_,
+                    rigid_body->q_, rigid_body->omega_,
+                    rigid_body->t_,
+                    damping
+            );
         }
             break;
         case SimObjectType::Fluid:
@@ -147,7 +168,7 @@ void HINASIM::PBDSim::integrate_prediction_with_damping(HINASIM::SimObject *o, d
 
 void HINASIM::PBDSim::generate_collision_constraints()
 {
-    // TODO:
+    collision_engine_->collision_detection();
 }
 
 void HINASIM::PBDSim::project_position_constraints()
@@ -200,13 +221,12 @@ void HINASIM::PBDSim::update_positions_and_velocities(HINASIM::SimObject *o, dou
         {
             auto *deformable = dynamic_cast<HINASIM::DeformableObject *>(o);
 
-            HINASIM::TimeIntegration::velocity_update_first_order(dt, deformable->inv_mass_, deformable->p_, deformable->x_, deformable->v_);
+            HINASIM::TimeIntegrationDeformable::velocity_update_first_order(dt, deformable->inv_mass_, deformable->p_, deformable->x_, deformable->v_);
             deformable->x_ = deformable->p_;
         }
             break;
         case SimObjectType::RigidBody:
         {
-            // TODO:
             std::cerr << "Rigid Body Not Implemented yet" << std::endl;
         }
             break;

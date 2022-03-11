@@ -22,6 +22,8 @@ namespace HINASIM
         Eigen::Vector3d omega_; // angular velocity
         Eigen::Vector3d t_; // torque
 
+        Eigen::Vector3d p_x_; // predicted_linear position
+
         double inv_mass_;
         Eigen::Vector3d inertia_tensor_local_;
         Eigen::Matrix3d inertia_tensor_world_;

@@ -38,8 +38,8 @@ namespace HINASIM
                 double, // 1.0 / normal^T * K * normal
                 double, // max impulse in tangent direction
                 double, // goal velocity in normal direction after collision
-                double, // restitution
-                double // friction
+                double, // friction
+                double // OUTPUT: sum_impulse
         >> rb_rb_contacts_;
     };
 }

@@ -53,7 +53,7 @@ double HINASIM::SphereColliderDF::distance(const Eigen::Vector3d &x, double tole
     const double dist = (x.norm() - radius_);// TODO: recheck this
     return inside_collision_ ? (-dist - tolerance) : (dist - tolerance);
 }
-#include <iostream>
+
 bool HINASIM::SphereColliderDF::collision_test(const Eigen::Vector3d &x, double tolerance, Eigen::Vector3d &contact_point, Eigen::Vector3d &normal, double &distance, double max_distance)
 {
     const Eigen::Vector3d d = x;
