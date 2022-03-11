@@ -29,7 +29,6 @@ int main()
 
     // ======================================== Phase 2: Set Up Simulation Thread ========================================
 
-
     bool pause = false;
     auto simulate = [&pbd_sim, &pause]()
     {
