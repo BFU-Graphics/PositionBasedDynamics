@@ -11,8 +11,8 @@ int main()
 
     // ======================================== Phase 1: Init Simulation World Info  ========================================
 
-    HINASIM::RigidBody sphere1(PBD_MODEL_DIR + std::string("sphere.obj"), {0, -1, 0});
-    HINASIM::RigidBody sphere2(PBD_MODEL_DIR + std::string("sphere.obj"), {0, 3, 0});
+    HINASIM::RigidBody sphere1(PBD_MODEL_DIR + std::string("sphere.obj"), {0, -5, 0});
+    HINASIM::RigidBody sphere2(PBD_MODEL_DIR + std::string("sphere.obj"), {0, 5, 0});
 
     pbd_sim
             .set_collision_engine(&cd)

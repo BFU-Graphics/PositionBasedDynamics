@@ -15,6 +15,7 @@ namespace HINASIM
 
     public:
         virtual bool solve() = 0;
+        virtual void clear() = 0;
 
     public:
         double stiffness_ = 1.0;
@@ -26,6 +27,7 @@ namespace HINASIM
         void add_contact(class RigidBody *rb1, class RigidBody *rb2, const Eigen::Vector3d &contact_point1, const Eigen::Vector3d &contact_point2, const Eigen::Vector3d &contact_normal, double contact_distance, double restitution,
                          double friction);
         bool solve() override;
+        void clear() override;
 
     private:
         std::vector<std::tuple<

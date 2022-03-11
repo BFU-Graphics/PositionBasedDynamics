@@ -153,3 +153,8 @@ bool HINASIM::RigidBodyContactConstraint::solve()
     }
     return true;
 }
+
+void HINASIM::RigidBodyContactConstraint::clear()
+{
+    rb_rb_contacts_.clear();
+}

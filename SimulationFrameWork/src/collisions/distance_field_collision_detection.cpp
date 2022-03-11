@@ -17,6 +17,10 @@ void HINASIM::DistanceFieldCollisionDetection::collision_detection()
     if (colliders_.size() <= 1)
         return;
 
+    // clear collision contacts every physics loop
+    for (auto contact: contacts_)
+        contact->clear();
+
 #ifdef USE_OPENMP
 #pragma omp parallel for
 #endif
