@@ -17,7 +17,10 @@ HINASIM::RigidBody::RigidBody(const std::function<void(Eigen::MatrixXd &, Eigen:
     TYPE_ = HINASIM::SimObjectType::RigidBody;
 }
 
-#include <iostream>
+void HINASIM::RigidBody::determine_mass_properties(double density)
+{
+
+}
 
 void HINASIM::RigidBody::init_physics_states()
 {
@@ -39,6 +42,13 @@ void HINASIM::RigidBody::init_physics_states()
     inv_inertia_tensor_local_.setOnes();
     inv_inertia_tensor_world_ = (q_.matrix()) * inv_inertia_tensor_local_.asDiagonal() * (q_.matrix()).transpose();
 
+    q_mat_ = Eigen::Quaterniond(1.0, 0.0, 0.0, 0.0); // TODO:
+    q_initial_ = Eigen::Quaterniond(1.0, 0.0, 0.0, 0.0); // TODO:
+    x0_mat_.setZero(); // TODO:
+    transformation_R_ = (q_initial_.inverse() * q_mat_ * q_.inverse()).matrix(); // TODO:
+    transformation_v1_ = -q_initial_.inverse().matrix() * x0_mat_; // TODO:
+    transformation_v2_ = (q_ * q_mat_.inverse()).matrix() * x0_mat_ + x_; // TODO:
+
     V_rest_ = V_;
 
     mouse_drag_force_.resize(V_.rows(), 3);
@@ -59,5 +69,9 @@ void HINASIM::RigidBody::update_physics_info()
     {
         inertia_tensor_world_ = q_.toRotationMatrix() * inertia_tensor_local_.asDiagonal() * (q_.toRotationMatrix()).transpose();
         inv_inertia_tensor_world_ = q_.toRotationMatrix() * inv_inertia_tensor_local_.asDiagonal() * (q_.toRotationMatrix()).transpose();
+
+        transformation_R_ = (q_initial_.inverse() * q_mat_ * q_.inverse()).matrix(); // TODO:
+        transformation_v1_ = -q_initial_.inverse().matrix() * x0_mat_; // TODO:
+        transformation_v2_ = (q_ * q_mat_.inverse()).matrix() * x0_mat_ + x_; // TODO:
     }
 }

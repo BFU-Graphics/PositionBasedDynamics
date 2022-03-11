@@ -90,36 +90,66 @@ void HINASIM::DistanceFieldCollisionDetection::collision_detection_RB_RB(HINASIM
     {
         const Eigen::Vector3d &com2 = rb2->position_;
 
-//        const Eigen::Matrix3d &R = rb2->transformation_R_;
-//        const Eigen::Vector3d &v1 = rb2->transformation_v1_;
-//        const Eigen::Vector3d &v2 = rb2->transformation_v2_;
+        const Eigen::Matrix3d &R = rb2->transformation_R_;
+        const Eigen::Vector3d &v1 = rb2->transformation_v1_;
+        const Eigen::Vector3d &v2 = rb2->transformation_v2_;
 
         const PointCloudBSH *bvh = co1->bvh_;
 
         // TODO: NOT COMPLETE YET BELOW
         std::function<bool(unsigned int, unsigned int)> predicate = [&](unsigned int node_index, unsigned int depth)
         {
-//            const BoundingSphere &bs = bvh->hull(node_index);
-//            const Eigen::Vector3d &sphere_x = bs.x_;
-//            const Eigen::Vector3d sphere_x_w = rb1->rotation_ * sphere_x + rb1->position_; // TODO: potential bugs
-//
-//            Eigen::AlignedBox3d box3f;
-//            box3f.extend(co2->aabb_->aabb_[0]);
-//            box3f.extend(co2->aabb_->aabb_[1]);
-//            const double dist = box3f.exteriorDistance(sphere_x_w);
-//
-//            // Test if center of bounding sphere intersects AABB
-//            if (dist < bs.r_)
-//            {
-//                // Test if distance of center of bounding sphere to collision object is smaller than the radius
-//                const Eigen::Vector3d x = R * (sphere_x_w - com2) + v1;
-//                const double dist2 = co2->distance(x, tolerance_);
-//                if (dist2 == std::numeric_limits<double>::max())
-//                    return true;
-//                if (dist2 < bs.r_)
-//                    return true;
-//            }
+            const BoundingSphere &bs = bvh->hull(node_index);
+            const Eigen::Vector3d &sphere_x = bs.x_;
+            const Eigen::Vector3d sphere_x_w = rb1->q_ * sphere_x + rb1->x_; // TODO: potential bugs
+
+            Eigen::AlignedBox3d box3f;
+            box3f.extend(co2->aabb_->aabb_[0]);
+            box3f.extend(co2->aabb_->aabb_[1]);
+            const double dist = box3f.exteriorDistance(sphere_x_w);
+
+            // Test if center of bounding sphere intersects AABB
+            if (dist < bs.r_)
+            {
+                // Test if distance of center of bounding sphere to collision object is smaller than the radius
+                const Eigen::Vector3d x = R * (sphere_x_w - com2) + v1;
+                const double dist2 = co2->distance(x, tolerance_);
+                if (dist2 == std::numeric_limits<double>::max())
+                    return true;
+                if (dist2 < bs.r_)
+                    return true;
+            }
             return false;
         };
+
+        std::function<void(unsigned int, unsigned int)> cb = [&](unsigned int node_index, unsigned int depth)
+        {
+            auto const &node = bvh->node(node_index);
+            if (!node.is_leaf())
+                return;
+
+//            for (auto i = node.begin; i < node.begin + node.n; ++i)
+//            {
+//                unsigned int index = bvh->entity(i);
+//                const Eigen::Vector3d &x_w = vd.getPosition(index);
+//                const Eigen::Vector3d x = R * (x_w - com2) + v1;
+//                Eigen::Vector3d cp, n;
+//                double dist;
+//                if (co2->collisionTest(x, tolerance_, cp, n, dist))
+//                {
+//                    const Eigen::Vector3d cp_w = R.transpose() * cp + v2;
+//                    const Eigen::Vector3d n_w = R.transpose() * n;
+//
+//#ifdef _DEBUG
+//                    int tid = 0;
+//#else
+//                    int tid = omp_get_thread_num();
+//#endif
+////                    contacts_mt[tid].push_back({0, co1->m_bodyIndex, co2->m_bodyIndex, x_w, cp_w, n_w, dist, restitutionCoeff, frictionCoeff});
+//                }
+//            }
+        };
+
+        bvh->traverse_depth_first(predicate, cb);
     }
 }
