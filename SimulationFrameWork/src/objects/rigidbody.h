@@ -13,6 +13,7 @@ namespace HINASIM
                            double density = 100.0);
 
     public: // chained useful methods
+        RigidBody &set_inv_mass(double inv_mass);
 
     public: // simulation state
         Eigen::Vector3d x_; // linear position
@@ -32,6 +33,7 @@ namespace HINASIM
         Eigen::Matrix3d inv_inertia_tensor_world_;
 
         Eigen::MatrixXd V_rest_; // rest pose of a rigid body
+        Eigen::MatrixXd V_buffer_; // rendering pose buffer (because physics update was faster than rendering update, we won;t update rendering V_ every physics frame)
         Eigen::Vector3d C_rest_; // rest center of mass
 
         double restitution_{0.5}; // TODO: to init here
@@ -50,9 +52,6 @@ namespace HINASIM
 
     protected: // disabled constructors
         explicit RigidBody(Eigen::Vector3d position = {0, 0, 0}, Eigen::Vector3d rotation = {0, 0, 0}, Eigen::Vector3d scale = {1, 1, 1}, double density = 100.0);
-
-    private:
-        void determine_mass_properties(double density); // TODO: in the future
 
     protected:
         void init_physics_states() override;

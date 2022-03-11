@@ -17,9 +17,10 @@ HINASIM::RigidBody::RigidBody(const std::function<void(Eigen::MatrixXd &, Eigen:
     TYPE_ = HINASIM::SimObjectType::RigidBody;
 }
 
-void HINASIM::RigidBody::determine_mass_properties(double density)
+HINASIM::RigidBody &HINASIM::RigidBody::set_inv_mass(double inv_mass)
 {
-
+    inv_mass_ = inv_mass;
+    return *this;
 }
 
 void HINASIM::RigidBody::init_physics_states()
@@ -52,8 +53,7 @@ void HINASIM::RigidBody::init_physics_states()
     transformation_v2_ = (q_ * q_mat_.inverse()).matrix() * x0_mat_ + x_; // TODO:
 
     V_rest_ = Eigen::Map<Eigen::MatrixXd>(V_.data(), V_.rows(), V_.cols());
-    for (int i = 0; i < V_.rows(); ++i)
-        V_.row(i) = (q_.toRotationMatrix() * V_rest_.row(i).transpose() + x_).transpose();
+    V_buffer_.resize(V_rest_.rows(), V_rest_.cols());
 
     mouse_drag_force_.resize(V_.rows(), 3);
     mouse_drag_force_.setZero();
@@ -61,8 +61,7 @@ void HINASIM::RigidBody::init_physics_states()
 
 void HINASIM::RigidBody::update_rendering_info()
 {
-    for (int i = 0; i < V_.rows(); ++i)
-        V_.row(i) = (q_.toRotationMatrix() * V_rest_.row(i).transpose() + x_).transpose();
+    V_ = V_buffer_;
 }
 
 void HINASIM::RigidBody::update_physics_info()
@@ -79,4 +78,7 @@ void HINASIM::RigidBody::update_physics_info()
         transformation_v1_ = -q_initial_.inverse().matrix() * x0_mat_; // TODO:
         transformation_v2_ = (q_ * q_mat_.inverse()).matrix() * x0_mat_ + x_; // TODO:
     }
+
+    for (int i = 0; i < V_.rows(); ++i)
+        V_buffer_.row(i) = (q_.toRotationMatrix() * V_rest_.row(i).transpose() + x_).transpose();
 }
