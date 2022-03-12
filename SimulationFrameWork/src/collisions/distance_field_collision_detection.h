@@ -13,6 +13,7 @@ namespace HINASIM
 
     public:
         DistanceFieldCollisionDetection &add_collider_sphere(class SimObject *o);
+        DistanceFieldCollisionDetection &add_collider_box(class SimObject *o);
 
     public:
         void collision_detection() override;

@@ -12,6 +12,12 @@ HINASIM::DistanceFieldCollisionDetection &HINASIM::DistanceFieldCollisionDetecti
     return *this;
 }
 
+HINASIM::DistanceFieldCollisionDetection &HINASIM::DistanceFieldCollisionDetection::add_collider_box(HINASIM::SimObject *o)
+{
+    colliders_.emplace_back(new BoxColliderDF(o));
+    return *this;
+}
+
 void HINASIM::DistanceFieldCollisionDetection::collision_detection()
 {
     if (colliders_.size() <= 1)

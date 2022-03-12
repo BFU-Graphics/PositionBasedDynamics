@@ -22,7 +22,6 @@ namespace HINASIM
         class SimObject *object_; // the object Collider was attached to;
     };
 
-
     class DistanceFieldCollider : public Collider
     {
     public:
@@ -33,14 +32,14 @@ namespace HINASIM
         virtual DistanceFieldCollider &update_bvh();
 
     public:
-        virtual bool collision_test(const Eigen::Vector3d &x, double tolerance, Eigen::Vector3d &contact_point, Eigen::Vector3d &normal, double &distance, double max_distance) = 0;
+        virtual bool collision_test(const Eigen::Vector3d &x, double tolerance, Eigen::Vector3d &contact_point, Eigen::Vector3d &normal, double &distance, double max_distance);
         virtual double distance(const Eigen::Vector3d &x, double tolerance) = 0;
+        virtual void approximate_normal(const Eigen::Vector3d &x, double tolerance, Eigen::Vector3d &normal);
 
     public:
         PointCloudBSH *bvh_;
         bool inside_collision_;
     };
-
 
     class SphereColliderDF final : public DistanceFieldCollider
     {
@@ -53,6 +52,18 @@ namespace HINASIM
 
     private:
         double radius_;
+    };
+
+    class BoxColliderDF final : public DistanceFieldCollider
+    {
+    public:
+        explicit BoxColliderDF(class SimObject *o, bool inside_collision = false);
+
+    public:
+        double distance(const Eigen::Vector3d &x, double tolerance) override;
+
+    private:
+        Eigen::Vector3d half_extent_;
     };
 }
 

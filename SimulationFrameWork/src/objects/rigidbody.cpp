@@ -53,7 +53,11 @@ void HINASIM::RigidBody::init_physics_states()
     transformation_v2_ = (q_ * q_mat_.inverse()).matrix() * x0_mat_ + x_; // TODO:
 
     V_rest_ = Eigen::Map<Eigen::MatrixXd>(V_.data(), V_.rows(), V_.cols());
+    for (int i = 0; i < V_.rows(); ++i)
+        V_.row(i) = (q_.toRotationMatrix() * V_rest_.row(i).transpose() + x_).transpose();
     V_buffer_.resize(V_rest_.rows(), V_rest_.cols());
+    for (int i = 0; i < V_.rows(); ++i)
+        V_buffer_.row(i) = (q_.toRotationMatrix() * V_rest_.row(i).transpose() + x_).transpose();
 
     mouse_drag_force_.resize(V_.rows(), 3);
     mouse_drag_force_.setZero();

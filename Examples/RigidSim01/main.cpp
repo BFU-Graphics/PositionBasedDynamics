@@ -11,21 +11,31 @@ int main()
 
     // ======================================== Phase 1: Init Simulation World Info  ========================================
 
-    HINASIM::RigidBody sphere1(PBD_MODEL_DIR + std::string("sphere.obj"), {0, -5, 0});
-    HINASIM::RigidBody sphere2(PBD_MODEL_DIR + std::string("sphere.obj"), {0, 5, 0});
+    HINASIM::RigidBody sphere1(PBD_MODEL_DIR + std::string("sphere.obj"), {0, 0, 0}, {0, 0, 0}, {7, 7, 7});
+//    HINASIM::RigidBody sphere2(PBD_MODEL_DIR + std::string("sphere.obj"), {0, 5, 0});
+//    HINASIM::RigidBody sphere3(PBD_MODEL_DIR + std::string("sphere.obj"), {0, 10, 0});
+    HINASIM::RigidBody sphere4(PBD_MODEL_DIR + std::string("sphere.obj"), {0, 15, 0});
+    HINASIM::RigidBody box1(PBD_MODEL_DIR + std::string("cube.obj"), {0, 0, 0});
 
     pbd_sim
             .set_collision_engine(&cd)
             .add_object(&sphere1)
-            .add_object(&sphere2);
+//            .add_object(&sphere2)
+//            .add_object(&sphere3)
+            .add_object(&sphere4);
 
     sphere1.set_inv_mass(0);
 
+//    cd.add_collider_box(&box1);
     cd.add_collider_sphere(&sphere1);
-    cd.add_collider_sphere(&sphere2);
+//    cd.add_collider_sphere(&sphere2);
+//    cd.add_collider_sphere(&sphere3);
+    cd.add_collider_sphere(&sphere4);
 
+    pbd_viewer.record(&sphere4);
     pbd_viewer.record(&sphere1);
-    pbd_viewer.record(&sphere2);
+//    pbd_viewer.record(&sphere2);
+//    pbd_viewer.record(&sphere3);
 
     // ======================================== Phase 2: Set Up Simulation Thread ========================================
 
@@ -51,7 +61,7 @@ int main()
         return false;
     };
 
-    pbd_viewer.viewer().core().camera_zoom = 0.3;
+    pbd_viewer.viewer().core().camera_zoom = 0.7;
 
     pbd_viewer
             .set_max_fps(120)
