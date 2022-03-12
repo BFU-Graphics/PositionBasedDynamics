@@ -2,6 +2,21 @@
 #include "SimulationFrameWork/pbd_sim.h"
 #include "SimulationFrameWork/src/collisions/distance_field_collision_detection.h"
 
+void add_many_spheres(HINASIM::PBDSim &pbd_sim, HINAVIEWER::PBDViewer &pbd_viewer, HINASIM::DistanceFieldCollisionDetection &cd)
+{
+    int size = 5;
+    for (int i = -size; i < size; ++i)
+        for (int j = -size; j < size; ++j)
+            for (int k = -size; k < size; ++k)
+            {
+                auto *sphere = new HINASIM::RigidBody(PBD_MODEL_DIR + std::string("sphere.obj"), {1.1 * i, 1.1 * j + 5, 1.1 * k});
+                pbd_sim.add_object(sphere);
+                cd.add_collider_sphere(sphere);
+                pbd_viewer.record(sphere);
+            }
+};
+
+
 int main()
 {
     // ======================================== Phase 0: Init Simulation & Rendering & Collision Engine  ========================================
@@ -11,37 +26,19 @@ int main()
 
     // ======================================== Phase 1: Init Simulation World Info  ========================================
 
-    HINASIM::RigidBody sphere1(PBD_MODEL_DIR + std::string("sphere.obj"), {0, -50, 0}, {0, 0, 0}, {50, 50, 50});
-    HINASIM::RigidBody sphere2(PBD_MODEL_DIR + std::string("sphere.obj"), {1, 4, 0}, {-70, -40, -20}, {1, 1, 1});
-    HINASIM::RigidBody sphere3(PBD_MODEL_DIR + std::string("sphere.obj"), {-1, 6, 0}, {70, 40, 20}, {1, 1, 1});
-    HINASIM::RigidBody sphere4(PBD_MODEL_DIR + std::string("sphere.obj"), {0, 8, -1}, {0, 0, 0}, {1, 1, 1});
-    HINASIM::RigidBody sphere5(PBD_MODEL_DIR + std::string("sphere.obj"), {0, 10, 1}, {0, 0, 0}, {1, 1, 1});
-    HINASIM::RigidBody sphere6(PBD_MODEL_DIR + std::string("sphere.obj"), {0, 12, 0}, {0, 0, 0}, {1, 1, 1});
+    HINASIM::RigidBody sphere_fixed(PBD_MODEL_DIR + std::string("sphere.obj"), {0, -300, 0}, {0, 0, 0}, {300, 300, 300});
 
     pbd_sim
             .set_collision_engine(&cd)
-            .add_object(&sphere1)
-            .add_object(&sphere2)
-            .add_object(&sphere3)
-            .add_object(&sphere4)
-            .add_object(&sphere5)
-            .add_object(&sphere6);
+            .add_object(&sphere_fixed);
 
-    sphere1.set_inv_mass(0);
+    sphere_fixed.set_inv_mass(0);
 
-    cd.add_collider_sphere(&sphere1);
-    cd.add_collider_sphere(&sphere2);
-    cd.add_collider_sphere(&sphere3);
-    cd.add_collider_sphere(&sphere4);
-    cd.add_collider_sphere(&sphere5);
-    cd.add_collider_sphere(&sphere6);
+    cd.add_collider_sphere(&sphere_fixed);
 
-    pbd_viewer.record(&sphere1);
-    pbd_viewer.record(&sphere3);
-    pbd_viewer.record(&sphere4);
-    pbd_viewer.record(&sphere5);
-    pbd_viewer.record(&sphere6);
-    pbd_viewer.record(&sphere2);
+    pbd_viewer.record(&sphere_fixed);
+
+    add_many_spheres(pbd_sim, pbd_viewer, cd);
 
     // ======================================== Phase 2: Set Up Simulation Thread ========================================
 
@@ -67,7 +64,7 @@ int main()
         return false;
     };
 
-    pbd_viewer.viewer().core().camera_zoom = 0.5;
+    pbd_viewer.viewer().core().camera_zoom = 0.3;
 
     pbd_viewer
             .set_max_fps(120)

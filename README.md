@@ -22,7 +22,7 @@
 
 ### Rigid Body Dynamics
 
-<img src="./Resources/images/rigidbody_sim01.png"  />
+<img src="./Resources/images/rigidbody_sim02.png"  />
 
 ### Fluid Dynamics
 
