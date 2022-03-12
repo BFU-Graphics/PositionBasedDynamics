@@ -18,12 +18,6 @@ HINASIM::Collider &HINASIM::Collider::update_aabb()
 {
     if (object_->TYPE_ == SimObjectType::RigidBody)
         aabb_->calc_aabb(dynamic_cast<RigidBody *>(object_)->V_buffer_);
-
-
-    std::cout << "======" << std::endl;
-    std::cout << aabb_->aabb_[0] << std::endl;
-    std::cout << aabb_->aabb_[1] << std::endl;
-    std::cout << "======" << std::endl;
     return *this;
 }
 
