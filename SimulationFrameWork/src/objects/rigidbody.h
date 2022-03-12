@@ -37,8 +37,8 @@ namespace HINASIM
         Eigen::MatrixXd V_buffer_; // rendering pose buffer (because physics update was faster than rendering update, we won;t update rendering V_ every physics frame)
         Eigen::Vector3d C_rest_; // rest center of mass
 
-        double restitution_{0.5}; // TODO: to init here
-        double friction_{0.2}; // TODO: to init here
+        double restitution_{0.9}; // TODO: to init here
+        double friction_{0.1}; // TODO: to init here
 
         // transformation required to transform a point to local space or vice vera
         Eigen::Matrix3d transformation_R_;
