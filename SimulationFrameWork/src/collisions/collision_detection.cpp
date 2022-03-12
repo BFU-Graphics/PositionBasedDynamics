@@ -29,5 +29,8 @@ void HINASIM::CollisionDetection::add_rigid_body_contact(HINASIM::RigidBody *rb1
 void HINASIM::CollisionDetection::contacts_solve()
 {
     for (auto &contact: contacts_)
+    {
+        contact->report_contacts();
         contact->solve();
+    }
 }

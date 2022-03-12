@@ -158,3 +158,10 @@ void HINASIM::RigidBodyContactConstraint::clear()
 {
     rb_rb_contacts_.clear();
 }
+
+#include <iostream>
+
+void HINASIM::RigidBodyContactConstraint::report_contacts()
+{
+    std::cout << "Contacts Sum: " << rb_rb_contacts_.size() << std::endl;
+}

@@ -17,10 +17,11 @@ namespace HINASIM
 
     class SimObject : public HINAVIEWER::RENDERABLE::Renderable, public HINAVIEWER::MOUSE_DRAGGABLE::Draggable
     {
-    protected:
+    public:
         explicit SimObject(Eigen::Vector3d position = {0, 0, 0}, Eigen::Vector3d rotation = {0, 0, 0}, Eigen::Vector3d scale = {1, 1, 1});
         explicit SimObject(const std::string &path, Eigen::Vector3d position = {0, 0, 0}, Eigen::Vector3d rotation = {0, 0, 0}, Eigen::Vector3d scale = {1, 1, 1});
         explicit SimObject(const std::function<void(Eigen::MatrixXd &V, Eigen::MatrixXi &F)> &custom_init_geometry, Eigen::Vector3d position = {0, 0, 0}, Eigen::Vector3d rotation = {0, 0, 0}, Eigen::Vector3d scale = {1, 1, 1});
+        virtual ~SimObject() = default;
 
     public:
         Eigen::Vector3d position_;

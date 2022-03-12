@@ -11,6 +11,7 @@ namespace HINASIM
         explicit RigidBody(const std::string &path, Eigen::Vector3d position = {0, 0, 0}, Eigen::Vector3d rotation = {0, 0, 0}, Eigen::Vector3d scale = {1, 1, 1}, double density = 100.0);
         explicit RigidBody(const std::function<void(Eigen::MatrixXd &V, Eigen::MatrixXi &F)> &custom_init_geometry, Eigen::Vector3d position = {0, 0, 0}, Eigen::Vector3d rotation = {0, 0, 0}, Eigen::Vector3d scale = {1, 1, 1},
                            double density = 100.0);
+        ~RigidBody() override = default;
 
     public: // chained useful methods
         RigidBody &set_inv_mass(double inv_mass);

@@ -16,6 +16,7 @@ namespace HINASIM
     public:
         virtual bool solve() = 0;
         virtual void clear() = 0;
+        virtual void report_contacts() = 0;
 
     public:
         double stiffness_ = 1.0;
@@ -28,6 +29,7 @@ namespace HINASIM
                          double friction);
         bool solve() override;
         void clear() override;
+        void report_contacts() override;
 
     private:
         std::vector<std::tuple<

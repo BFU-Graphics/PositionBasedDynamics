@@ -17,11 +17,12 @@ namespace HINASIM
     {
     public:
         PBDSim() = default;
-        ~PBDSim() = default;
+        ~PBDSim();
 
     public:
         void simulate_real_dt();
         void simulate(double dt);
+        bool pause_ = true;
 
     public:
         PBDSim &set_collision_engine(CollisionDetection *collision_engine);
@@ -44,7 +45,7 @@ namespace HINASIM
     protected: // Env vars
         CollisionDetection *collision_engine_ = nullptr;
         Eigen::RowVector3d gravity_{0, -9.8, 0};
-        double fixed_dt = 0.02;
+        double fixed_dt_ = 0.02;
 
     public: // ! TO DELETE IN THE FUTURE
         PBDSim &add_collider(CollisionObject *collider);

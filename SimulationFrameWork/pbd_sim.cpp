@@ -5,6 +5,13 @@
 
 #include <thread>
 
+HINASIM::PBDSim::~PBDSim()
+{
+    if (!objects_.empty())
+        for (auto &o: objects_)
+            delete o;
+}
+
 void HINASIM::PBDSim::simulate(double dt)
 {
     auto start = std::chrono::steady_clock::now();
@@ -19,8 +26,8 @@ void HINASIM::PBDSim::simulate(double dt)
 void HINASIM::PBDSim::simulate_real_dt()
 {
     auto start = std::chrono::steady_clock::now();
-    simulate(fixed_dt);
-    long long rest_time = static_cast<long long>(fixed_dt * 1000) - HINASIM::UTILS::since(start).count();
+    simulate(fixed_dt_);
+    long long rest_time = static_cast<long long>(fixed_dt_ * 1000) - HINASIM::UTILS::since(start).count();
 
     if (rest_time > 0)
     {

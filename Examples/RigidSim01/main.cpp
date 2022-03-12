@@ -9,13 +9,12 @@ void add_many_spheres(HINASIM::PBDSim &pbd_sim, HINAVIEWER::PBDViewer &pbd_viewe
         for (int j = -size; j < size; ++j)
             for (int k = -size; k < size; ++k)
             {
-                auto *sphere = new HINASIM::RigidBody(PBD_MODEL_DIR + std::string("sphere.obj"), {1.1 * i, 1.1 * j + 5, 1.1 * k});
+                auto *sphere = new HINASIM::RigidBody(PBD_MODEL_DIR + std::string("sphere.obj"), {2.2 * i, 2.2 * j + size + 10, 2.2 * k});
                 pbd_sim.add_object(sphere);
                 cd.add_collider_sphere(sphere);
                 pbd_viewer.record(sphere);
             }
 };
-
 
 int main()
 {
@@ -42,12 +41,14 @@ int main()
 
     // ======================================== Phase 2: Set Up Simulation Thread ========================================
 
-    bool pause = false;
-    auto simulate = [&pbd_sim, &pause]()
+    bool is_simulating = true;
+    auto simulate = [&pbd_sim, &is_simulating]()
     {
-        while (!pause)
+        while (is_simulating)
         {
-            pbd_sim.simulate_real_dt(); // simulate with real time elapsed;
+            std::cout << (pbd_sim.pause_ ? "Paused" : "") << std::endl;
+            if (!pbd_sim.pause_)
+                pbd_sim.simulate_real_dt(); // simulate with real time elapsed;
         }
     };
 
@@ -61,6 +62,15 @@ int main()
         pbd_sim.update_all_rendering_state();
         for (auto &o: pbd_sim.objects_)
             pbd_viewer.update_vertex_positions(o->ID_, o->V_);
+        return false;
+    };
+
+    pbd_viewer.viewer().callback_key_down = [&pbd_sim, &is_simulating](igl::opengl::glfw::Viewer &viewer, unsigned int key, int modifiers) -> bool
+    {
+        if (key == ' ')
+            pbd_sim.pause_ = !pbd_sim.pause_;
+        if (key == 'x')
+            is_simulating = false;
         return false;
     };
 
