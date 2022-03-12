@@ -16,6 +16,10 @@ namespace HINASIM
     class PBDSim
     {
     public:
+        PBDSim() = default;
+        ~PBDSim() = default;
+
+    public:
         void simulate_real_dt();
         void simulate(double dt);
 

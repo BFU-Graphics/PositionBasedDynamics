@@ -5,11 +5,8 @@
 HINASIM::Collider::Collider(SimObject *o)
 {
     object_ = o;
-    aabb_ = new AABB(o->V_);
-    std::cout << "=============" << std::endl;
-    std::cout << aabb_->aabb_[0] << std::endl;
-    std::cout << aabb_->aabb_[1] << std::endl;
-    std::cout << "=============" << std::endl;
+    if (object_->TYPE_ == SimObjectType::RigidBody)
+        aabb_ = new AABB(dynamic_cast<RigidBody *>(object_)->V_buffer_);
 }
 
 HINASIM::Collider::~Collider()
@@ -21,13 +18,20 @@ HINASIM::Collider &HINASIM::Collider::update_aabb()
 {
     if (object_->TYPE_ == SimObjectType::RigidBody)
         aabb_->calc_aabb(dynamic_cast<RigidBody *>(object_)->V_buffer_);
+
+
+    std::cout << "======" << std::endl;
+    std::cout << aabb_->aabb_[0] << std::endl;
+    std::cout << aabb_->aabb_[1] << std::endl;
+    std::cout << "======" << std::endl;
     return *this;
 }
 
 HINASIM::DistanceFieldCollider::DistanceFieldCollider(HINASIM::SimObject *o, bool inside_collision) : Collider(o), inside_collision_(inside_collision)
 {
     bvh_ = new PointCloudBSH();
-    bvh_->init(object_->V_);
+    if (object_->TYPE_ == SimObjectType::RigidBody)
+        bvh_->init(dynamic_cast<RigidBody *>(object_)->V_rest_);
     bvh_->construct();
 }
 

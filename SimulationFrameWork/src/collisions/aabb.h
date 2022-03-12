@@ -2,7 +2,6 @@
 #define POSITIONBASEDDYNAMICS_AABB_H
 
 #include <Eigen/Dense>
-
 #if defined(WIN32) || defined(_WIN32) || defined(WIN64)
 #define FORCE_INLINE __forceinline
 #else

@@ -84,5 +84,5 @@ void HINASIM::RigidBody::update_physics_info()
     }
 
     for (int i = 0; i < V_.rows(); ++i)
-        V_buffer_.row(i) = (q_.toRotationMatrix() * V_rest_.row(i).transpose() + x_).transpose();
+        V_buffer_.row(i) = (p_q_.toRotationMatrix() * V_rest_.row(i).transpose() + p_x_).transpose();
 }

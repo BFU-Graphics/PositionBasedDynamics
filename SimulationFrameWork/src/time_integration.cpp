@@ -34,14 +34,15 @@ void HINASIM::TimeIntegrationRigidBody::semi_implicit_integration_with_damping(d
         // linear integration
         velocity += acceleration * h;
         velocity *= damping;
-        predicted_position = position + h * velocity;
 
         // angular integration
         angular_velocity += h * inv_inertia_world * (torque - (angular_velocity.cross(inertia_world * angular_velocity)));
-        Eigen::Quaterniond angVelQ(0.0, angular_velocity[0], angular_velocity[1], angular_velocity[2]);
-        predicted_rotation = rotation.coeffs() + h * 0.5 * (angVelQ * rotation).coeffs();
-        predicted_rotation.normalize();
     }
+    predicted_position = position + h * velocity;
+
+    Eigen::Quaterniond angVelQ(0.0, angular_velocity[0], angular_velocity[1], angular_velocity[2]);
+    predicted_rotation = rotation.coeffs() + h * 0.5 * (angVelQ * rotation).coeffs();
+    predicted_rotation.normalize();
 }
 
 void HINASIM::TimeIntegrationRigidBody::velocity_update_first_order(double h, double inv_mass, const Eigen::Vector3d &predicted_position, const Eigen::Vector3d &position, Eigen::Vector3d &velocity,
