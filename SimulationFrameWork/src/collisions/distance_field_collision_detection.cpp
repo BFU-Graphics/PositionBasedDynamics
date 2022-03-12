@@ -166,7 +166,7 @@ void HINASIM::DistanceFieldCollisionDetection::collision_detection_RB_RB(HINASIM
 #ifdef _DEBUG
                 tid = 0;
 #else
-                int tid = omp_get_thread_num();
+                tid = omp_get_thread_num();
 #endif
 #endif
                 contacts_mt[tid].push_back({ContactType::RigidBody, rb1, rb2, x_w, cp_w, n_w, dist, restitution, friction});
