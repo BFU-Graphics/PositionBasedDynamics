@@ -35,7 +35,7 @@ namespace HINASIM
 
         Eigen::MatrixXd V_rest_; // rest pose of a rigid body
         Eigen::MatrixXd V_buffer_; // rendering pose buffer (because physics update was faster than rendering update, we won;t update rendering V_ every physics frame)
-        Eigen::Vector3d C_rest_; // rest center of mass
+        Eigen::Vector3d C_rest_; // rest center of mass (not used yet)
 
         double restitution_{0.9}; // TODO: to init here
         double friction_{0.1}; // TODO: to init here
