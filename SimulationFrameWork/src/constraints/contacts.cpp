@@ -94,62 +94,62 @@ bool HINASIM::RigidBodyContactConstraint::solve()
         RigidBody *rb1 = std::get<0>(rb_rb_contacts_[i]);
         RigidBody *rb2 = std::get<1>(rb_rb_contacts_[i]);
 
-        if (rb1->inv_mass_ == 0.0 && rb2->inv_mass_ == 0.0)
-            return false;
-
-        Eigen::Vector3d contact_point1 = std::get<2>(rb_rb_contacts_[i]);
-        Eigen::Vector3d contact_point2 = std::get<3>(rb_rb_contacts_[i]);
-        Eigen::Vector3d contact_normal = std::get<4>(rb_rb_contacts_[i]);
-        Eigen::Vector3d contact_tangent = std::get<5>(rb_rb_contacts_[i]);
-        const double nKn_inv = std::get<6>(rb_rb_contacts_[i]);
-        const double p_max = std::get<7>(rb_rb_contacts_[i]);
-        const double goal_u_rel_n = std::get<8>(rb_rb_contacts_[i]);
-        const double friction = std::get<9>(rb_rb_contacts_[i]);
-        double sum_impulse = std::get<10>(rb_rb_contacts_[i]); // for output, inited by 0.0
-
-
-        const Eigen::Vector3d r1 = contact_point1 - rb1->x_;
-        const Eigen::Vector3d r2 = contact_point2 - rb2->x_;
-        const Eigen::Vector3d u1 = rb1->v_ + rb1->omega_.cross(r1);
-        const Eigen::Vector3d u2 = rb2->v_ + rb2->omega_.cross(r2);
-        const Eigen::Vector3d u_rel = u1 - u2;
-        const double u_rel_n = u_rel.dot(contact_normal);
-        const double delta_u_rel_n = goal_u_rel_n - u_rel_n;
-        double correctionMagnitude = nKn_inv * delta_u_rel_n;
-
-        if (correctionMagnitude < -sum_impulse)
-            correctionMagnitude = -sum_impulse; // collision contact may be solved multiple times, so sum_impulse would be non-zero
-
-        // penetration depth
-        const double d = contact_normal.dot(contact_point1 - contact_point2);
-        if (d < 0.0)
-            correctionMagnitude -= stiffness_ * nKn_inv * d;
-
-        Eigen::Vector3d p(correctionMagnitude * contact_normal);
-        sum_impulse += correctionMagnitude;
-
-        // dynamic friction
-        const double pn = p.dot(contact_normal);
-        if (friction * pn > p_max)
-            p -= p_max * contact_tangent;
-        else if (friction * pn < -p_max)
-            p += p_max * contact_tangent;
-        else
-            p -= friction * pn * contact_tangent;
-
-        if (rb1->inv_mass_ > 0.0)
+        if (rb1->inv_mass_ != 0.0 || rb2->inv_mass_ != 0.0)
         {
-            rb1->v_ += rb1->inv_mass_ * p;
-            rb1->omega_ += rb1->inv_inertia_tensor_world_ * (r1.cross(p));
-        }
+            Eigen::Vector3d contact_point1 = std::get<2>(rb_rb_contacts_[i]);
+            Eigen::Vector3d contact_point2 = std::get<3>(rb_rb_contacts_[i]);
+            Eigen::Vector3d contact_normal = std::get<4>(rb_rb_contacts_[i]);
+            Eigen::Vector3d contact_tangent = std::get<5>(rb_rb_contacts_[i]);
+            const double nKn_inv = std::get<6>(rb_rb_contacts_[i]);
+            const double p_max = std::get<7>(rb_rb_contacts_[i]);
+            const double goal_u_rel_n = std::get<8>(rb_rb_contacts_[i]);
+            const double friction = std::get<9>(rb_rb_contacts_[i]);
+            double sum_impulse = std::get<10>(rb_rb_contacts_[i]); // for output, inited by 0.0
 
-        if (rb2->inv_mass_ > 0.0)
-        {
-            rb2->v_ += rb2->inv_mass_ * -p;
-            rb2->omega_ += rb2->inv_inertia_tensor_world_ * (r2.cross(-p));
-        }
 
-        std::get<10>(rb_rb_contacts_[i]) = sum_impulse;
+            const Eigen::Vector3d r1 = contact_point1 - rb1->x_;
+            const Eigen::Vector3d r2 = contact_point2 - rb2->x_;
+            const Eigen::Vector3d u1 = rb1->v_ + rb1->omega_.cross(r1);
+            const Eigen::Vector3d u2 = rb2->v_ + rb2->omega_.cross(r2);
+            const Eigen::Vector3d u_rel = u1 - u2;
+            const double u_rel_n = u_rel.dot(contact_normal);
+            const double delta_u_rel_n = goal_u_rel_n - u_rel_n;
+            double correctionMagnitude = nKn_inv * delta_u_rel_n;
+
+            if (correctionMagnitude < -sum_impulse)
+                correctionMagnitude = -sum_impulse; // collision contact may be solved multiple times, so sum_impulse would be non-zero
+
+            // penetration depth
+            const double d = contact_normal.dot(contact_point1 - contact_point2);
+            if (d < 0.0)
+                correctionMagnitude -= stiffness_ * nKn_inv * d;
+
+            Eigen::Vector3d p(correctionMagnitude * contact_normal);
+            sum_impulse += correctionMagnitude;
+
+            // dynamic friction
+            const double pn = p.dot(contact_normal);
+            if (friction * pn > p_max)
+                p -= p_max * contact_tangent;
+            else if (friction * pn < -p_max)
+                p += p_max * contact_tangent;
+            else
+                p -= friction * pn * contact_tangent;
+
+            if (rb1->inv_mass_ > 0.0)
+            {
+                rb1->v_ += rb1->inv_mass_ * p;
+                rb1->omega_ += rb1->inv_inertia_tensor_world_ * (r1.cross(p));
+            }
+
+            if (rb2->inv_mass_ > 0.0)
+            {
+                rb2->v_ += rb2->inv_mass_ * -p;
+                rb2->omega_ += rb2->inv_inertia_tensor_world_ * (r2.cross(-p));
+            }
+
+            std::get<10>(rb_rb_contacts_[i]) = sum_impulse;
+        }
     }
     return true;
 }
