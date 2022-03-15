@@ -4,8 +4,8 @@
 
 [PositionBasedDynamics](https://github.com/BFU-Graphics/PositionBasedDynamics) is a basic simulation framework to facilitate developing [" Position Based Dynamics "](https://matthias-research.github.io/pages/publications/posBasedDyn.pdf) based projects from scratch.
 
-1. PositionBasedDynamics need no external dependencies but self-contained [libigl](https://github.com/libigl/libigl), which is a simple C++ geometry processing library, and would be automacally included once build.
-2. PositionBasedDynamics seperates utterlly the rendering part and the simulation part while developing.
+1. PositionBasedDynamics need no external dependencies but self-contained [libigl](https://github.com/libigl/libigl), which is a simple C++ geometry processing library, and would be automatically included once build.
+2. PositionBasedDynamics separates utterly the rendering part and the simulation part on developing.
 
 ## Build Instruction
 
