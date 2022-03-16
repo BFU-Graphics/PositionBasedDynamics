@@ -40,3 +40,4 @@ comming soon
 
 - [x] global BVH collision detection
 - [x] rigid-rigid contact constraint
+- [ ] rigid-particle contact constraint
