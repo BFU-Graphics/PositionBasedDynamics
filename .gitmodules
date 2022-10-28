@@ -1,0 +1,3 @@
+[submodule "deps/libigl"]
+	path = deps/libigl
+	url = https://github.com/BFU-Graphics/libigl.git

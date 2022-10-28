@@ -1,6 +1,7 @@
 #include "pbd_viewer.h"
 #include "src/mouse_callback.h"
 
+#include <vector>
 #include <utility>
 
 namespace HINAVIEWER
