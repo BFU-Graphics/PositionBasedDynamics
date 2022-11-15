@@ -11,3 +11,4 @@ bin
 external
 deps
 deps/libigl
+/deps/libigl/external/.cache/
