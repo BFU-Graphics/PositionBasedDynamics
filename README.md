@@ -1,8 +1,8 @@
 # PositionBasedDynamics
 
-[![Cmake Build](https://github.com/BFU-Graphics/PositionBasedDynamics/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/BFU-Graphics/PositionBasedDynamics/actions/workflows/ubuntu.yml)
-[![Cmake Build](https://github.com/BFU-Graphics/PositionBasedDynamics/actions/workflows/macos.yml/badge.svg)](https://github.com/BFU-Graphics/PositionBasedDynamics/actions/workflows/macos.yml)
-[![Cmake Build](https://github.com/BFU-Graphics/PositionBasedDynamics/actions/workflows/windows.yml/badge.svg)](https://github.com/BFU-Graphics/PositionBasedDynamics/actions/workflows/windows.yml)
+[![Cmake Build](https://github.com/BFU-Graphics/PositionBasedDynamics/actions/workflows/Ubuntu.yml/badge.svg)](https://github.com/BFU-Graphics/PositionBasedDynamics/actions/workflows/Ubuntu.yml)
+[![Cmake Build](https://github.com/BFU-Graphics/PositionBasedDynamics/actions/workflows/macOS.yml/badge.svg)](https://github.com/BFU-Graphics/PositionBasedDynamics/actions/workflows/macOS.yml)
+[![Cmake Build](https://github.com/BFU-Graphics/PositionBasedDynamics/actions/workflows/Windows.yml/badge.svg)](https://github.com/BFU-Graphics/PositionBasedDynamics/actions/workflows/Windows.yml)
 
 ## Introduction
 
