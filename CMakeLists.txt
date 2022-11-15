@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.15)
 project(PositionBasedDynamics)
 
-option(LIBIGL_WITH_OPENGL "Use OpenGL" ON)
-option(LIBIGL_WITH_OPENGL_GLFW "Use GLFW" ON)
-option(LIBIGL_WITH_OPENGL_GLFW_IMGUI "Use ImGui" ON)
+option(LIBIGL_OPENGL "Use OpenGL" ON)
+option(LIBIGL_GLFW "Use GLFW" ON)
+option(LIBIGL_IMGUI "Use ImGui" ON)
 add_subdirectory(deps/libigl)
 
 file(GLOB_RECURSE SIMULATION_FRAMEWORK_FILES SimulationFrameWork/*.cpp SimulationFrameWork/*.h SimulationFrameWork/*.inl.h)
@@ -14,8 +14,8 @@ target_link_libraries(HinaLib
         PUBLIC
         igl::core
         igl::opengl
-        igl::opengl_glfw
-        igl::opengl_glfw_imgui
+        igl::glfw
+        igl::imgui
         )
 target_compile_definitions(HinaLib
         PUBLIC

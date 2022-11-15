@@ -8,9 +8,10 @@
 
 #include <igl/opengl/glfw/Viewer.h>
 #include <igl/opengl/glfw/imgui/ImGuiMenu.h>
+#include <igl/opengl/glfw/imgui/ImGuiPlugin.h>
 #include <igl/opengl/glfw/imgui/ImGuiHelpers.h>
-#include <imgui/imgui.h>
-#include <imgui/imgui_internal.h>
+#include <imgui.h>
+#include <imgui_internal.h>
 
 namespace HINAVIEWER
 {
@@ -43,6 +44,7 @@ namespace HINAVIEWER
 
     protected:
         igl::opengl::glfw::Viewer viewer_;
+        igl::opengl::glfw::imgui::ImGuiPlugin plugin_;
         igl::opengl::glfw::imgui::ImGuiMenu menu_;
         std::vector<HINAVIEWER::INSPECTOR::Inspector *> inspector_list_;
         std::vector<int> object_list_;

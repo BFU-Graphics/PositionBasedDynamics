@@ -107,7 +107,8 @@ HINAVIEWER::PBDViewer &HINAVIEWER::PBDViewer::show_inspector()
 
 void HINAVIEWER::PBDViewer::setup_menu()
 {
-    viewer_.plugins.push_back(&menu_);
+    plugin_.widgets.push_back(&menu_);
+    viewer_.plugins.push_back(&plugin_);
 
     menu_.callback_draw_viewer_menu = [&]()
     {
@@ -158,7 +159,7 @@ void HINAVIEWER::PBDViewer::setup_menu()
 
         if (ImGui::CollapsingHeader("Rendering Runtime Info", ImGuiTreeNodeFlags_DefaultOpen))
         {
-            float w = ImGui::GetContentRegionAvailWidth();
+            float w = ImGui::GetContentRegionAvail().x;
             float p = ImGui::GetStyle().FramePadding.x;
 
             ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
@@ -166,7 +167,7 @@ void HINAVIEWER::PBDViewer::setup_menu()
 
         if (ImGui::CollapsingHeader("Physics Runtime Info", ImGuiTreeNodeFlags_DefaultOpen))
         {
-            float w = ImGui::GetContentRegionAvailWidth();
+            float w = ImGui::GetContentRegionAvail().x;
             float p = ImGui::GetStyle().FramePadding.x;
 
             std::string simulation_runtime = std::to_string(HINAVIEWER::INSPECTOR::Timeable::simulation_time_);
