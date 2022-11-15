@@ -1,5 +1,9 @@
 # PositionBasedDynamics
 
+[![Cmake Build](https://github.com/BFU-Graphics/PositionBasedDynamics/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/BFU-Graphics/PositionBasedDynamics/actions/workflows/ubuntu.yml)
+[![Cmake Build](https://github.com/BFU-Graphics/PositionBasedDynamics/actions/workflows/macos.yml/badge.svg)](https://github.com/BFU-Graphics/PositionBasedDynamics/actions/workflows/macos.yml)
+[![Cmake Build](https://github.com/BFU-Graphics/PositionBasedDynamics/actions/workflows/windows.yml/badge.svg)](https://github.com/BFU-Graphics/PositionBasedDynamics/actions/workflows/windows.yml)
+
 ## Introduction
 
 [PositionBasedDynamics](https://github.com/BFU-Graphics/PositionBasedDynamics) is a basic simulation framework to facilitate developing [" Position Based Dynamics "](https://matthias-research.github.io/pages/publications/posBasedDyn.pdf) based projects from scratch.
